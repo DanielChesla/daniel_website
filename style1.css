@@ -1,5 +1,8 @@
 body {
   background-color: rgb(220,255,255);
+  background-image: lizard.jpg;
+  opacity: 0.2;
+
 }
 
 h1 {
@@ -17,5 +20,3 @@ h3 {
   margin-left: 30px;
 }
 
-background-image: lizard.jpg
-opacity: 0.2;

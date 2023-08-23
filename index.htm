@@ -1,49 +1,37 @@
 <!DOCTYPE html>
 <html>
-    <head>
-<link rel="stylesheet" href="style1.css">
-        <title>Daniel Chesla's home page</title>
-    </head>
-    <body>
-
+<head>
+    <link rel="stylesheet" href="style1.css">
+    <title>Daniel Chesla's home page</title>
+</head>
+<body>
     <p><strong>Name:</strong> Daniel Chesla</p>
     <p><strong>Purpose of this page:</strong> Learn all the things!</p>
 
-<h1>This is h1</h1>
-<h2>This is h2</h2>
-<h3>This is h3</h3>
+    <h1>This is h1</h1>
+    <h2>This is h2</h2>
+    <h3>This is h3</h3>
 
-      <p>Change background color to: 
-         <button id="white-btn">White</button>
-         <button id="green-btn">Green</button>
-         <button id="ltblue-btn">Light Blue</button>
-      </p>
-        
+    <p>Change background color to: 
+        <button id="white-btn">White</button>
+        <button id="green-btn">Green</button>
+        <button id="ltblue-btn">Light Blue</button>
+    </p>
 
-      <script>
-         let whiteBtn = document.getElementById("white-btn");
-         whiteBtn.addEventListener("click", function() {
+    <script>
+        let whiteBtn = document.getElementById("white-btn");
+        whiteBtn.addEventListener("click", function() {
             changeBackgroundColor("white");
-         });
-         
-         let greenBtn = document.getElementById("green-btn");
-         greenBtn.addEventListener("click", function() {
+        });
+
+        let greenBtn = document.getElementById("green-btn");
+        greenBtn.addEventListener("click", function() {
             changeBackgroundColor("green");
-         });         
+        });
 
-
-
-          
-         function changeBackgroundColor(newColor) {
-            let document.body.style.backgroundColor = newColor;
-         }
-      </script>
-
-        
-
-        
-        
-    </body>
+        function changeBackgroundColor(newColor) {
+            document.body.style.backgroundColor = newColor;
+        }
+    </script>
+</body>
 </html>
-
-

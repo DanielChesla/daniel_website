@@ -24,18 +24,26 @@
 
     
     <p><strong>Javascript testing and demo</strong></p>
+    
     <p>Change background color to: 
         <button class="button" id="white-btn">White</button>
         <button class="button" id="green-btn">Green</button>
         <button class="button" id="ltblue-btn">Light Blue</button>
     </p>
     <br /><br />
+    
+    <p>Change text color to: 
+        <button class="button" id="black-btn">Black</button>
+        <button class="button" id="darkBlue-btn">Dark Blue</button>
+        <button class="button" id="purple-btn">Purple</button>
+    </p>
     <br /><br />
 
 
     
     
     <script>
+        
         let whiteBtn = document.getElementById("white-btn");
         whiteBtn.addEventListener("click", function() {
             changeBackgroundColor("white");
@@ -51,10 +59,41 @@
             changeBackgroundColor("rgb(220, 255, 255)");
         });
 
+
+
+        
+        let blackBtn = document.getElementById("black-btn");
+        blackBtn.addEventListener("click", function() {
+            changeTextColor("rgb(0, 0, 0)");
+        });
+
+        let darkBlueBtn = document.getElementById("darkBlue-btn");
+        darkBlueBtn.addEventListener("click", function() {
+            changeTextColor("rgb(0, 0, 90)");
+        });
+
+        let purpleBtn = document.getElementById("purple-btn");
+        purpleBtn.addEventListener("click", function() {
+            changeTextColor("rgb(50, 0, 90)");
+        });
+
+
+
+
+
+
         
         function changeBackgroundColor(newColor) {
             document.body.style.backgroundColor = newColor;
         }
+
+        function changeTextColor(newColor) {
+            document.body.style.backgroundColor = newColor;
+        }
+
+
+
+        
     </script>
 </body>
 </html>

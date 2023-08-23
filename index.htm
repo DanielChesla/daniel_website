@@ -13,7 +13,36 @@
 <h2>This is h2</h2>
 <h3>This is h3</h3>
 
+      <p>Change background color to: 
+         <button id="white-btn">White</button>
+         <button id="green-btn">Green</button>
+         <button id="ltblue-btn">Light Blue</button>
+      </p>
+        
 
+      <script>
+         let whiteBtn = document.getElementById("white-btn");
+         whiteBtn.addEventListener("click", function() {
+            changeBackgroundColor("white");
+         });
+         
+         let greenBtn = document.getElementById("green-btn");
+         greenBtn.addEventListener("click", function() {
+            changeBackgroundColor("green");
+         });         
+
+
+
+          
+         function changeBackgrounColor(newColor) {
+            let newColor = document.body.style.backgroundColor;
+            document.body.style.backgroundColor = newColor;
+         }
+      </script>
+
+        
+
+        
         
     </body>
 </html>

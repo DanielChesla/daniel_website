@@ -39,6 +39,21 @@
     </p>
     <br /><br />
 
+    <p>Chose an image to view below:     </p>
+        <p><button class="button" id="lizard-btn">Lizard</button>
+        <button class="button" id="bird-btn">Bird</button>
+        <button class="button" id="dog-btn">Dog</button>
+    </p>
+    <br /><br />
+
+
+
+
+
+
+
+
+
 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Etiam non quam lacus suspendisse faucibus interdum posuere lorem. 
     Odio eu feugiat pretium nibh. Hendrerit gravida rutrum quisque non tellus orci ac auctor augue. Mauris ultrices eros in cursus turpis. Etiam dignissim diam quis enim lobortis scelerisque fermentum dui faucibus. 
     Laoreet non curabitur gravida arcu ac tortor dignissim convallis. Est ullamcorper eget nulla facilisi etiam dignissim diam. Senectus et netus et malesuada fames ac turpis egestas integer. 
@@ -65,7 +80,7 @@
     A pellentesque sit amet porttitor eget dolor. Elit duis tristique sollicitudin nibh sit. Adipiscing commodo elit at imperdiet. Sit amet massa vitae tortor condimentum lacinia quis vel.</p>
 
 
-<img src="lizard.jpg" alt="Lizard">
+<img id="image" src="lizard.jpg" alt="Image">
     
     
     <script>
@@ -115,7 +130,26 @@
         }
 
 
+        let lizardBtn = document.getElementById("lizard-btn");
+        lizardBtn.addEventListener("click", function() {
+            changeImage("lizard.jpg");
+        });
 
+        let birdBtn = document.getElementById("bird-btn");
+        birdBtn.addEventListener("click", function() {
+            changeImage("bird.jpg");
+        });
+
+        let dogBtn = document.getElementById("dog-btn");
+        dogBtn.addEventListener("click", function() {
+            changeImage("dog.jpg");
+        });
+
+        
+    function changeImage(newImage) {
+        imageLocation = newImage;
+        document.getElementById("image").src = newImage;
+    }
 
 
 

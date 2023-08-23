@@ -20,7 +20,7 @@ h3 {
 .button {
   display: inline-block;
   padding: 10px 20px;
-  background-color: #B5B4FF;
+  background-color: rgb(220, 255, 255);
   color: #fff;
   border: 10px;
   border-radius: 30px;
@@ -32,5 +32,5 @@ h3 {
 }
 
 .button:hover {
-  background-color: #090972;
+  background-color: rgb(220, 255, 255);
 }

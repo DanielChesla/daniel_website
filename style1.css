@@ -16,3 +16,10 @@ h3 {
   color: navy;
   margin-left: 30px;
 }
+
+background-image: url(
+'https://media.geeksforgeeks.org/wp-content/uploads/20210313130410/exbg.png');
+            background-size: cover;
+  
+            /* Specify the background image */
+            opacity: 0.2;

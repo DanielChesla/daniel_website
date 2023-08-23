@@ -25,10 +25,10 @@ h3 {
   border: none;
   border-radius: 30px;
   cursor: pointer;
-  font-size: 26px;
+  font-size: 16px;
   text-align: center;
   text-decoration: none;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.9s ease;
 }
 
 .button:hover {

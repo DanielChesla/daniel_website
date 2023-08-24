@@ -3,22 +3,25 @@ body {
 }
 
 h1 {
-  color: navy;
-  
+ 
   text-align: center;
   border: 2px solid blue;
-  border-radius: 5px;
+  border-radius: 20px;
 
 }
 
 h2 {
-  color: navy;
-  margin-left: 10px; 
+  text-align: center;
+  border: 2px solid blue;
+  border-radius: 20px;
+
 }
 
 h3 {
-  color: navy;
-  margin-left: 10px; 
+  text-align: center;
+  border: 2px solid blue;
+  border-radius: 20px;
+
 }
 
 .button {

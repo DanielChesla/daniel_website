@@ -6,7 +6,8 @@ h1 {
   color: navy;
   
   text-align: center;
-  border: 3px solid green;
+  border: 2px solid blue;
+  border-radius: 5px;
 
 }
 

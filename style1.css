@@ -28,8 +28,27 @@ p {
 
 }
 
+
+
 table {
-  margin: 0 auto; /* Set left and right margins to "auto" this will center the table */
+    width: 100%; /* Make the table occupy the full width of its container */
+    border-collapse: collapse; /* Collapse table borders */
+    margin-bottom: 20px; /* Add spacing at the bottom of the table */
+    margin: 0 auto; /* Set left and right margins to "auto" this will center the table */
+  
+}
+
+/* Style table headers */
+th {
+    background-color: #f2f2f2; /* Background color for header cells */
+    padding: 10px; /* Add padding to header cells */
+    text-align: left; /* Align text to the left in header cells */
+}
+
+/* Style table data cells */
+td {
+    padding: 8px; /* Add padding to data cells */
+    border-bottom: 1px solid #ddd; /* Add a bottom border to separate rows */
 }
 
 

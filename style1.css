@@ -28,7 +28,9 @@ p {
 
 }
 
-
+table {
+  margin: 0 auto; /* Set left and right margins to "auto" this will center the table */
+}
 
 .button {
   display: inline-block;

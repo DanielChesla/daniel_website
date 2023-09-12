@@ -38,6 +38,17 @@ img {
   height: 200px; /* Set the height to 200 pixels */
 }
 
+article {
+    background-color: lightgray;
+    color: navy;
+    padding: 10px; 
+    border: 1px solid #ccc; 
+    border-radius: 5px; 
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2); 
+    
+}
+
+
 
 .button {
   display: inline-block;

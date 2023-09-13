@@ -31,7 +31,7 @@ p {
 
 
 table {
-    width: 80%; /* Make the table occupy the full width of its container */
+    width: 50%; /* Make the table occupy the full width of its container */
     border-collapse: collapse; /* Collapse table borders */
     margin-bottom: 20px; /* Add spacing at the bottom of the table */
     margin: 0 auto; /* Set left and right margins to "auto" this will center the table */

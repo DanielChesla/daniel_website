@@ -59,11 +59,12 @@ img {
 
 article {
     background-color: lightgray;
-    color: navy;
+    <-- color: navy; -->
     padding: 10px; 
     border: 1px solid #ccc; 
     border-radius: 5px; 
     box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2); 
+    width: 50%; /* Make the table occupy the full width of its container */
     
 }
 

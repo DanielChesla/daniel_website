@@ -62,7 +62,7 @@ article {
     <-- color: navy; -->
     padding: 10px; 
     border: 1px solid #ccc; 
-    border-radius: 5px; 
+    border-radius: 25px; 
     box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2); 
     width: 50%; /* Make the article occupy the full width of its container */
     margin: 0 auto;

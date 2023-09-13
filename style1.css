@@ -29,6 +29,10 @@ p {
 }
 
 
+footer {
+font-size: 28px; 
+}
+
 
 table {
     width: 50%; /* Make the table occupy the full width of its container */

@@ -40,6 +40,9 @@ table {
     border-collapse: collapse; /* Collapse table borders */
     margin-bottom: 20px; /* Add spacing at the bottom of the table */
     margin: 0 auto; /* Set left and right margins to "auto" this will center the table */
+    border: 5px solid #f2f2f6;
+    border-radius: 20px;
+    border-style: ridge;
   
 }
 

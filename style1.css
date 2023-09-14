@@ -63,8 +63,8 @@ img {
 
 
 span div img{
-  width: 300px; /* Set the width to 300 pixels */
-  height: 500px; /* Set the height to 200 pixels */
+  width: 400px; /* Set the width of the image in the selector to 400 pixels */
+  height: 500px; /* Set the height of the image in the selector to 500 pixels */
 }
 
 

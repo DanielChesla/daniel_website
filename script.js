@@ -53,6 +53,16 @@ document.addEventListener("DOMContentLoaded", function () {
         changeImage("dog.jpg");
     });
 
+        let suzukiBtn = document.getElementById("suzuki-btn");
+    suzukiBtn.addEventListener("click", function () {
+        changeImage("suzuki.jpg");
+    });
+
+        let frogBtn = document.getElementById("frog-btn");
+    frogBtn.addEventListener("click", function () {
+        changeImage("frog.jpg");
+    });
+
     function changeImage(newImage) {
         document.getElementById("image").src = newImage;
     }

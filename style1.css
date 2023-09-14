@@ -5,7 +5,7 @@ body {
 h1 {
  
   text-align: center;
-  border: 5px solid blue;
+  border: 5px solid #f2f2f6;
   border-radius: 20px;
 
 }
@@ -44,7 +44,7 @@ table {
 
 /* Style table headers */
 th {
-    background-color: #e1e1eb; /* Background color for header cells */
+    background-color: #f2f2f6; /* Background color for header cells */
     padding: 10px; /* Add padding to header cells */
     text-align: left; /* Align text to the left in header cells */
 }
@@ -70,7 +70,7 @@ span div img{
 
 
 article {
-    background-color: #e1e1eb;
+    background-color: #f2f2f6;
     padding: 50px; 
     border: 1px solid #ccc; 
     border-radius: 25px; 

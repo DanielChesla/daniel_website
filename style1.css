@@ -107,10 +107,17 @@ div {
   text-align: center;
   text-decoration: none;
   transition: background-color 0.9s ease;
+
 }
 
 .button:hover {
   background-color: rgb(0, 0, 255);
+  animation: wiggle 200ms linear 1s 2 reverse;
 }
 
-
+@keyframes wiggle {
+   0%   { transform: rotate(0); }  
+   25%  { transform: rotate(3deg); }  
+   75%  { transform: rotate(-3deg); }
+   100% { transform: rotate(0); }
+}

@@ -44,6 +44,7 @@ table {
     border: 5px solid #f2f2f6;
     border-radius: 20px;
     border-style: ridge;
+    box-shadow: -5px -5px 10px;
   
 }
 

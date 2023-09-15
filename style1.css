@@ -8,6 +8,7 @@ h1 {
   border: 5px solid #f2f2f6;
   border-radius: 20px;
   border-style: ridge;
+  animation: wiggle 200ms linear 1s 2 reverse;
   
 
 }
@@ -112,7 +113,7 @@ div {
 
 .button:hover {
   background-color: rgb(0, 0, 255);
-  animation: wiggle 200ms linear 1s 2 reverse;
+  
 }
 
 @keyframes wiggle {

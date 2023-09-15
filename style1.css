@@ -8,7 +8,7 @@ h1 {
   border: 5px solid #f2f2f6;
   border-radius: 20px;
   border-style: ridge;
-  animation: wiggle 500ms linear 1s 20 reverse;
+  animation: wiggle 500ms linear 1s 10 reverse;
   
 
 }

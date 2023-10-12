@@ -7,6 +7,7 @@ function responseReceivedHandler() {
             const sunriseTimestamp = response.sys.sunrise;
             const sunsetTimestamp = response.sys.sunset;
             const cityLoc = response.name;
+            const cityWind = response.wind; 
             
 
             const sunriseTime = new Date(sunriseTimestamp * 1000).toLocaleTimeString();
@@ -17,7 +18,7 @@ function responseReceivedHandler() {
             "<p>Current temp: " + response.main.temp + " &deg;F</p>" +
                 "<p>Desc: " + response.weather[0].description + "</p>" +
                 "<p>Humidity: " + response.main.humidity + "%</p>" +
-                "<p>Wind: " + response.wind + " mph</p>" +
+                "<p>Wind: " + cityWind + " mph</p>" +
                 "<p>Sunrise: " + sunriseTime + "</p>" +
                 "<p>Sunset: " + sunsetTime + "</p>";
         } else {

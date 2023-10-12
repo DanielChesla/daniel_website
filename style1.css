@@ -122,3 +122,9 @@ div {
    75%  { transform: rotate(-3deg); }
    100% { transform: rotate(0); }
 }
+
+.mathfield {
+  border: 1px solid rgb(66, 175, 211);
+  border-radius: 10px;
+  height: 40px;
+}

@@ -1,3 +1,6 @@
+// formulas were taken from various sources on the web, including https://www.cuemath.com/mean-median-mode-formula/ //
+
+
 function max(arr) {
     let max = arr[0];
 
@@ -49,9 +52,9 @@ function range(arr) {
 
 function calculate() {
 
-    let val1 = parseInt(document.getElementById("firstnumber").value);
-    let val2 = parseInt(document.getElementById("secondnumber").value);
-    let val3 = parseInt(document.getElementById("thirdnumber").value);
+    let val1 = Number(document.getElementById("firstnumber").value);
+    let val2 = Number(document.getElementById("secondnumber").value);
+    let val3 = Number(document.getElementById("thirdnumber").value);
 
     let values = [val1, val2, val3];
 

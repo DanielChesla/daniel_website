@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Calculator</title>
+        <meta name="description" content="A simple calculator">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="math.js"></script>
+        <link rel="stylesheet" href="styles.css">
+    </head>
+    <body>
+        <!--Calculator-->
+        <section class="page-section" id="contact">
+            <div class="container">
+                <div class="text-center">
+                    <h0 class="section-heading text-uppercase"> Calculator</h2>
+                    <h1 class="section-subheading text-muted">Calculate Maximum, Minimum, Mean, Median and Range.</h3>
+                </div>
+
+                <form id="contactForm" data-sb-form-api-token="API_TOKEN">
+                    <div class="row align-items-stretch mb-7">
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <!-- First input-->
+                                <input class="form-control" id="firstnumber" type="text" placeholder="Enter your first number*" data-sb-validations="required" />
+                                <div class="invalid-feedback" data-sb-feedback="name:required">A number is required.</div>
+                            </div>
+                            <div class="form-group">
+                                <!-- Second input-->
+                                <input class="form-control" id="secondnumber" type="text" placeholder="Enter your second number*" data-sb-validations="required" />
+                                <div class="invalid-feedback" data-sb-feedback="name:required">A number is required.</div>
+                            </div>
+                            <div class="form-group mb-md-2">
+                                <!-- Third input-->
+                                <input class="form-control" id="thirdnumber" type="text" placeholder="Enter your third number*" data-sb-validations="required" />
+                                <div class="invalid-feedback" data-sb-feedback="phone:required">A number is required.</div>
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="form-group form-group-textarea mb-md-2">
+                                <!-- Message output-->
+                                <label id="maximum">Max</label>
+                                <label id="minimum">Min</label>
+                                <label id="mean">Mean</label>
+                                <label id="median">Median</label>
+                                <label id="range">Range</label>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Submit Button-->
+                    <div class="text-center"><a class="btn btn-primary btn-xl text-uppercase" href="javascript:void(0);" onclick="calculate();">Calculate</a></div>
+                </form>
+            </div>
+        </section> 
+    </body>
+</html>

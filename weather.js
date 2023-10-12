@@ -14,7 +14,7 @@ function responseReceivedHandler() {
             const sunsetTime = new Date(sunsetTimestamp * 1000).toLocaleTimeString();
 
             weatherInfo.innerHTML =
-            "<p>Current weather in " + cityLoc + "</p>" +    
+            "<p style='font-size: 18px; text-decoration: underline;'>Current weather in " + cityLoc + "</p>" +
             "<p>Current temp: " + response.main.temp + " &deg;F</p>" +
                 "<p>Desc: " + response.weather[0].description + "</p>" +
                 "<p>Humidity: " + response.main.humidity + "%</p>" +

@@ -17,7 +17,7 @@ function responseReceivedHandler() {
             "<p>Current temp: " + response.main.temp + " &deg;F</p>" +
                 "<p>Desc: " + response.weather[0].description + "</p>" +
                 "<p>Humidity: " + response.main.humidity + "%</p>" +
-                "<p>Wind: " + response.main.wind + " mph</p>" +
+                "<p>Wind: " + response.wind + " mph</p>" +
                 "<p>Sunrise: " + sunriseTime + "</p>" +
                 "<p>Sunset: " + sunsetTime + "</p>";
         } else {

@@ -12,6 +12,8 @@
     </head>
     <body>
         <!--This is a page to test a basic calculator for my CS class-->
+        <div class="container">
+        <div class="d-grid gap-5">
         <div class="container-fluid ">
             <nav class="navbar sticky-top navbar-expand-lg bg-body-tertiary" style="border: 1px solid #f09b9b; border-radius: 10px; background: linear-gradient(to bottom right, rgb(255, 255, 255), rgb(66, 175, 211));">
                 <div class="container-fluid ">
@@ -50,52 +52,84 @@
               </nav>
 
         <section class="page-section" id="contact">
-            <div class="container">
+            
                 <div class="text-center">
-                    <h0 class="fs-5 text-center mb-3"> Basic Calculator</h2>
-                    <h1 class="fs-5 text-center mb-3">Calculate Maximum, Minimum, Mean, Median and Range.</h3>
+                  <h1 class="text-center">Basic Calculator</h1>
+                  <p></br></br></br>  
+                  <h2 class="fs-5 text-center mb-3">Calculate Maximum, Minimum, Mean, Median and Range.</h2>
+                      <p></br></br></br>
+                        This calculator can be used to calculate the maximum, minimum, mean, median and range of three numbers.</br></br>
+                          To use, enter 3 numbers in the fields below, and click calculate</br></br>
+                          The form accepts numbers, including positive numbers, negative numbers, and decimals </br></br>
+                          The form only accepts numbers, rejecting any non numeric input using a simple input type="number" </br></br>
+                          
+                      </p>
                 </div>
 
                 
-                    <div class="row align-items-stretch mb-7">
-                        <div class="col-xl-2-center col-lg-2-center col-md-2-center">
-                            <div class="form-group">
+                    <div class="row">
+                        
+                            <div class="col-xl-4 col-lg-4 col-md-4 " style="border: 1px solid rgb(66, 175, 211); border-radius: 10px;">
                                 <!-- First input-->
                                 <input class="form-control" id="firstnumber" type="number" placeholder="Enter the first number: " />                               
                             </div>
-                            <div class="form-group">
+                            <div class="col-xl-4 col-lg-4 col-md-4" style="border: 1px solid rgb(66, 175, 211);  border-radius: 10px;">
                                 <!-- Second input-->
                                 <input class="form-control" id="secondnumber" type="number" placeholder="Enter the second number: " />                                
                             </div>
-                            <div class="form-group mb-md-2">
+                            <div class="col-xl-4 col-lg-4 col-md-4" style="border: 1px solid rgb(66, 175, 211);  border-radius: 10px;">
                                 <!-- Third input-->
                                 <input class="form-control" id="thirdnumber" type="number" placeholder="Enter the third number: "  />                                
                             </div>
-                        </div>
-                        <div class="container-fluid">
+                        
+                      </br>
+                    </br>
+                  </br>
+                </br>
+                    
+                <p>
+                  
+                </br></br>
+                </p>
+
+                <!-- Submit Button-->
+                <div class="text-center"><a class="btn btn-primary btn-xl text-uppercase" href="javascript:void(0);" onclick="calculate();">Calculate</a></div>
+                <p>
+
+                </br></br>
+                </p>
+                
+                <div class="container-fluid">
                           <div class="row">
                                 <!-- Message output-->
-                                <div class="col-xl-2 col-lg-2 col-md-2 pb-2" >
+                                <div class="col-xl-3 col-lg-3 col-md-3 pb-2" style="border: 1px solid rgb(66, 175, 211);  border-radius: 10px; background-color: white;">
                                   <label id="maximum">Max :</label>
                                 </div>
-                                <div class="col-xl-2 col-lg-2 col-md-2 pb-2" >
+                                <div class="col-xl-2 col-lg-2 col-md-2 pb-2" style="border: 1px solid rgb(66, 175, 211);  border-radius: 10px; background-color: white;">
                                   <label id="minimum">Min :</label>
                                 </div>
-                                <div class="col-xl-2 col-lg-2 col-md-2 pb-2" >
+                                <div class="col-xl-2 col-lg-2 col-md-2 pb-2" style="border: 1px solid rgb(66, 175, 211);  border-radius: 10px; background-color: white;">
                                   <label id="mean">Mean :</label>
                                 </div>
-                                <div class="col-xl-2 col-lg-2 col-md-2 pb-2" >
+                                <div class="col-xl-2 col-lg-2 col-md-2 pb-2" style="border: 1px solid rgb(66, 175, 211);  border-radius: 10px; background-color: white;">
                                   <label id="median">Median :</label>
                                 </div>
-                                <div class="col-xl-2 col-lg-2 col-md-2 pb-2" >
+                                <div class="col-xl-3 col-lg-3 col-md-3 pb-2" style="border: 1px solid rgb(66, 175, 211);  border-radius: 10px; background-color: white;">
                                   <label id="range">Range :</label>
                                 </div>
 
                             </div>
                         </div>
                     </div>
-                    <!-- Submit Button-->
-                    <div class="text-center"><a class="btn btn-primary btn-xl text-uppercase" href="javascript:void(0);" onclick="calculate();">Calculate</a></div>
+                    
+                    
+                    <p>
+
+                    </br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br>
+
+                    </p>
+
+
                     <nav class="navbar sticky-bottom navbar-expand-lg bg-body-tertiary" style="border: 1px solid #f09b9b; border-radius: 10px; background: linear-gradient(to bottom right, rgb(255, 255, 255), rgb(66, 175, 211));">
 
                       <a href="https://danielchesla.com" class="btn btn-primary">Go to my home page</a>

@@ -7,7 +7,7 @@ function responseReceivedHandler() {
             const sunriseTimestamp = response.sys.sunrise;
             const sunsetTimestamp = response.sys.sunset;
             const cityLoc = response.name;
-            const cityWind = response.wind; 
+            const cityWind = response.wind.speed; 
             
 
             const sunriseTime = new Date(sunriseTimestamp * 1000).toLocaleTimeString();

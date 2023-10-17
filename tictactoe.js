@@ -91,7 +91,7 @@ $(function () {
      * a new game.
      */
     play = function () {
-        var board = $("<table border=1 cellspacing=0>"), indicator = 1;
+        var board = $("<table class='tictactoe-table' border='1' cellspacing='0'>"), indicator = 1;
         for (var i = 0; i < SIZE; i += 1) {
             var row = $("<tr>");
             board.append(row);

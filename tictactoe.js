@@ -5,6 +5,10 @@
  * If the page has no such element, it will just be added at the end 
  * of the body.
  */
+
+var xTally = 0; // Initialize X's score to 0
+var oTally = 0; // Initialize O's score to 0
+
 $(function () {
 
     var squares = [], 

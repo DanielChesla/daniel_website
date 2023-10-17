@@ -49,6 +49,19 @@ table {
   
 }
 
+.tictactoe-table {
+    width: 50%; /* Make the table occupy the full width of its container */
+    border-collapse: collapse; /* Collapse table borders */
+    margin-bottom: 20px; /* Add spacing at the bottom of the table */
+    margin: 0 auto; /* Set left and right margins to "auto" to center the table */
+    border: 5px solid #f2f2f6;
+    border-radius: 20px;
+    border-style: ridge;
+    box-shadow: -5px -5px 10px;
+}
+
+
+
 /* Style table headers */
 th {
     background-color: #f2f2f6; /* Background color for header cells */

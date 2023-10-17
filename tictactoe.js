@@ -78,7 +78,7 @@ $(function () {
             alert(turn + " wins!");
             startNewGame();
         } else if (moves === SIZE * SIZE) {
-            alert("Cat\u2019s game!");
+            alert("It's a tie!");
             startNewGame();
         } else {
             turn = turn === "X" ? "O" : "X";

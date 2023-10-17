@@ -58,11 +58,11 @@ function win(score) {
     for (var i = 0; i < wins.length; i += 1) {
         if ((wins[i] & score) === wins[i]) {
             if (turn === "X") {
-                xTally++;
-                $("#x-score").text(xTally); // Update X's score on the screen
+                xTally++; // Increase total games won by "X"
+                $("#x-score").text(xTally); // Update total games won by "X" on the screen
             } else if (turn === "O") {
-                oTally++;
-                $("#o-score").text(oTally); // Update O's score on the screen
+                oTally++; // Increase total games won by "O"
+                $("#o-score").text(oTally); // Update total games won by "O" on the screen
             }
             alert(turn + " wins!");
             startNewGame();

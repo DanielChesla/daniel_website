@@ -54,14 +54,23 @@ $(function () {
     /*
      * Returns whether the given score is a winning score.
      */
-    win = function (score) {
-        for (var i = 0; i < wins.length; i += 1) {
-            if ((wins[i] & score) === wins[i]) {
-                return true;
+function win(score) {
+    for (var i = 0; i < wins.length; i += 1) {
+        if ((wins[i] & score) === wins[i]) {
+            if (turn === "X") {
+                xTally++;
+                $("#x-score").text(xTally); // Update X's score on the screen
+            } else if (turn === "O") {
+                oTally++;
+                $("#o-score").text(oTally); // Update O's score on the screen
             }
+            alert(turn + " wins!");
+            startNewGame();
+            return true;
         }
-        return false;
-    },
+    }
+    return false;
+}
 
     /*
      * Sets the clicked-on square to the current player's mark,

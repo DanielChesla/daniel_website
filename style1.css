@@ -50,8 +50,8 @@ table {
 }
 
 .tictactoe-table {
-    width: 25%; /* Make the table occupy the full width of its container */
-    /* background : white; */
+    width: 25%; 
+    background-color: white;
     margin-bottom: 20px; /* Add spacing at the bottom of the table */
     margin: 0 auto; /* Set left and right margins to "auto" to center the table */
     border: 5px solid #f2f2f6;

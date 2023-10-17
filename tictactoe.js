@@ -49,7 +49,8 @@ $(function () {
         score = {"X": 0, "O": 0};
         moves = 0;
         squares.forEach(function (square) {square.html(EMPTY);});
-    },
+        gameEnded = false; // Reset the gameEnded flag
+    }
 
     /*
      * Returns whether the given score is a winning score.
@@ -66,6 +67,7 @@ function win(score) {
             }
             alert(turn + " wins!");
             startNewGame();
+            gameEnded = true; // Set the gameEnded flag to true
             return true;
         }
     }
@@ -88,7 +90,7 @@ function win(score) {
         score[turn] += $(this)[0].indicator;
         console.log(score[turn]);
         if (win(score[turn])) {
-            alert(turn + " wins!");
+            /*alert(turn + " wins!");*/
             startNewGame();
         } else if (moves === SIZE * SIZE) {
             alert("It's a tie!");

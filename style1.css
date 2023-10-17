@@ -50,15 +50,41 @@ table {
 }
 
 .tictactoe-table {
-    width: 25%; 
+    width: 25%;
     background-color: white;
-    margin-bottom: 20px; /* Add spacing at the bottom of the table */
-    margin: 0 auto; /* Set left and right margins to "auto" to center the table */
+    margin-bottom: 20px;
+    margin: 0 auto;
     border: 5px solid #f2f2f6;
     border-radius: 20px;
     border-style: ridge;
     box-shadow: -5px -5px 10px;
 }
+
+.tictactoe-table td {
+    border: 2px solid #000; /* Add a border to the table cells */
+    width: 100px; /* Adjust the width of the table cells if needed */
+    height: 100px; /* Adjust the height of the table cells if needed */
+    text-align: center;
+    vertical-align: middle;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.tictactoe-table td:hover {
+    background-color: #eee;
+}
+
+.tictactoe-table tr {
+    border: 2px solid #000; /* Add a border to the table rows */
+}
+
+
+
+
+
+
+
 
 
 

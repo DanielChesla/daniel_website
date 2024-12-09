@@ -11,21 +11,25 @@
             padding: 0;
             line-height: 1.6;
             background: url('background_colors.jpg') no-repeat center center fixed;
+            background-size: cover;
         }
         header {
             background: #003366;
             color: white;
             padding: 1rem 0;
             text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
         nav {
             text-align: center;
-            background: #6699CC; /
-            padding: 20px;
-            border-radius: 10px; 
-            color: #fff; /
-            margin-bottom: 20px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+            background: #6699CC;
+            padding: 10px;
+            position: sticky;
+            top: 70px;
+            z-index: 1000;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
         nav a {
             margin: 0 15px;
@@ -34,26 +38,35 @@
             font-weight: bold;
         }
         .content {
-            display: flex;
-            flex-wrap: wrap;
-            max-width: 1200px;
-            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: auto auto;
             gap: 20px;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 10px;
         }
         .contact, .testimonials, .portfolio {
-            background: #6699CC; /
+            background: linear-gradient(145deg, #76a8d8, #578cb9);
             padding: 20px;
-            border-radius: 10px; 
-            color: #fff; /
-            margin-bottom: 20px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
-}
+            border-radius: 15px;
+            color: #fff;
+            box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2), -4px -4px 8px rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .contact:hover, .testimonials:hover, .portfolio:hover {
+            transform: translateY(-5px);
+            box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.25), -6px -6px 12px rgba(255, 255, 255, 0.15);
+        }
         .portfolio img {
             width: 100%;
             max-width: 300px;
             margin: 10px;
             display: inline-block;
             border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
         }
         footer {
             text-align: center;
@@ -67,8 +80,8 @@
 <body>
     <header>
         <h1>Great Quality Painting, Inc</h1>
-        <h2>Family owned and operated</h2>
-        <h2>Proudly serving Broward and Palm Beach county since 2005</h2>
+        <h2>Family Owned and Operated</h2>
+        <h2>Proudly Serving Broward and Palm Beach County Since 2005</h2>
     </header>
     <nav>
         <a href="#contact">Contact</a>
@@ -83,7 +96,6 @@
             <p><strong>Address:</strong> Boca Raton FL</p>
             <p><strong>Licence:</strong> xxxxx </p>
             <p><strong>Fully Insured</strong></p>
-            
         </section>
         <section id="testimonials" class="testimonials">
             <h2>Customer Testimonials</h2>
@@ -110,3 +122,4 @@
     </footer>
 </body>
 </html>
+

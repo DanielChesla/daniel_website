@@ -68,19 +68,25 @@ nav p a:hover {
             margin: 20px auto;
             padding: 0 10px;
         }
-        .contact, .testimonials {
-            background: linear-gradient(145deg, #76a8d8, #578cb9);
-            padding: 20px;
-            border-radius: 15px;
-            color: #fff;
-            box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2), -4px -4px 8px rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-        .contact:hover, .testimonials:hover, .portfolio:hover {
-            transform: translateY(-5px);
-            box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.25), -6px -6px 12px rgba(255, 255, 255, 0.15);
-        }
+.contact, .testimonials, .portfolio {
+    background: linear-gradient(145deg, #76a8d8, #578cb9); /* Subtle gradient for depth */
+    padding: 20px;
+    border-radius: 15px; /* Rounded corners */
+    color: #fff;
+    box-shadow: 
+        8px 8px 16px rgba(0, 0, 0, 0.3),  /* Stronger shadow for depth */
+        -4px -4px 8px rgba(255, 255, 255, 0.1); /* Subtle highlight for lighting */
+    border: 1px solid rgba(255, 255, 255, 0.3); /* Thin border for contrast */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth animation */
+}
+
+.contact:hover, .testimonials:hover, .portfolio:hover {
+    transform: translateY(-8px); /* Lift effect */
+    box-shadow: 
+        12px 12px 20px rgba(0, 0, 0, 0.4),  /* Deeper shadow on hover */
+        -6px -6px 12px rgba(255, 255, 255, 0.15); /* Enhanced highlight */
+}
+
         .portfolio {
             grid-column: span 2;
             background: linear-gradient(145deg, #76a8d8, #578cb9);

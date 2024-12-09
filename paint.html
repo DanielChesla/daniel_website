@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painting Contractor</title>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -12,26 +11,24 @@
             padding: 0;
             line-height: 1.6;
             background: url('background_colors.jpg') no-repeat center center fixed;
+            background-size: cover;
         }
         header {
             background: #003366;
             color: white;
             padding: 1rem 0;
             text-align: center;
-        }
-        /* Apply the Dancing Script font to the specific text */
-        header h2 {
-            font-family: 'Dancing Script', cursive;
-            font-size: 1.8rem; /* You can adjust the size to your preference */
+            position: relative;
+            z-index: 1;
         }
         nav {
             text-align: center;
             background: #6699CC;
-            padding: 20px;
-            border-radius: 10px;
-            color: #fff;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            position: sticky;
+            top: 70px;  /* Adjusted to account for the header height */
+            z-index: 1000;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
         nav a {
             margin: 0 15px;
@@ -39,41 +36,45 @@
             color: white;
             font-weight: bold;
         }
-        /* Flexbox Layout for Content */
         .content {
-            display: flex;
-            flex-wrap: wrap;
-            max-width: 1200px;
-            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: auto auto;
             gap: 20px;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 10px;
         }
-        /* Contact and Testimonials sections */
         .contact, .testimonials {
-            background: #6699CC;
+            background: linear-gradient(145deg, #76a8d8, #578cb9);
             padding: 20px;
-            border-radius: 10px;
+            border-radius: 15px;
             color: #fff;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            flex: 1 1 40%; /* Makes these sections take equal width */
+            box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2), -4px -4px 8px rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
-        /* Portfolio Section (at the bottom) */
+        .contact:hover, .testimonials:hover, .portfolio:hover {
+            transform: translateY(-5px);
+            box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.25), -6px -6px 12px rgba(255, 255, 255, 0.15);
+        }
         .portfolio {
-            background: #6699CC;
+            grid-column: span 2;
+            background: linear-gradient(145deg, #76a8d8, #578cb9);
             padding: 20px;
-            border-radius: 10px;
+            border-radius: 15px;
             color: #fff;
-            margin-top: 20px;
-            width: 100%; /* Takes full width */
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            text-align: center;
+            box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2), -4px -4px 8px rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
         }
         .portfolio img {
             width: 100%;
-            height: 200px; /* Set uniform height */
-            object-fit: cover; /* Ensure images maintain aspect ratio */
+            max-width: 300px;
             margin: 10px;
-            border-radius: 8px;
+            display: inline-block;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
         }
         footer {
             text-align: center;
@@ -87,8 +88,8 @@
 <body>
     <header>
         <h1>Great Quality Painting, Inc</h1>
-        <h2>Family owned and operated</h2>
-        <h2>Proudly serving Broward and Palm Beach county since 2005</h2>
+        <h2>Family Owned and Operated</h2>
+        <h2>Proudly Serving Broward and Palm Beach County Since 2005</h2>
     </header>
     <nav>
         <a href="#contact">Contact</a>
@@ -96,7 +97,6 @@
         <a href="#portfolio">Portfolio</a>
     </nav>
     <div class="content">
-        <!-- Contact Section -->
         <section id="contact" class="contact">
             <h2>Contact Us</h2>
             <p><strong>Phone:</strong> <a href="tel:+15615583594">(561) 558-3594</a></p>
@@ -105,7 +105,6 @@
             <p><strong>Licence:</strong> xxxxx </p>
             <p><strong>Fully Insured</strong></p>
         </section>
-        <!-- Testimonials Section -->
         <section id="testimonials" class="testimonials">
             <h2>Customer Testimonials</h2>
             <blockquote>
@@ -118,17 +117,14 @@
                 <br>– John Smith
             </blockquote>
         </section>
-    </div>
-    <!-- Portfolio Section -->
-    <section id="portfolio" class="portfolio">
-        <h2>Portfolio</h2>
-        <div class="portfolio-images">
+        <section id="portfolio" class="portfolio">
+            <h2>Portfolio</h2>
             <img src="project1.jpg" alt="Project 1">
             <img src="project2.jpg" alt="Project 2">
             <img src="project3.jpg" alt="Project 3">
             <img src="project4.jpg" alt="Project 4">
-        </div>
-    </section>
+        </section>
+    </div>
     <footer>
         &copy; 2024 Great Quality Painting, Inc
     </footer>

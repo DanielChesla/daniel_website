@@ -46,7 +46,7 @@
             margin: 20px auto;
             padding: 0 10px;
         }
-        .contact, .testimonials, .portfolio {
+        .contact, .testimonials {
             background: linear-gradient(145deg, #76a8d8, #578cb9);
             padding: 20px;
             border-radius: 15px;
@@ -58,6 +58,15 @@
         .contact:hover, .testimonials:hover, .portfolio:hover {
             transform: translateY(-5px);
             box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.25), -6px -6px 12px rgba(255, 255, 255, 0.15);
+        }
+        .portfolio {
+            grid-column: span 2;
+            background: linear-gradient(145deg, #76a8d8, #578cb9);
+            padding: 20px;
+            border-radius: 15px;
+            color: #fff;
+            box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2), -4px -4px 8px rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
         }
         .portfolio img {
             width: 100%;
@@ -122,4 +131,3 @@
     </footer>
 </body>
 </html>
-

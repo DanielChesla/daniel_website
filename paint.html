@@ -38,23 +38,28 @@ header {
 nav {
     text-align: center;
     background: transparent; /* Remove background color */
-    padding: 10px 0; /* Adjust padding for spacing */
+    padding: 10px 0;
     position: sticky;
-    top: 70px; /* Adjust this value based on header height */
-    z-index: 10;
+    top: 0; /* Stick to the very top */
+    z-index: 100; /* Higher z-index to appear on top */
     box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2), -4px -4px 8px rgba(255, 255, 255, 0.1); /* Depth effect */
 }
 
+
 nav p a {
+    position: sticky;
+    top: 0; /* Stick to the top of the viewport */
+    z-index: 100; /* Ensure visibility on top of other elements */
     text-decoration: none;
-    color: white; /* Text color */
-    background-color: #003366; /* Button color */
+    color: white;
+    background-color: #003366;
     padding: 10px 20px;
     border-radius: 5px;
     font-size: 1.5rem;
     font-weight: bold;
     transition: background-color 0.3s ease;
 }
+
 
 nav p a:hover {
     background-color: #578cb9; /* Button hover color */

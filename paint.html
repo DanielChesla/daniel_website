@@ -13,94 +13,71 @@
             background: url('background_colors.jpg') no-repeat center center fixed;
             background-size: cover;
         }
-header {
-    background: linear-gradient(145deg, #002244, #00509e, #87cefa); /* Dramatic gradient background */
-
-    color: white;
-    padding: 1rem;
-    text-align: center;
-    position: relative;
-    top: 0; /* Makes it stick to the top of the viewport */
-    z-index: 100; /* High z-index to appear on top */
-    border-radius: 15px; /* Rounded corners */
-    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2), -4px -4px 8px rgba(255, 255, 255, 0.1); /* Depth effect */
-    border: 1px solid rgba(255, 255, 255, 0.3); /* Subtle border */
-}
-
-
-
-        /* Apply a cursive font to Family Owned and Operated */
-        header h2 {
-            font-family: 'Brush Script MT', cursive; /* A cursive font that's web-safe */
-            font-size: 2.0rem; /* Adjust size as needed */
-            font-weight: normal; /* Make the text more elegant */
+        header {
+            background: linear-gradient(145deg, #002244, #00509e, #87cefa);
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            border-radius: 15px;
+            box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2), -4px -4px 8px rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
         }
-nav {
-    text-align: center;
-    background: transparent; /* Remove background color */
-    padding: 10px 0;
-    position: sticky;
-    top: 0; /* Stick to the very top */
-    z-index: 100; /* Higher z-index to appear on top */
-    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2), -4px -4px 8px rgba(255, 255, 255, 0.1); /* Depth effect */
-}
-
-
-nav p a {
-    position: sticky;
-    top: 0; /* Stick to the top of the viewport */
-    z-index: 100; /* Ensure visibility on top of other elements */
-    text-decoration: none;
-    color: white;
-    background-color: #83eb34;
-    padding: 10px 20px;
-    border-radius: 5px;
-    font-size: 1.5rem;
-    font-weight: bold;
-    transition: background-color 0.3s ease;
-}
-
-
-nav p a:hover {
-    background-color: #578cb9; /* Button hover color */
-}
-
+        header h2 {
+            font-family: 'Brush Script MT', cursive;
+            font-size: 2rem;
+            font-weight: normal;
+        }
+        nav {
+            text-align: center;
+            background: transparent;
+            padding: 10px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2), -4px -4px 8px rgba(255, 255, 255, 0.1);
+        }
+        nav p a {
+            text-decoration: none;
+            color: white;
+            background-color: #83eb34;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+        nav p a:hover {
+            background-color: #578cb9;
+        }
         .content {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            grid-template-rows: auto auto;
+            grid-template-columns: 1fr 1fr; /* Two equal-width columns */
+            grid-template-rows: auto auto; /* Two rows for content */
             gap: 20px;
             max-width: 1200px;
             margin: 20px auto;
             padding: 0 10px;
         }
-.contact, .testimonials, .portfolio {
-    background: linear-gradient(145deg, #002244, #00509e, #87cefa); /* Dramatic gradient background */
-    padding: 20px;
-    border-radius: 15px; /* Rounded corners */
-    color: #fff;
-    box-shadow: 
-        8px 8px 16px rgba(0, 0, 0, 0.3),  /* Stronger shadow for depth */
-        -4px -4px 8px rgba(255, 255, 255, 0.1); /* Subtle highlight for lighting */
-    border: 1px solid rgba(255, 255, 255, 0.3); /* Thin border for contrast */
-    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth animation */
-}
-
-.contact:hover, .testimonials:hover, .portfolio:hover {
-    transform: translateY(-8px); /* Lift effect */
-    box-shadow: 
-        12px 12px 20px rgba(0, 0, 0, 0.4),  /* Deeper shadow on hover */
-        -6px -6px 12px rgba(255, 255, 255, 0.15); /* Enhanced highlight */
-}
-
-        .portfolio {
-            grid-column: span 2;
-            background: linear-gradient(145deg, #002244, #00509e, #87cefa); /* Dramatic gradient background */
+        .contact, .testimonials, .portfolio {
+            background: linear-gradient(145deg, #002244, #00509e, #87cefa);
             padding: 20px;
             border-radius: 15px;
             color: #fff;
-            box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2), -4px -4px 8px rgba(255, 255, 255, 0.1);
+            box-shadow: 
+                8px 8px 16px rgba(0, 0, 0, 0.3),  
+                -4px -4px 8px rgba(255, 255, 255, 0.1);
             border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .contact:hover, .testimonials:hover, .portfolio:hover {
+            transform: translateY(-8px);
+            box-shadow: 
+                12px 12px 20px rgba(0, 0, 0, 0.4),  
+                -6px -6px 12px rgba(255, 255, 255, 0.15);
+        }
+        .portfolio {
+            grid-column: 1 / 3; /* Span both columns */
+            grid-row: 2; /* Place it in the second row */
         }
         .portfolio img {
             width: 100%;
@@ -135,10 +112,10 @@ nav p a:hover {
             <p><strong>Phone:</strong> <a href="tel:+15615583594">(561) 558-3594</a></p>
             <p><strong>Email:</strong> <a href="mailto:info@example.com">info@example.com</a></p>
             <p><strong>Address:</strong> Boca Raton FL</p>
-            <p><strong>Licence:</strong> xxxxx </p>
+            <p><strong>Licence:</strong> xxxxx</p>
             <p><strong>Fully Insured</strong></p>
-            <p><strong>Falamos português</p>
-            <p><strong>Hablamos español</p>
+            <p><strong>Falamos português</strong></p>
+            <p><strong>Hablamos español</strong></p>
         </section>
         <section id="testimonials" class="testimonials">
             <h2>Customer Testimonials</h2>

@@ -41,7 +41,7 @@
             color: white;
             background-color: #83eb34;
             padding: 10px 20px;
-            border-radius: 25px;
+            border-radius: 5px;
             font-size: 1.5rem;
             font-weight: bold;
             transition: background-color 0.3s ease;
@@ -51,8 +51,8 @@
         }
         .content {
             display: grid;
-            grid-template-columns: 1fr 1fr; /* Two equal-width columns */
-            grid-template-rows: auto auto; /* Two rows for content */
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: auto auto;
             gap: 20px;
             max-width: 1200px;
             margin: 20px auto;
@@ -76,8 +76,8 @@
                 -6px -6px 12px rgba(255, 255, 255, 0.15);
         }
         .portfolio {
-            grid-column: 1 / 3; /* Span both columns */
-            grid-row: 2; /* Place it in the second row */
+            grid-column: 1 / 3;
+            grid-row: 2;
         }
         .portfolio img {
             width: 100%;
@@ -94,6 +94,17 @@
             color: white;
             padding: 10px 0;
             margin-top: 20px;
+        }
+
+        /* Media Query for Mobile Devices */
+        @media (max-width: 768px) {
+            .content {
+                grid-template-columns: 1fr; /* Stack sections vertically */
+                grid-template-rows: auto auto auto;
+            }
+            .portfolio {
+                grid-column: 1; /* Keep portfolio in the first column */
+            }
         }
     </style>
 </head>
@@ -120,8 +131,13 @@
         <section id="testimonials" class="testimonials">
             <h2>Customer Testimonials</h2>
             <blockquote>
-                "After much success with an interior painting project, we contracted GQP to paint the exterior of our home. The jobs always exceeded our expectations, and the jobsite was left cleaner than they found it."
+                "After much success with an interior painting project, we contracted GQP to paint the exterior of our home.  
+                The jobs always exceeded our expectations, and the jobsite was left cleaner than they found it."
                 <br>– Daniel C, Boca Raton
+            </blockquote>
+            <blockquote>
+                "Our house looks brand new! Thank you for the amazing service."
+                <br>– Jose P, Pompano Beach
             </blockquote>
             <blockquote>
                 "GQP painted our office space, and the difference it made was incredible. Their attention to detail was second to none, and they made sure the workspace was left spotless after the job was done. Highly recommended!"

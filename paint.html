@@ -36,27 +36,29 @@ header {
         }
 nav {
     text-align: center;
-    /* background: #6699CC; */
-    padding: 10px;
+    background: transparent; /* Remove background color */
+    padding: 10px 0; /* Adjust padding for spacing */
     position: sticky;
-    top: 300px; /* Adjust this value to match the header's height */
-    z-index: 10; /* Ensure it appears on top */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    top: 70px; /* Adjust this value based on header height */
+    z-index: 10;
+    box-shadow: none; /* Remove box shadow */
 }
-        /* Style the "Call Now" button */
-        nav p a {
-            text-decoration: none;
-            color: white;
-            background-color: #003366; /* Button color */
-            padding: 10px 20px;
-            border-radius: 5px;
-            font-size: 1.2rem;
-            font-weight: bold;
-            transition: background-color 0.3s ease;
-        }
-        nav p a:hover {
-            background-color: #578cb9; /* Button hover color */
-        }
+
+nav p a {
+    text-decoration: none;
+    color: white; /* Text color */
+    background-color: #003366; /* Button color */
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+nav p a:hover {
+    background-color: #578cb9; /* Button hover color */
+}
+
         .content {
             display: grid;
             grid-template-columns: 1fr 1fr;

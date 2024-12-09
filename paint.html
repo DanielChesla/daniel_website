@@ -14,18 +14,18 @@
             background-size: cover;
         }
 header {
-    background: linear-gradient(145deg, #003366, #00509e); /* Gradient background for a modern look */
+    background: linear-gradient(145deg, #003366, #00509e); /* Gradient background */
     color: white;
     padding: 1.5rem;
     text-align: center;
-    position: sticky;
-    z-index: 1;
+    position: sticky; /* Sticky positioning */
+    top: 0; /* Makes it stick to the top of the viewport */
+    z-index: 100; /* High z-index to appear on top */
     border-radius: 15px; /* Rounded corners */
-    max-width: 1200px; /* Center and contain the header */
-    margin: 20px auto; /* Space around the header */
     box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2), -4px -4px 8px rgba(255, 255, 255, 0.1); /* Depth effect */
-    border: 1px solid rgba(255, 255, 255, 0.3); /* Subtle border for better contrast */
+    border: 1px solid rgba(255, 255, 255, 0.3); /* Subtle border */
 }
+
 
 
         /* Apply a cursive font to Family Owned and Operated */

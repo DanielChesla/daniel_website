@@ -40,7 +40,7 @@
             text-decoration: none;
             color: white;
             background-color: #83eb34;
-            padding: 6px 6px;
+            padding: 10px 20px;
             border-radius: 5px;
             font-size: 1.5rem;
             font-weight: bold;
@@ -96,14 +96,19 @@
             margin-top: 20px;
         }
 
+        /* Change link color to white */
+        .contact a, .testimonials a {
+            color: white; /* Set the color of phone and email links to white */
+            text-decoration: none; /* Remove underline */
+        }
+
         /* Media Query for Mobile Devices */
         @media (max-width: 768px) {
             .content {
-                grid-template-columns: 1fr; /* Stack sections vertically */
-                grid-template-rows: auto auto auto;
+                grid-template-columns: 1fr;
             }
             .portfolio {
-                grid-column: 1; /* Keep portfolio in the first column */
+                grid-column: 1;
             }
         }
     </style>
@@ -115,7 +120,7 @@
         <h2>Proudly Serving Broward and Palm Beach County Since 2005</h2>
     </header>
     <nav>
-        <p><a href="tel:+15615583594">Call now for a free estimate!</a></p>
+        <p><a href="tel:+15615583594">Call now for your free estimate!</a></p>
     </nav>
     <div class="content">
         <section id="contact" class="contact">

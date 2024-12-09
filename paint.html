@@ -27,15 +27,15 @@
             font-size: 2.0rem; /* Adjust size as needed */
             font-weight: normal; /* Make the text more elegant */
         }
-        nav {
-            text-align: center;
-            background: #6699CC;
-            padding: 10px;
-            position: sticky;
-            top: 70px;  /* Adjusted to account for the header height */
-            z-index: 1000;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
+nav {
+    text-align: center;
+    background: #6699CC;
+    padding: 10px;
+    position: sticky;
+    top: 70px;  /* Keeps the nav below the header */
+    z-index: 10; /* Increased to ensure it's on top */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
         /* Style the "Call Now" button */
         nav p a {
             text-decoration: none;

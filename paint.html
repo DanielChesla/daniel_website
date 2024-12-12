@@ -96,6 +96,34 @@
             margin-top: 20px;
         }
 
+
+.scroll-container {
+    position: relative;
+    height: 150px; /* Set the height of the visible area */
+    overflow: hidden; /* Hide the overflowing text */
+}
+
+.scroll-container blockquote {
+    margin: 0;
+    padding: 0;
+    text-align: justify;
+}
+
+.scroll-container {
+    animation: scrollText 20s linear infinite;
+}
+
+@keyframes scrollText {
+    0% {
+        transform: translateY(100%);
+    }
+    100% {
+        transform: translateY(-100%);
+    }
+}
+
+        
+        
         /* Change link color to white */
         .contact a, .testimonials a {
             color: white; /* Set the color of phone and email links to white */
@@ -133,26 +161,29 @@
             <p><strong>Falamos português</strong></p>
             <p><strong>Hablamos español</strong></p>
         </section>
-        <section id="testimonials" class="testimonials">
-            <h2>Customer Testimonials</h2>
-            <blockquote>
-                "Our first experience with GQP was when we hired them to repaint the interior of our home.  We were thrilled to discover that they also do exterior projects.  We contracted GQP to paint the exterior of our home, and it looks amazing!  
-                The results always exceeded our expectations, and the jobsite was always left cleaner than they found it."
-                <br>– Daniel C, Boca Raton
-            </blockquote>
-            <blockquote>
-                "Our house looks brand new! Thank you for the amazing service."
-                <br>– Jose P, Pompano Beach
-            </blockquote>
-            <blockquote>
-                "GQP painted our office space, and the difference it made was incredible. Their attention to detail was second to none, and they made sure the workspace was left spotless after the job was done. Highly recommended!"
-                <br>– Michael P, West Palm Beach
-            </blockquote>
-            <blockquote>
-                "After moving into our new home, we hired Great Quality Painting to update the entire interior. Their team was efficient, friendly, and delivered beautiful results. It’s like living in a brand new home!"
-                <br>– Jennifer K, Boca Raton
-            </blockquote>
-        </section>
+<section id="testimonials" class="testimonials">
+    <h2>Customer Testimonials</h2>
+    <div class="scroll-container">
+        <blockquote>
+            "Our first experience with GQP was when we hired them to repaint the interior of our home.  We were thrilled to discover that they also do exterior projects.  We contracted GQP to paint the exterior of our home, and it looks amazing!  
+            The results always exceeded our expectations, and the jobsite was always left cleaner than they found it."
+            <br>– Daniel C, Boca Raton
+        </blockquote>
+        <blockquote>
+            "Our house looks brand new! Thank you for the amazing service."
+            <br>– Jose P, Pompano Beach
+        </blockquote>
+        <blockquote>
+            "GQP painted our office space, and the difference it made was incredible. Their attention to detail was second to none, and they made sure the workspace was left spotless after the job was done. Highly recommended!"
+            <br>– Michael P, West Palm Beach
+        </blockquote>
+        <blockquote>
+            "After moving into our new home, we hired Great Quality Painting to update the entire interior. Their team was efficient, friendly, and delivered beautiful results. It’s like living in a brand new home!"
+            <br>– Jennifer K, Boca Raton
+        </blockquote>
+    </div>
+</section>
+
         <section id="portfolio" class="portfolio">
             <h2>Portfolio</h2>
             <img src="project1.jpg" alt="Project 1">

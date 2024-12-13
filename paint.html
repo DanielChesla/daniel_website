@@ -145,6 +145,41 @@
     animation: scrollLoop 70s linear infinite; /* Adjust duration as needed */
 }
 
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 200px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 5px;
+    padding: 5px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%; /* Position above the list item */
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.tooltip:hover .tooltiptext,
+.tooltip:focus .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}
+
+.tooltip:focus {
+    outline: none;
+}
+
+
 @keyframes scrollLoop {
     0% {
         transform: translateY(0);
@@ -234,7 +269,7 @@
         </section>
         
 
-<section id="services" class="services">
+/* <section id="services" class="services">
     <h2>Services</h2>
     <ul style="list-style-type: none; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;">
         <li style="background: rgba(255, 255, 255, 0.2); padding: 10px; border-radius: 5px; text-align: center;">Residential</li>
@@ -252,7 +287,27 @@
     </ul>
 </section>
 
+*/
 
+
+<section id="services" class="services">
+    <h2>Services</h2>
+    <ul style="list-style-type: none; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;">
+        <li class="tooltip" style="background: rgba(255, 255, 255, 0.2); padding: 10px; border-radius: 5px; text-align: center;">
+            Residential
+            <span class="tooltiptext">Professional residential painting services for your home.</span>
+        </li>
+        <li class="tooltip" style="background: rgba(255, 255, 255, 0.2); padding: 10px; border-radius: 5px; text-align: center;">
+            Commercial
+            <span class="tooltiptext">High-quality commercial painting services for businesses.</span>
+        </li>
+        <li class="tooltip" style="background: rgba(255, 255, 255, 0.2); padding: 10px; border-radius: 5px; text-align: center;">
+            Home Offices
+            <span class="tooltiptext">Create the perfect professional space at home.</span>
+        </li>
+        <!-- Repeat for other items as needed -->
+    </ul>
+</section>
 
 
 <section id="portfolio" class="portfolio">

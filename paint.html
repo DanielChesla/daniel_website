@@ -116,6 +116,22 @@
     animation: scrollLoop 70s linear infinite; /* Adjust duration as needed */
 }
 
+.services ul {
+    list-style-type: none; /* Remove bullet points */
+    padding: 0; /* Remove padding */
+    display: grid; /* Use grid layout */
+    grid-template-columns: repeat(3, 1fr); /* Create 3 equal-width columns */
+    gap: 15px; /* Add spacing between items */
+}
+
+.services li {
+    background: rgba(255, 255, 255, 0.2); /* Add a light background */
+    padding: 10px; /* Add padding inside each list item */
+    border-radius: 5px; /* Round the corners */
+    text-align: center; /* Center-align the text */
+}
+
+
 @keyframes scrollLoop {
     0% {
         transform: translateY(0);

@@ -196,13 +196,16 @@
             margin-top: 20px;
         }
         /* Media Query for Mobile Devices */
-        @media (max-width: 768px) {
+@media (max-width: 768px) {
             .content {
                 grid-template-columns: 1fr;
             }
             .portfolio {
                 grid-column: 1;
             }
+            #services ul {
+                grid-template-columns: repeat(2, 1fr);
+    }
         }
     </style>
 </head>

@@ -145,6 +145,40 @@
     animation: scrollLoop 70s linear infinite; /* Adjust duration as needed */
 }
 
+.tooltip {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 200px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 5px;
+    padding: 5px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%; /* Position above the list item */
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.tooltip:hover .tooltiptext,
+.tooltip:focus .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}
+
+.tooltip:focus {
+    outline: none;
+}
+
+        
 @keyframes scrollLoop {
     0% {
         transform: translateY(0);
@@ -281,20 +315,57 @@
 <section id="services" class="services">
     <h2>Services</h2>
     <ul style="list-style-type: none; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;">
-        <li style="background: rgba(255, 255, 255, 0.2); padding: 10px; border-radius: 5px; text-align: center;">Residential</li>
-        <li style="background: rgba(255, 255, 255, 0.2); padding: 10px; border-radius: 5px; text-align: center;">Commercial</li>
-        <li style="background: rgba(255, 255, 255, 0.2); padding: 10px; border-radius: 5px; text-align: center;">Home Offices</li>
-        <li style="background: rgba(255, 255, 255, 0.2); padding: 10px; border-radius: 5px; text-align: center;">Interior Painting</li>
-        <li style="background: rgba(255, 255, 255, 0.2); padding: 10px; border-radius: 5px; text-align: center;">Exterior Painting</li>
-        <li style="background: rgba(255, 255, 255, 0.2); padding: 10px; border-radius: 5px; text-align: center;">Trim Painting</li>
-        <li style="background: rgba(255, 255, 255, 0.2); padding: 10px; border-radius: 5px; text-align: center;">Minor Carpentry</li>
-        <li style="background: rgba(255, 255, 255, 0.2); padding: 10px; border-radius: 5px; text-align: center;">Restoration Work</li>
-        <li style="background: rgba(255, 255, 255, 0.2); padding: 10px; border-radius: 5px; text-align: center;">Wallpaper</li>
-        <li style="background: rgba(255, 255, 255, 0.2); padding: 10px; border-radius: 5px; text-align: center;">Sheet Rock</li>
-        <li style="background: rgba(255, 255, 255, 0.2); padding: 10px; border-radius: 5px; text-align: center;">Interior Renovations</li>
-        <li style="background: rgba(255, 255, 255, 0.2); padding: 10px; border-radius: 5px; text-align: center;">Pressure Washing</li>
+        <li class="tooltip" style="background: rgba(255, 255, 255, 0.2); padding: 10px; border-radius: 5px; text-align: center;">
+            Residential
+            <span class="tooltiptext">Professional residential painting services for your home.</span>
+        </li>
+        <li class="tooltip" style="background: rgba(255, 255, 255, 0.2); padding: 10px; border-radius: 5px; text-align: center;">
+            Commercial
+            <span class="tooltiptext">High-quality commercial painting services for businesses of all sizes.</span>
+        </li>
+        <li class="tooltip" style="background: rgba(255, 255, 255, 0.2); padding: 10px; border-radius: 5px; text-align: center;">
+            Home Offices
+            <span class="tooltiptext">Transform your home office with professional painting and design.</span>
+        </li>
+        <li class="tooltip" style="background: rgba(255, 255, 255, 0.2); padding: 10px; border-radius: 5px; text-align: center;">
+            Interior Painting
+            <span class="tooltiptext">Enhance the beauty of your interiors with expert painting services.</span>
+        </li>
+        <li class="tooltip" style="background: rgba(255, 255, 255, 0.2); padding: 10px; border-radius: 5px; text-align: center;">
+            Exterior Painting
+            <span class="tooltiptext">Durable and vibrant exterior painting to boost curb appeal.</span>
+        </li>
+        <li class="tooltip" style="background: rgba(255, 255, 255, 0.2); padding: 10px; border-radius: 5px; text-align: center;">
+            Trim Painting
+            <span class="tooltiptext">Precision painting for trim, doors, and moldings to complete your space.</span>
+        </li>
+        <li class="tooltip" style="background: rgba(255, 255, 255, 0.2); padding: 10px; border-radius: 5px; text-align: center;">
+            Minor Carpentry
+            <span class="tooltiptext">Small carpentry repairs and upgrades to complement your painting project.</span>
+        </li>
+        <li class="tooltip" style="background: rgba(255, 255, 255, 0.2); padding: 10px; border-radius: 5px; text-align: center;">
+            Restoration Work
+            <span class="tooltiptext">Expert restoration to preserve and revitalize your home’s features.</span>
+        </li>
+        <li class="tooltip" style="background: rgba(255, 255, 255, 0.2); padding: 10px; border-radius: 5px; text-align: center;">
+            Wallpaper
+            <span class="tooltiptext">Installation and removal of wallpaper for a fresh, modern look.</span>
+        </li>
+        <li class="tooltip" style="background: rgba(255, 255, 255, 0.2); padding: 10px; border-radius: 5px; text-align: center;">
+            Sheet Rock
+            <span class="tooltiptext">Professional drywall installation and repair for smooth walls.</span>
+        </li>
+        <li class="tooltip" style="background: rgba(255, 255, 255, 0.2); padding: 10px; border-radius: 5px; text-align: center;">
+            Interior Renovations
+            <span class="tooltiptext">Comprehensive interior renovation services to transform your space.</span>
+        </li>
+        <li class="tooltip" style="background: rgba(255, 255, 255, 0.2); padding: 10px; border-radius: 5px; text-align: center;">
+            Pressure Washing
+            <span class="tooltiptext">Thorough pressure washing to clean and prepare surfaces for painting.</span>
+        </li>
     </ul>
 </section>
+
 
 
 

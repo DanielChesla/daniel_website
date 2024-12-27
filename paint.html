@@ -482,7 +482,7 @@
     
 </body>
 
-    <script>
+<script>
     // Existing script for exit popup
     let popupShown = false;
     document.addEventListener("mouseleave", (e) => {
@@ -508,6 +508,7 @@
             if (media.tagName === 'IMG') {
                 modalContent.innerHTML = `<img src="${media.src}" alt="${media.alt}" style="max-width: 100%; max-height: 100%;">`;
             } else if (media.tagName === 'VIDEO') {
+                media.pause(); // Pause the original video
                 modalContent.innerHTML = `
                     <video controls autoplay style="max-width: 100%; max-height: 100%;">
                         <source src="${media.querySelector('source').src}" type="video/mp4">
@@ -532,4 +533,5 @@
         }
     });
 </script>
+
 </html>

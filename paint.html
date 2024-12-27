@@ -525,7 +525,9 @@ document.querySelectorAll('.portfolio img, .portfolio video').forEach(media => {
                 </video>
             `;
             const modalVideo = modalContent.querySelector('video');
-            modalVideo.play(); // Start playing the video in the modal
+            modalVideo.addEventListener('loadedmetadata', () => {
+                modalVideo.play();
+            });
         }
     });
 });
@@ -546,7 +548,6 @@ modal.addEventListener('click', (e) => {
         closeModalAndPauseVideos();
     }
 });
-
 
 </script>
 

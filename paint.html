@@ -10,6 +10,52 @@
 
     <title>South Florida's leading experts for Residential and Commerical painting!</title>
     <style>
+
+/* Modal styles */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    max-width: 90%;
+    max-height: 90%;
+}
+
+.modal img, .modal video {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.modal video {
+    outline: none;
+}
+
+.close {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    font-size: 30px;
+    color: white;
+    cursor: pointer;
+    z-index: 1001;
+}
+
+.close:hover {
+    color: #ccc;
+}
+
+
+        
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -429,9 +475,16 @@
     </div>
 </div>
 
+<!-- Modal Structure -->
+<div class="modal" id="modal">
+    <span class="close" id="close">&times;</span>
+    <div class="modal-content" id="modalContent"></div>
+</div>
+    
 </body>
 
     <script>
+    // Existing script for exit popup
     let popupShown = false;
     document.addEventListener("mouseleave", (e) => {
         if (e.clientY < 0 && !popupShown) {
@@ -442,6 +495,42 @@
 
     document.getElementById("close-popup").addEventListener("click", () => {
         document.getElementById("exit-popup").style.display = "none";
+    });
+
+    // New script for modal functionality
+    const modal = document.getElementById('modal');
+    const modalContent = document.getElementById('modalContent');
+    const closeModal = document.getElementById('close');
+
+    // Add click event listeners to all media
+    document.querySelectorAll('.portfolio img, .portfolio video').forEach(media => {
+        media.addEventListener('click', () => {
+            modal.style.display = 'flex'; // Show the modal
+            if (media.tagName === 'IMG') {
+                modalContent.innerHTML = `<img src="${media.src}" alt="${media.alt}" style="max-width: 100%; max-height: 100%;">`;
+            } else if (media.tagName === 'VIDEO') {
+                modalContent.innerHTML = `
+                    <video controls autoplay style="max-width: 100%; max-height: 100%;">
+                        <source src="${media.querySelector('source').src}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                `;
+            }
+        });
+    });
+
+    // Close modal on close button click
+    closeModal.addEventListener('click', () => {
+        modal.style.display = 'none';
+        modalContent.innerHTML = ''; // Clear modal content
+    });
+
+    // Close modal on outside click
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            modal.style.display = 'none';
+            modalContent.innerHTML = ''; // Clear modal content
+        }
     });
 </script>
 </html>

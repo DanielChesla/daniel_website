@@ -23,21 +23,20 @@
     z-index: 1000;
     align-items: center;
     justify-content: center;
+    overflow: hidden; /* Prevent scrolling if content overflows */
 }
 
 .modal-content {
-    max-width: 90%;
-    max-height: 90%;
+    max-width: 90%; /* Constrain width to 90% of the viewport */
+    max-height: 90%; /* Constrain height to 90% of the viewport */
+    overflow: auto; /* Allow scrolling inside the modal if content is too large */
 }
 
 .modal img, .modal video {
-    width: 100%;
-    height: auto;
-    display: block;
-}
-
-.modal video {
-    outline: none;
+    max-width: 100%; /* Ensure the media fits within the modal content */
+    max-height: 100%; /* Ensure the media fits within the modal content */
+    display: block; /* Block-level display for proper centering */
+    margin: auto; /* Center the media inside the modal */
 }
 
 .close {

@@ -517,17 +517,20 @@ document.querySelectorAll('.portfolio img, .portfolio video').forEach(media => {
         if (media.tagName === 'IMG') {
             modalContent.innerHTML = `<img src="${media.src}" alt="${media.alt}" style="max-width: 100%; max-height: 100%;">`;
         } else if (media.tagName === 'VIDEO') {
+            const videoSrc = media.querySelector('source').src;
             modalContent.innerHTML = `
-                <video controls autoplay style="max-width: 100%; max-height: 100%;">
-                    <source src="${media.querySelector('source').src}" type="video/mp4">
+                <video controls style="max-width: 100%; max-height: 100%;">
+                    <source src="${videoSrc}" type="video/mp4">
                     Your browser does not support the video tag.
                 </video>
             `;
+            const modalVideo = modalContent.querySelector('video');
+            modalVideo.play(); // Start playing the video in the modal
         }
     });
 });
 
-// Close modal and pause all videos
+// Function to close modal and pause all videos
 function closeModalAndPauseVideos() {
     modal.style.display = 'none';
     modalContent.innerHTML = ''; // Clear modal content
@@ -543,6 +546,7 @@ modal.addEventListener('click', (e) => {
         closeModalAndPauseVideos();
     }
 });
+
 
 </script>
 

@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Loan Amortization Calculator</title>
+    <meta name="description" content="Loan P&I amortization with borrowed amount auto-calc, property tax, and homeowners insurance monthly totals.">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style1.css">
+    <style>
+      .money { font-variant-numeric: tabular-nums; }
+      .muted { color: #667085; }
+      .calc-card { max-width: 980px; margin:auto; }
+      .table thead th { white-space: nowrap; }
+      .input-group-text { min-width: 2.5rem; justify-content:center; }
+    </style>
+  </head>
+  <body>
+    <div class="container py-4">
+      <h1 class="mb-3">Loan Amortization Calculator</h1>
+      <p class="text-secondary">
+        <strong>Borrowed Amount</strong> is computed as <strong>Sale Price − Down Payment</strong>. Enter interest & term to see the schedule.
+        Property tax and homeowners insurance are shown as separate monthly amounts and added to your <em>total monthly out‑of‑pocket</em>.
+      </p>
+
+      <div class="card shadow-sm calc-card">
+        <div class="card-body">
+          <form id="loan-form" onsubmit="event.preventDefault(); calculateAmortization();">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label for="salePrice" class="form-label">Sale Price</label>
+                <div class="input-group">
+                  <span class="input-group-text">$</span>
+                  <input type="number" class="form-control" id="salePrice" placeholder="e.g., 350000" min="0" step="0.01" required>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label for="downPayment" class="form-label">Down Payment</label>
+                <div class="input-group">
+                  <span class="input-group-text">$</span>
+                  <input type="number" class="form-control" id="downPayment" placeholder="e.g., 70000" min="0" step="0.01" required>
+                </div>
+              </div>
+
+              <!-- Readonly principal keeps original id so old references still work -->
+              <div class="col-md-6">
+                <label for="principal" class="form-label">Borrowed Amount</label>
+                <div class="input-group">
+                  <span class="input-group-text">$</span>
+                  <input type="number" class="form-control" id="principal" value="0" readonly>
+                </div>
+                <div id="principalWarn" class="form-text text-warning d-none">Down payment exceeds sale price. Borrowed amount set to $0.00.</div>
+              </div>
+
+              <div class="col-md-3">
+                <label for="interest" class="form-label">Annual Interest Rate (%)</label>
+                <input type="number" class="form-control" step="0.01" id="interest" placeholder="e.g., 6.75" required>
+              </div>
+              <div class="col-md-3">
+                <label for="term" class="form-label">Loan Term (years)</label>
+                <input type="number" class="form-control" step="1" id="term" placeholder="e.g., 30" required>
+              </div>
+
+              <!-- Property tax -->
+              <div class="col-md-6">
+                <label for="propertyTax" class="form-label">Property Tax</label>
+                <div class="input-group">
+                  <span class="input-group-text">$</span>
+                  <input type="number" class="form-control" id="propertyTax" placeholder="e.g., 7200" min="0" step="0.01">
+                  <select id="taxPeriod" class="form-select" style="max-width: 10rem">
+                    <option value="year" selected>per year</option>
+                    <option value="month">per month</option>
+                  </select>
+                </div>
+                <div class="form-text muted">Optional. If set to “per year”, we divide by 12 to get the monthly tax.</div>
+              </div>
+
+              <!-- Homeowners insurance -->
+              <div class="col-md-6">
+                <label for="homeIns" class="form-label">Homeowners Insurance</label>
+                <div class="input-group">
+                  <span class="input-group-text">$</span>
+                  <input type="number" class="form-control" id="homeIns" placeholder="e.g., 1800" min="0" step="0.01">
+                  <select id="insPeriod" class="form-select" style="max-width: 10rem">
+                    <option value="year" selected>per year</option>
+                    <option value="month">per month</option>
+                  </select>
+                </div>
+                <div class="form-text muted">Optional. If set to “per year”, we divide by 12 to get the monthly premium.</div>
+              </div>
+            </div>
+
+            <div class="mt-3 d-flex gap-2">
+              <button type="submit" class="btn btn-primary">Calculate</button>
+              <button type="button" class="btn btn-outline-secondary" onclick="resetAmortization()">Clear</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div id="results" class="card shadow-sm mt-4 calc-card" style="display:none;">
+        <div class="card-body">
+          <h2 class="h4">Results</h2>
+          <div class="row g-3">
+            <div class="col-md-4">
+              <div class="p-3 border rounded-3 bg-light-subtle">
+                <div class="small text-uppercase text-muted">P&I Monthly Payment</div>
+                <div class="fs-4 fw-semibold"><span id="monthly-payment" class="money">—</span></div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="p-3 border rounded-3 bg-light-subtle">
+                <div class="small text-uppercase text-muted">Monthly Property Tax</div>
+                <div class="fs-4 fw-semibold"><span id="monthly-tax" class="money">—</span></div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="p-3 border rounded-3 bg-light-subtle">
+                <div class="small text-uppercase text-muted">Monthly Insurance</div>
+                <div class="fs-4 fw-semibold"><span id="monthly-ins" class="money">—</span></div>
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="p-3 border rounded-3 bg-white">
+                <div class="small text-uppercase text-muted">Total Monthly (P&I + Tax + Insurance)</div>
+                <div class="display-5 fw-bold"><span id="monthly-total" class="money">—</span></div>
+                <div class="small text-secondary mt-2">Note: Taxes & insurance are not part of the loan amortization—they’re shown here for monthly budgeting.</div>
+              </div>
+            </div>
+          </div>
+
+          <p class="mt-4">Total Interest Paid: $<span id="total-interest" class="money"></span></p>
+          <h2 class="h4 mt-3">Amortization Schedule</h2>
+          <div class="table-responsive">
+            <table id="amortization-schedule" class="table table-sm table-striped align-middle">
+              <thead>
+                <tr>
+                  <th>Month</th>
+                  <th>Payment</th>
+                  <th>Principal Payment</th>
+                  <th>Interest Payment</th>
+                  <th>Remaining Balance</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const fmt = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
+
+      function computePrincipal(){
+        const sale = parseFloat(document.getElementById('salePrice').value);
+        const down = parseFloat(document.getElementById('downPayment').value);
+        if (isNaN(sale) || isNaN(down)) return 0;
+        const p = Math.max(0, sale - down);
+        const warn = document.getElementById('principalWarn');
+        if (down > sale) warn.classList.remove('d-none'); else warn.classList.add('d-none');
+        document.getElementById('principal').value = p.toFixed(2);
+        return p;
+      }
+
+      function getMonthlyTax(){
+        const amt = parseFloat(document.getElementById('propertyTax').value);
+        if (isNaN(amt) || amt <= 0) return 0;
+        const period = document.getElementById('taxPeriod').value;
+        return period === 'month' ? amt : (amt / 12);
+      }
+
+      function getMonthlyIns(){
+        const amt = parseFloat(document.getElementById('homeIns').value);
+        if (isNaN(amt) || amt <= 0) return 0;
+        const period = document.getElementById('insPeriod').value;
+        return period === 'month' ? amt : (amt / 12);
+      }
+
+      // Auto-fill principal as user types
+      ['salePrice','downPayment'].forEach(id => {
+        document.getElementById(id).addEventListener('input', computePrincipal);
+      });
+
+      // If results are showing, update totals when tax/ins changes
+      ['propertyTax','taxPeriod','homeIns','insPeriod','interest','term'].forEach(id => {
+        document.getElementById(id).addEventListener('input', function(){
+          if (document.getElementById('results').style.display !== 'none') {
+            calculateAmortization();
+          }
+        });
+      });
+
+      function resetAmortization(){
+        document.getElementById('loan-form').reset();
+        document.getElementById('principal').value = 0;
+        document.getElementById('principalWarn').classList.add('d-none');
+        document.getElementById('results').style.display = 'none';
+        const tbody = document.querySelector('#amortization-schedule tbody');
+        if (tbody) tbody.innerHTML = '';
+        // Clear result cards
+        document.getElementById('monthly-payment').textContent = '—';
+        document.getElementById('monthly-tax').textContent = '—';
+        document.getElementById('monthly-ins').textContent = '—';
+        document.getElementById('monthly-total').textContent = '—';
+        document.getElementById('total-interest').textContent = '';
+      }
+
+      function calculateAmortization(){
+        const P = computePrincipal();
+        const annualRate = parseFloat(document.getElementById('interest').value);
+        const years = parseInt(document.getElementById('term').value, 10);
+
+        if (isNaN(P) || isNaN(annualRate) || isNaN(years)) return;
+
+        const n = years * 12;
+        const r = (annualRate / 100) / 12;
+
+        let payment;
+        if (r === 0){
+          payment = P / n;
+        } else {
+          payment = P * (r / (1 - Math.pow(1 + r, -n)));
+        }
+
+        // Build amortization (P&I only)
+        let balance = P;
+        let totalInterest = 0;
+        const tbody = document.querySelector('#amortization-schedule tbody');
+        tbody.innerHTML = '';
+
+        for (let month = 1; month <= n; month++){
+          const interestPaid = r === 0 ? 0 : balance * r;
+          let principalPaid = payment - interestPaid;
+
+          if (principalPaid > balance || month === n){
+            principalPaid = balance;
+            payment = principalPaid + interestPaid;
+          }
+
+          balance -= principalPaid;
+          totalInterest += interestPaid;
+
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${month}</td>
+            <td>${fmt.format(payment)}</td>
+            <td>${fmt.format(principalPaid)}</td>
+            <td>${fmt.format(interestPaid)}</td>
+            <td>${fmt.format(Math.max(0, balance))}</td>
+          `;
+          tbody.appendChild(tr);
+
+          if (balance <= 0) break;
+        }
+
+        const monthlyTax = getMonthlyTax();
+        const monthlyIns = getMonthlyIns();
+        document.getElementById('monthly-payment').textContent = fmt.format(payment);
+        document.getElementById('monthly-tax').textContent = fmt.format(monthlyTax);
+        document.getElementById('monthly-ins').textContent = fmt.format(monthlyIns);
+        document.getElementById('monthly-total').textContent = fmt.format(payment + monthlyTax + monthlyIns);
+        document.getElementById('total-interest').textContent = fmt.format(totalInterest);
+        document.getElementById('results').style.display = 'block';
+      }
+    </script>
+  </body>
+</html>

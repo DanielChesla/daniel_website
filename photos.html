@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Photos · Projects · Daniel Chesla</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style1.css" />
+    <meta name="description" content="Photo gallery." />
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg bg-white border-bottom py-3 sticky-top">
+      <div class="container">
+        <a class="navbar-brand fw-semibold" href="index.html#top">Daniel Chesla</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav" aria-controls="nav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="nav">
+          <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
+            <li class="nav-item"><a class="nav-link" href="index.html#about">About</a></li>
+            <li class="nav-item"><a class="nav-link" href="index.html#skills">Skills</a></li>
+            <li class="nav-item"><a class="nav-link" href="index.html#industries">Industries</a></li>
+            <li class="nav-item"><a class="nav-link" href="index.html#experience">Experience</a></li>
+            <li class="nav-item"><a class="nav-link" href="index.html#education">Education</a></li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Projects</a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="Mathpage.html">Math Project</a></li>
+                <li><a class="dropdown-item" href="weather.html">Weather</a></li>
+                <li><a class="dropdown-item" href="loan.html">Loan Calculator</a></li>
+                <li><a class="dropdown-item" href="TicTacToe.html">TicTacToe</a></li>
+                <li><a class="dropdown-item active" href="photos.html">Photos</a></li>
+                <li><a class="dropdown-item" href="contact.html">Contact</a></li>
+              </ul>
+            </li>
+            <li class="nav-item">
+              <a class="btn btn-primary ms-lg-2" href="https://danielchesla.com">Home</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <main>
+      <header class="py-5 bg-light border-bottom">
+        <div class="container">
+          <h1 class="display-6 fw-bold mb-1">Photos</h1>
+          <p class="text-secondary mb-0">A responsive gallery with a simple lightbox.</p>
+        </div>
+      </header>
+
+      <section class="py-5" id="photos">
+        <div class="container">
+          <div class="row g-3">
+            <div class="col-6 col-md-4 col-lg-3"><img class="img-fluid rounded-3 shadow-sm gallery-img" src="bird.jpg" alt="Bird" data-bs-toggle="modal" data-bs-target="#lightbox" /></div>
+            <div class="col-6 col-md-4 col-lg-3"><img class="img-fluid rounded-3 shadow-sm gallery-img" src="flower.jpg" alt="Hibiscus" data-bs-toggle="modal" data-bs-target="#lightbox" /></div>
+            <div class="col-6 col-md-4 col-lg-3"><img class="img-fluid rounded-3 shadow-sm gallery-img" src="lizard.jpg" alt="Lizard" data-bs-toggle="modal" data-bs-target="#lightbox" /></div>
+          </div>
+        </div>
+
+        <div class="modal fade" id="lightbox" tabindex="-1" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content border-0">
+              <div class="modal-body p-0">
+                <img id="lightbox-img" class="img-fluid w-100 rounded" alt="Preview" />
+              </div>
+              <div class="modal-footer border-0">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="py-4 border-top small">
+      <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
+        <span>© <span id="year"></span> Daniel Chesla</span>
+        <div class="d-flex gap-2">
+          <a href="https://danielchesla.com" class="link-body-emphasis">Home</a>
+          <a href="https://github.com/danielchesla" class="link-body-emphasis">GitHub</a>
+        </div>
+      </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      document.getElementById('year').textContent = new Date().getFullYear();
+      const imgs = document.querySelectorAll('.gallery-img');
+      const lightboxImg = document.getElementById('lightbox-img');
+      imgs.forEach(img => img.addEventListener('click', () => {
+        lightboxImg.src = img.src;
+        lightboxImg.alt = img.alt;
+      }));
+    </script>
+  </body>
+</html>

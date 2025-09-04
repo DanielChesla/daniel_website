@@ -86,14 +86,12 @@
           function clearStatus() { statusBox.innerHTML = ""; }
           const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-          // Poll-friendly client: honors 202/503 with server-provided retryAfter
+          // Reads body ONCE; handles 202 "loading" clearly
           async function callApi(prompt) {
-            let lastErr = "Unknown error";
+            let lastErr = "Model still loading";
 
-            for (let attempt = 0; attempt < 8; attempt++) {
-              if (attempt > 0) {
-                showStatus(`Model warming up… retry ${attempt}/7`, "warning", true);
-              }
+            for (let attempt = 0; attempt < 6; attempt++) {
+              if (attempt > 0) showStatus(`Model loading… retry ${attempt}/5`, "warning", true);
 
               try {
                 const res = await fetch(API_URL, {
@@ -102,22 +100,23 @@
                   body: JSON.stringify({ prompt }),
                 });
 
-                const text = await res.text(); // read ONCE
+                const text = await res.text();
                 let data; try { data = text ? JSON.parse(text) : {}; } catch { data = { raw: text }; }
 
+                // Success
                 if (res.ok && (data.image || data.url)) return data;
 
-                // Handle "loading" responses without throwing
-                if (res.status === 202 || res.status === 503) {
-                  const wait = Math.min(6000, Math.max(800, Number(data?.retryAfter) || 1500));
-                  await sleep(wait);
+                // Loading (HF 503 that Edge converts to 202 if we ever go back to quick-return)
+                if (res.status === 202) {
+                  lastErr = data?.error || data?.status || "Model loading";
+                  await sleep(Number(data?.retryAfter) || 1500);
                   continue;
                 }
 
-                // Other transient errors: retry with backoff
-                if ([429, 500, 502, 504].includes(res.status)) {
+                // Transient upstream issues
+                if ([429, 500, 502, 503, 504].includes(res.status)) {
                   lastErr = data?.error || data?.detail || `HTTP ${res.status}`;
-                  await sleep(1200 + attempt * 800);
+                  await sleep(1500 + attempt * 700);
                   continue;
                 }
 
@@ -126,7 +125,6 @@
               } catch (e) {
                 lastErr = e?.message || String(e);
                 await sleep(1200);
-                continue;
               }
             }
 

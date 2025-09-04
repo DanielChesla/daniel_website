@@ -1,14 +1,13 @@
 // /api/generate-image-edge.js
 export const config = { runtime: "edge" };
 
-// JSON helper
 const json = (status, obj) =>
   new Response(JSON.stringify(obj), {
     status,
     headers: { "content-type": "application/json" },
   });
 
-// ArrayBuffer → base64 (Edge has no Node Buffer)
+// ArrayBuffer -> base64 (Edge has no Node Buffer)
 const abToBase64 = (ab) => {
   const bytes = new Uint8Array(ab);
   let bin = "";
@@ -28,48 +27,31 @@ export default async function handler(req) {
   const prompt = body?.prompt;
   if (!prompt) return json(400, { error: "Missing prompt" });
 
-  // TIP: use a faster model for demos via env var (falls back to SD 2)
-  const MODEL = process.env.HF_MODEL || "stabilityai/stable-diffusion-2";
-
-  // Keep the edge invocation short; if the model is cold, return 202 quickly.
-  const controller = new AbortController();
-  const TIME_BUDGET_MS = 8000; // ~8s per call
-  const to = setTimeout(() => controller.abort(), TIME_BUDGET_MS);
+  // Default to fast model; you already set HF_MODEL=stabilityai/sd-turbo in Vercel
+  const MODEL = process.env.HF_MODEL || "stabilityai/sd-turbo";
 
   try {
+    // On Edge we can afford to wait for the model to load
     const r = await fetch(`https://api-inference.huggingface.co/models/${MODEL}`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${HF_API_KEY}`,
         "Content-Type": "application/json",
-        // IMPORTANT: do not block here; allow quick 503 while model loads
-        // "x-wait-for-model": "true",
-        Accept: "image/*,application/json",
+        "Accept": "image/*,application/json",
+        "x-wait-for-model": "true",
       },
       body: JSON.stringify({ inputs: prompt }),
-      signal: controller.signal,
     });
-
-    clearTimeout(to);
 
     const ct = (r.headers.get("content-type") || "").toLowerCase();
 
-    // Model still loading or other transient
-    if (r.status === 503) {
-      let retryAfterMs = 1500;
-      try {
-        const j = await r.json();
-        if (j?.estimated_time) retryAfterMs = Math.max(800, Math.floor(j.estimated_time * 1000));
-      } catch { /* ignore */ }
-      return json(202, { status: "loading", retryAfter: retryAfterMs });
-    }
-
     if (!r.ok) {
+      // Surface HF message so you can see gating/rate-limit errors
       const payload = ct.includes("application/json") ? await r.json() : await r.text();
-      return json(r.status, { error: "Upstream error", detail: payload });
+      return json(r.status, { error: "Upstream error", detail: payload, contentType: ct });
     }
 
-    // Image path
+    // Binary image path
     if (ct.startsWith("image/") || ct.startsWith("application/octet-stream")) {
       const buf = await r.arrayBuffer();
       const b64 = abToBase64(buf);
@@ -90,12 +72,10 @@ export default async function handler(req) {
       return json(500, { error: "No image payload in JSON", debug: j });
     }
 
-    // Unknown content-type
+    // Unknown content type
     const raw = await r.text();
     return json(500, { error: "Unexpected content-type", contentType: ct, raw });
   } catch (e) {
-    // Abort or network → suggest retry
-    if (e?.name === "AbortError") return json(202, { status: "loading", retryAfter: 1500 });
-    return json(503, { error: e?.message || "Network error; retry" });
+    return json(503, { error: e?.message || "Network error" });
   }
 }

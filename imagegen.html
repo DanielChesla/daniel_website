@@ -73,6 +73,7 @@
         }
 
         function init() {
+          // Edge function on Vercel
           const API_URL = "/api/generate-image-edge";
 
           const formEl      = document.getElementById("imageForm");
@@ -96,7 +97,7 @@
           function clearStatus() { statusBox.innerHTML = ""; }
           const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-          // ✅ Read response body ONCE as text, then try to parse JSON
+          // READ BODY ONCE → parse JSON if possible, else keep raw for debug
           async function callApi(prompt) {
             const backoff = [0, 1200, 2000, 3500, 5000];
             let lastErr = "Unknown error";
@@ -106,6 +107,7 @@
                 showStatus(`Model warming up… retry ${i}/${backoff.length - 1}`, "warning", true);
                 await sleep(backoff[i]);
               }
+
               try {
                 const res = await fetch(API_URL, {
                   method: "POST",
@@ -113,28 +115,23 @@
                   body: JSON.stringify({ prompt }),
                 });
 
-                // Read once as text
+                // Read once as text, then try to parse
                 const text = await res.text();
                 let data;
-                try {
-                  data = text ? JSON.parse(text) : {};
-                } catch {
-                  data = { raw: text }; // not JSON; keep raw for debugging
-                }
+                try { data = text ? JSON.parse(text) : {}; }
+                catch { data = { raw: text }; }
 
-                if (res.ok && (data.image || data.url)) {
-                  return data; // success
-                }
+                if (res.ok && (data.image || data.url)) return data;
 
                 console.log("API response:", { status: res.status, data });
 
-                // Retry on transient statuses
+                // retry on transient statuses
                 if ([429, 500, 502, 503, 504].includes(res.status)) {
                   lastErr = data?.error || data?.detail || `HTTP ${res.status}`;
                   continue;
                 }
 
-                // Non-retriable
+                // non-retriable
                 throw new Error(data?.error || data?.detail || `HTTP ${res.status}`);
               } catch (e) {
                 lastErr = e?.message || String(e);

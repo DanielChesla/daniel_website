@@ -13,38 +13,8 @@
     <script src="math.js" defer></script>
   </head>
   <body>
-    <!-- NAVBAR (matches new home page) -->
-    <nav class="navbar navbar-expand-lg bg-white border-bottom py-3 sticky-top">
-      <div class="container">
-        <a class="navbar-brand fw-semibold" href="index.html">Daniel Chesla</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav" aria-controls="nav" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="nav">
-          <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
-            <li class="nav-item"><a class="nav-link" href="index.html#about">About</a></li>
-            <li class="nav-item"><a class="nav-link" href="index.html#skills">Skills</a></li>
-            <li class="nav-item"><a class="nav-link" href="index.html#industries">Industries</a></li>
-            <li class="nav-item"><a class="nav-link" href="index.html#experience">Experience</a></li>
-            <li class="nav-item"><a class="nav-link" href="index.html#education">Education</a></li>
-            <li class="nav-item"><a class="nav-link" href="index.html#photos">Photos</a></li>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Projects</a>
-              <ul class="dropdown-menu">
-                <li><a class="dropdown-item active" href="Mathpage.html">Math Project</a></li>
-                <li><a class="dropdown-item" href="weather.html">Weather</a></li>
-                <li><a class="dropdown-item" href="loan.html">Loan Calculator</a></li>
-                <li><a class="dropdown-item" href="TicTacToe.html">TicTacToe</a></li>
-                <li><a class="dropdown-item" href="contact.html">Contact</a></li>
-              </ul>
-            </li>
-            <li class="nav-item">
-              <a class="btn btn-primary ms-lg-2" href="https://danielchesla.com">Home</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
+    <!-- Header injected dynamically -->
+    <div id="header-include"></div>
 
     <!-- HERO -->
     <header class="py-5 bg-light border-bottom">
@@ -53,7 +23,8 @@
           <div class="col-lg-8">
             <h1 class="display-6 fw-bold mb-2">Basic Statistics Calculator</h1>
             <p class="lead text-secondary mb-0">
-              Enter three numbers to compute <strong>Maximum</strong>, <strong>Minimum</strong>, <strong>Mean</strong>, <strong>Median</strong>, and <strong>Range</strong>.
+              Enter three numbers to compute <strong>Maximum</strong>, <strong>Minimum</strong>,
+              <strong>Mean</strong>, <strong>Median</strong>, and <strong>Range</strong>.
             </p>
           </div>
         </div>
@@ -69,7 +40,8 @@
               <div class="card-body">
                 <h2 class="h4 mb-3">Your Inputs</h2>
                 <p class="text-secondary small mb-4">
-                  This page was built for a class project to practice HTML, CSS, JavaScript, and Bootstrap. The form accepts positive/negative numbers and decimals.
+                  This page was built for a class project to practice HTML, CSS, JavaScript, and Bootstrap.
+                  The form accepts positive/negative numbers and decimals.
                 </p>
 
                 <form class="row g-3" onsubmit="calculate(); return false;">
@@ -142,21 +114,11 @@
       </div>
     </main>
 
-    <!-- FOOTER -->
-    <footer class="py-4 border-top small">
-      <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
-        <span>© <span id="year"></span> Daniel Chesla</span>
-        <div class="d-flex gap-2">
-          <a href="index.html" class="link-body-emphasis">Home</a>
-          <a href="https://github.com/danielchesla" class="link-body-emphasis">GitHub</a>
-        </div>
-      </div>
-    </footer>
+    <!-- Footer injected dynamically -->
+    <div id="footer-include"></div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-      // Footer year
-      document.getElementById('year').textContent = new Date().getFullYear();
-    </script>
+    <!-- Loader that pulls in header & footer -->
+    <script src="include-loader.js"></script>
   </body>
 </html>

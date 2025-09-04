@@ -1,8 +1,6 @@
 // netlify/functions/generate-image.js
 export const handler = async (event) => {
-  if (event.httpMethod === "OPTIONS") {
-    return { statusCode: 200, body: "" };
-  }
+  if (event.httpMethod === "OPTIONS") return { statusCode: 200, body: "" };
   if (event.httpMethod !== "POST") {
     return { statusCode: 405, body: JSON.stringify({ error: "Method Not Allowed" }) };
   }

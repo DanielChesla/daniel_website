@@ -1,130 +1,128 @@
-/*
- * A complete tic-tac-toe widget, using JQuery.  Just include this 
- * script in a browser page and play.  A tic-tac-toe game will be 
- * included as a child element of the element with id "tictactoe".  
- * If the page has no such element, it will just be added at the end 
- * of the body.
- */
+// tictactoe.js (vanilla JS, no jQuery)
+// Works with TicTacToe.html provided (board/status/scoreboard + reset buttons)
 
-var xTally = 0; // Initialize X's score to 0
-var oTally = 0; // Initialize O's score to 0
+(() => {
+  const boardEl = document.getElementById("board");
+  const statusEl = document.getElementById("status");
+  const xWinsEl = document.getElementById("x-wins");
+  const oWinsEl = document.getElementById("o-wins");
+  const tiesEl  = document.getElementById("ties");
 
-$(function () {
+  // Persist scores across reloads (optional)
+  const getNum = (k, def=0) => Number(localStorage.getItem(k) ?? def);
+  let xWins = getNum("ttt_xWins");
+  let oWins = getNum("ttt_oWins");
+  let ties  = getNum("ttt_ties");
 
-    var squares = [], 
-        SIZE = 3,
-        EMPTY = "&nbsp;",
-        score,
-        moves,
-        turn = "X",
+  // Game state
+  let board = Array(9).fill(""); // "", "X", or "O"
+  let current = "X";
+  let moves = 0;
+  let gameOver = false;
 
-    /*
-     * To determine a win condition, each square is "tagged" from left
-     * to right, top to bottom, with successive powers of 2.  Each cell
-     * thus represents an individual bit in a 9-bit string, and a
-     * player's squares at any given time can be represented as a
-     * unique 9-bit value. A winner can thus be easily determined by
-     * checking whether the player's current 9 bits have covered any
-     * of the eight "three-in-a-row" combinations.
-     *
-     *     273                 84
-     *        \               /
-     *          1 |   2 |   4  = 7
-     *       -----+-----+-----
-     *          8 |  16 |  32  = 56
-     *       -----+-----+-----
-     *         64 | 128 | 256  = 448
-     *       =================
-     *         73   146   292
-     *
-     */
-    wins = [7, 56, 448, 73, 146, 292, 273, 84],
+  const wins = [
+    [0,1,2],[3,4,5],[6,7,8], // rows
+    [0,3,6],[1,4,7],[2,5,8], // cols
+    [0,4,8],[2,4,6]          // diags
+  ];
 
-    /*
-     * Clears the score and move count, erases the board, and makes it
-     * X's turn.
-     */
-    startNewGame = function () {
-        turn = "X";
-        score = {"X": 0, "O": 0};
-        moves = 0;
-        squares.forEach(function (square) {square.html(EMPTY);});
-        gameEnded = false; // Reset the gameEnded flag
+  // ------- UI helpers -------
+  function updateScoreboard() {
+    xWinsEl.textContent = xWins;
+    oWinsEl.textContent = oWins;
+    tiesEl.textContent  = ties;
+  }
+
+  function setStatus(msg) {
+    statusEl.textContent = msg;
+  }
+
+  function renderBoard() {
+    // Build cells only once
+    if (!boardEl.dataset.built) {
+      boardEl.dataset.built = "1";
+      // Create 9 buttons/divs
+      for (let i = 0; i < 9; i++) {
+        const cell = document.createElement("button");
+        cell.type = "button";
+        cell.className = "btn btn-outline-secondary fs-3 fw-semibold";
+        cell.style.width = "100%";
+        cell.style.aspectRatio = "1/1"; // perfect square
+        cell.dataset.index = String(i);
+        cell.addEventListener("click", onCellClick);
+        boardEl.appendChild(cell);
+      }
+    }
+    // Write values
+    const cells = boardEl.querySelectorAll("[data-index]");
+    cells.forEach((c, i) => { c.textContent = board[i]; });
+  }
+
+  function checkWin(player) {
+    return wins.some(combo => combo.every(i => board[i] === player));
+  }
+
+  function endGame(message, outcome) {
+    gameOver = true;
+    setStatus(message);
+    if (outcome === "X") { xWins++; localStorage.setItem("ttt_xWins", xWins); }
+    else if (outcome === "O") { oWins++; localStorage.setItem("ttt_oWins", oWins); }
+    else if (outcome === "TIE") { ties++; localStorage.setItem("ttt_ties", ties); }
+    updateScoreboard();
+  }
+
+  // ------- Events -------
+  function onCellClick(e) {
+    if (gameOver) return;
+    const idx = Number(e.currentTarget.dataset.index);
+    if (board[idx]) return; // already played
+
+    board[idx] = current;
+    moves++;
+    renderBoard();
+
+    if (checkWin(current)) {
+      endGame(`Player ${current} wins!`, current);
+      return;
+    }
+    if (moves === 9) {
+      endGame("It's a tie!", "TIE");
+      return;
     }
 
-    /*
-     * Returns whether the given score is a winning score.
-     */
-function win(score) {
-    for (var i = 0; i < wins.length; i += 1) {
-        if ((wins[i] & score) === wins[i]) {
-            if (turn === "X") {
-                xTally++; // Increase total games won by "X"
-                $("#x-score").text(xTally); // Update total games won by "X" on the screen
-            } else if (turn === "O") {
-                oTally++; // Increase total games won by "O"
-                $("#o-score").text(oTally); // Update total games won by "O" on the screen
-            }
-            alert(turn + " wins!");
-            startNewGame();
-            gameEnded = true; // Set the gameEnded flag to true
-            return true;
-        }
-    }
-    return false;
-}
+    current = current === "X" ? "O" : "X";
+    setStatus(`Player ${current}'s turn`);
+  }
 
-    /*
-     * Sets the clicked-on square to the current player's mark,
-     * then checks for a win or cats game.  Also changes the
-     * current player.
-     */
-    set = function () {
-        
-        if ($(this).html() !== EMPTY) {
-            return;
-        }
-        $(this).html(turn);
-        console.log($(this));
-        moves += 1;
-        score[turn] += $(this)[0].indicator;
-        console.log(score[turn]);
-        if (win(score[turn])) {
-            /*alert(turn + " wins!");*/
-            startNewGame();
-        } else if (moves === SIZE * SIZE) {
-            alert("It's a tie!");
-            startNewGame();
-        } else {
-            turn = turn === "X" ? "O" : "X";
-        }
-    },
+  // ------- Public (used by buttons in HTML) -------
+  window.resetBoard = function resetBoard() {
+    board.fill("");
+    moves = 0;
+    current = "X";
+    gameOver = false;
+    setStatus(`Player ${current}'s turn`);
+    renderBoard();
+  };
 
-    /*
-     * Creates and attaches the DOM elements for the board as an
-     * HTML table, assigns the indicators for each cell, and starts
-     * a new game.
-     */
-    play = function () {
-        var board = $("<table class='tictactoe-table' border='1' cellspacing='0'>"), indicator = 1;
-        for (var i = 0; i < SIZE; i += 1) {
-            var row = $("<tr>");
-            board.append(row);
-            for (var j = 0; j < SIZE; j += 1) {
-                var cell = $("<td height=50 width=50 align=center valign=center></td>");
-                cell[0].indicator = indicator;
-                cell.click(set);
-                row.append(cell);
-                squares.push(cell);
-                indicator += indicator;
-            }
-        }
+  window.resetScores = function resetScores() {
+    xWins = 0; oWins = 0; ties = 0;
+    localStorage.setItem("ttt_xWins", xWins);
+    localStorage.setItem("ttt_oWins", oWins);
+    localStorage.setItem("ttt_ties", ties);
+    updateScoreboard();
+    resetBoard();
+  };
 
-        // Attach under tictactoe if present, otherwise to body.
-        $(document.getElementById("tictactoe") || document.body).append(board);
-        startNewGame();
-    };
+  // ------- Init -------
+  // Make a 3x3 grid layout if not styled elsewhere
+  if (!boardEl.classList.contains("grid-3x3")) {
+    boardEl.style.display = "grid";
+    boardEl.style.gridTemplateColumns = "repeat(3, 1fr)";
+    boardEl.style.gap = "10px";
+    boardEl.style.maxWidth = "360px";
+  }
 
-    play();
-});
-
+  updateScoreboard();
+  setStatus(`Player ${current}'s turn`);
+  renderBoard();
+})();

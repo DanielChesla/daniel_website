@@ -1,41 +1,45 @@
+// /api/generate-image.js (Vercel serverless function)
 export default async function handler(req, res) {
-  if (req.method !== "POST") {
-    res.setHeader("Allow", ["POST"]);
-    return res.status(405).send("Method Not Allowed");
-  }
+  if (req.method === "OPTIONS") return res.status(200).end();
+  if (req.method !== "POST") return res.status(405).json({ error: "Method Not Allowed" });
 
   try {
-    const { prompt } = req.body || {};
-    if (!prompt) return res.status(400).send("Missing prompt");
+    const HF_API_KEY = process.env.HF_API_KEY;
+    if (!HF_API_KEY) return res.status(500).json({ error: "Missing HF_API_KEY" });
 
-    const r = await fetch("https://api.openai.com/v1/images/generations", {
+    // Vercel parses JSON bodies automatically for Node functions
+    const { prompt } = (typeof req.body === "string" ? JSON.parse(req.body || "{}") : req.body) || {};
+    if (!prompt) return res.status(400).json({ error: "Missing prompt" });
+
+    const model = "stabilityai/stable-diffusion-2";
+    const r = await fetch(`https://api-inference.huggingface.co/models/${model}`, {
       method: "POST",
       headers: {
-        "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
-        "Content-Type": "application/json"
+        Authorization: `Bearer ${HF_API_KEY}`,
+        "Content-Type": "application/json",
+        "x-wait-for-model": "true",
       },
-      body: JSON.stringify({
-        model: "gpt-image-1",
-        prompt,
-        size: "1024x1024",
-        n: 1
-      })
+      body: JSON.stringify({ inputs: prompt }),
     });
 
     if (!r.ok) {
-      const t = await r.text();
-      return res.status(500).send(`OpenAI error ${r.status}: ${t}`);
+      const ct = (r.headers.get("content-type") || "").toLowerCase();
+      const err = ct.includes("application/json") ? await r.json() : await r.text();
+      return res.status(r.status).json({ error: err });
     }
 
-    const data = await r.json();
-    const url = data?.data?.[0]?.url;
-    const b64 = data?.data?.[0]?.b64_json;
+    const ct = (r.headers.get("content-type") || "").toLowerCase();
+    if (ct.includes("application/json")) {
+      const j = await r.json();
+      const b64 =
+        j?.image || j?.generated_image || j?.data?.[0]?.b64_json || j?.images?.[0] || j?.[0]?.b64_json;
+      if (!b64) return res.status(500).json({ error: "Unexpected JSON from model" });
+      return res.status(200).json({ image: `data:image/png;base64,${b64}` });
+    }
 
-    if (url) return res.status(200).json({ url });
-    if (b64) return res.status(200).json({ b64 });
-
-    return res.status(500).send("No image returned");
+    const buf = Buffer.from(await r.arrayBuffer());
+    return res.status(200).json({ image: `data:image/png;base64,${buf.toString("base64")}` });
   } catch (e) {
-    return res.status(400).send(`Bad request: ${e.message}`);
+    return res.status(500).json({ error: e.message || "Unknown error" });
   }
 }

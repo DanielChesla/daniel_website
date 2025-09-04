@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="style1.css" />
   </head>
   <body>
-    <!-- Header include -->
     <div id="header-include"></div>
 
     <main class="py-5">
@@ -57,23 +56,18 @@
       </div>
     </main>
 
-    <!-- Footer include -->
     <div id="footer-include"></div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="include-loader.js"></script>
 
     <script>
-      // Wrap everything so elements exist before we query them
       (function () {
         if (document.readyState === "loading") {
           document.addEventListener("DOMContentLoaded", init);
-        } else {
-          init();
-        }
+        } else { init(); }
 
         function init() {
-          // Edge function on Vercel
           const API_URL = "/api/generate-image-edge";
 
           const formEl      = document.getElementById("imageForm");
@@ -82,11 +76,6 @@
           const resultBox   = document.getElementById("resultBox");
           const copyBtn     = document.getElementById("copyPrompt");
           const generateBtn = document.getElementById("generateBtn");
-
-          if (!formEl) {
-            console.error("imageForm element not found.");
-            return;
-          }
 
           function showStatus(message, kind = "info", withSpinner = false) {
             const spinner = withSpinner
@@ -97,15 +86,13 @@
           function clearStatus() { statusBox.innerHTML = ""; }
           const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-          // READ BODY ONCE → parse JSON if possible, else keep raw for debug
+          // Poll-friendly client: honors 202/503 with server-provided retryAfter
           async function callApi(prompt) {
-            const backoff = [0, 1200, 2000, 3500, 5000];
             let lastErr = "Unknown error";
 
-            for (let i = 0; i < backoff.length; i++) {
-              if (i > 0) {
-                showStatus(`Model warming up… retry ${i}/${backoff.length - 1}`, "warning", true);
-                await sleep(backoff[i]);
+            for (let attempt = 0; attempt < 8; attempt++) {
+              if (attempt > 0) {
+                showStatus(`Model warming up… retry ${attempt}/7`, "warning", true);
               }
 
               try {
@@ -115,26 +102,30 @@
                   body: JSON.stringify({ prompt }),
                 });
 
-                // Read once as text, then try to parse
-                const text = await res.text();
-                let data;
-                try { data = text ? JSON.parse(text) : {}; }
-                catch { data = { raw: text }; }
+                const text = await res.text(); // read ONCE
+                let data; try { data = text ? JSON.parse(text) : {}; } catch { data = { raw: text }; }
 
                 if (res.ok && (data.image || data.url)) return data;
 
-                console.log("API response:", { status: res.status, data });
-
-                // retry on transient statuses
-                if ([429, 500, 502, 503, 504].includes(res.status)) {
-                  lastErr = data?.error || data?.detail || `HTTP ${res.status}`;
+                // Handle "loading" responses without throwing
+                if (res.status === 202 || res.status === 503) {
+                  const wait = Math.min(6000, Math.max(800, Number(data?.retryAfter) || 1500));
+                  await sleep(wait);
                   continue;
                 }
 
-                // non-retriable
+                // Other transient errors: retry with backoff
+                if ([429, 500, 502, 504].includes(res.status)) {
+                  lastErr = data?.error || data?.detail || `HTTP ${res.status}`;
+                  await sleep(1200 + attempt * 800);
+                  continue;
+                }
+
+                // Non-retriable
                 throw new Error(data?.error || data?.detail || `HTTP ${res.status}`);
               } catch (e) {
                 lastErr = e?.message || String(e);
+                await sleep(1200);
                 continue;
               }
             }

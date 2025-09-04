@@ -86,15 +86,18 @@
           function clearStatus() { statusBox.innerHTML = ""; }
           const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-          // Polls the Edge route; respects 202 with retryAfter
+          const pretty = (v) => {
+            try { return typeof v === "string" ? v : JSON.stringify(v, null, 2); }
+            catch { return String(v); }
+          };
+
+          // Polls Edge; reads body ONCE; shows real details
           async function callApi(prompt) {
             let lastErr = "Model loading…";
-            const MAX_ATTEMPTS = 20;         // up to ~45–60s total depending on retryAfter
-            let attempt = 0;
+            const MAX_ATTEMPTS = 20;
 
-            while (attempt < MAX_ATTEMPTS) {
-              attempt++;
-              if (attempt > 1) showStatus(`Model loading… retry ${attempt-1}/${MAX_ATTEMPTS-1}`, "warning", true);
+            for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
+              if (attempt > 0) showStatus(`Model loading… retry ${attempt}/${MAX_ATTEMPTS-1}`, "warning", true);
 
               try {
                 const res = await fetch(API_URL, {
@@ -103,35 +106,36 @@
                   body: JSON.stringify({ prompt }),
                 });
 
-                const text = await res.text();     // read ONCE
+                const text = await res.text(); // read once
                 let data; try { data = text ? JSON.parse(text) : {}; } catch { data = { raw: text }; }
 
-                // Success
+                // success
                 if (res.ok && (data.image || data.url)) return data;
 
-                // "Loading" (202 from our Edge, or we may switch to 503 later)
+                // loading
                 if (res.status === 202 || res.status === 503) {
                   const wait = Math.min(6000, Math.max(800, Number(data?.retryAfter) || 1500));
                   await sleep(wait);
                   continue;
                 }
 
-                // Transient upstream issues
+                // transient
                 if ([429, 500, 502, 504].includes(res.status)) {
                   lastErr = data?.error || data?.detail || `HTTP ${res.status}`;
+                  console.log("Upstream/transient:", data);
                   await sleep(1200 + attempt * 600);
                   continue;
                 }
 
-                // Non-retriable
-                throw new Error(data?.error || data?.detail || `HTTP ${res.status}`);
+                // non-retriable
+                throw new Error(data?.error || pretty(data?.detail) || `HTTP ${res.status}`);
               } catch (e) {
                 lastErr = e?.message || String(e);
                 await sleep(1200);
               }
             }
 
-            throw new Error(lastErr || "Took too long; please try again.");
+            throw new Error(lastErr);
           }
 
           formEl.addEventListener("submit", async (e) => {
@@ -143,6 +147,7 @@
             const style      = document.getElementById("style").value;
             const sex        = document.getElementById("sex").value;
 
+            // Keep it safe & neutral
             const prompt = `Generate a family friendly image with a ${sex} ${style} character with a ${background} background`;
 
             promptBox.textContent = prompt;

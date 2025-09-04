@@ -125,4 +125,24 @@ footer{
 /* Optional: give content breathing room when jumping to anchors */
 html { scroll-padding-top: 84px; }  /* tweak if your navbar is taller */
 
+/* Keep the injected header container sticky */
+#header-include {
+  position: sticky;
+  position: -webkit-sticky; /* Safari */
+  top: 0;
+  z-index: 1050; /* above content & dropdowns */
+}
+
+/* Harden Bootstrap's sticky-top in case something overrides it */
+.navbar.sticky-top {
+  position: sticky !important;
+  position: -webkit-sticky !important; /* Safari */
+  top: 0;
+  z-index: 1050;
+  background: #fff; /* ensure it doesn't look "transparent" when overlapping */
+}
+
+/* Smooth anchor jumps + avoid header covering sections */
+html { scroll-padding-top: 84px; scroll-behavior: smooth; }
+
 

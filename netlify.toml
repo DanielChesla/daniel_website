@@ -1,3 +1,9 @@
 [build]
-  publish = "."                    # your static site root (index.html lives here)
-  functions = "netlify/functions"  # where the function above lives
+  publish = "."                  # serve files from the repo root
+  functions = "netlify/functions"
+
+# (Optional) allow clean local dev URLs for functions
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200

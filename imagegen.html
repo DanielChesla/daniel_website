@@ -63,7 +63,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="include-loader.js"></script>
     <script>
-      // Same-origin Vercel API route (Option C)
+      // Same-origin Vercel API route
       const API_URL = "/api/generate-image";
 
       const form = document.getElementById("imageForm");
@@ -79,75 +79,37 @@
           : "";
         statusBox.innerHTML = `<div class="alert alert-${kind} mb-0">${spinner}${message}</div>`;
       }
-
-      function clearStatus() {
-        statusBox.innerHTML = "";
-      }
-
+      function clearStatus() { statusBox.innerHTML = ""; }
       const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-      async function callApi(prompt, attempt = 1) {
-        const res = await fetch(API_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ prompt }),
-        });
+      // Robust retry loop to handle HF cold starts & transient errors
+      async function callApi(prompt) {
+        const backoff = [0, 1200, 2000, 3500, 5000]; // ms per attempt
+        let lastErr = null;
 
-        if (!res.ok) {
-          // Retry once on 503/504 to smooth over cold starts
-          if (attempt === 1 && (res.status === 503 || res.status === 504)) {
-            showStatus("Model is waking up… retrying", "warning", true);
-            await sleep(1500);
-            return callApi(prompt, 2);
+        for (let i = 0; i < backoff.length; i++) {
+          if (i > 0) {
+            showStatus(`Model warming up… retry ${i}/${backoff.length - 1}`, "warning", true);
+            await sleep(backoff[i]);
           }
-          const errText = await res.text().catch(() => `HTTP ${res.status}`);
-          throw new Error(errText || `HTTP ${res.status}`);
-        }
+          try {
+            const res = await fetch(API_URL, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ prompt }),
+            });
 
-        return res.json();
-      }
+            if (res.ok) return res.json();
 
-      form.addEventListener("submit", async (e) => {
-        e.preventDefault();
-        resultBox.innerHTML = "";
-        generateBtn.disabled = true;
+            // Retry on common transient statuses
+            if ([429, 500, 502, 503, 504].includes(res.status)) {
+              lastErr = await res.text().catch(() => `HTTP ${res.status}`);
+              continue;
+            }
 
-        const background = document.getElementById("background").value;
-        const style = document.getElementById("style").value;
-        const sex = document.getElementById("sex").value;
-
-        // Keep wording "family friendly" to reduce safety blocks
-        const prompt = `Generate a family friendly image with a ${sex} ${style} character with a ${background} background`;
-
-        // Show the prompt being sent
-        promptBox.textContent = prompt;
-        promptBox.classList.remove("d-none");
-
-        showStatus("Generating image…", "primary", true);
-
-        try {
-          const data = await callApi(prompt);
-          const src = data.url || data.image; // API may return a hosted URL or a data URL
-          if (!src) throw new Error("No image returned from API");
-
-          resultBox.innerHTML = `<img src="${src}" class="img-fluid rounded shadow" alt="Generated image" />`;
-          clearStatus();
-        } catch (err) {
-          showStatus(`Error: ${err.message || err}`, "danger");
-        } finally {
-          generateBtn.disabled = false;
-        }
-      });
-
-      // Copy the generated prompt
-      copyBtn.addEventListener("click", () => {
-        if (!promptBox.textContent) return;
-        navigator.clipboard.writeText(promptBox.textContent).then(() => {
-          const original = copyBtn.textContent;
-          copyBtn.textContent = "Copied!";
-          setTimeout(() => (copyBtn.textContent = original), 1500);
-        });
-      });
-    </script>
-  </body>
-</html>
+            // Non-retriable
+            const errText = await res.text().catch(() => `HTTP ${res.status}`);
+            throw new Error(errText || `HTTP ${res.status}`);
+          } catch (e) {
+            lastErr = e.message || String(e);
+            con

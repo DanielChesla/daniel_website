@@ -3,97 +3,68 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>TicTacToe</title>
-    <meta name="description" content="Play a two-player TicTacToe game with running scores and a reset button." />
+    <title>TicTacToe · Play Against a Friend</title>
+    <meta name="description" content="A simple TicTacToe game built with HTML, CSS, and JavaScript. Play against a friend and track wins, losses, and ties." />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style1.css" />
-    <style>
-      .tictactoe-table { border-collapse: separate !important; border-spacing: .5rem !important; border: none !important; }
-      .tictactoe-table td {
-        width: 110px !important; height: 110px !important;
-        font-size: 2rem; text-align: center; vertical-align: middle;
-        background: #fff; border: 1px solid #e5e7eb; border-radius: .75rem;
-        box-shadow: 0 1px 2px rgba(0,0,0,.04);
-      }
-      @media (max-width: 480px) {
-        .tictactoe-table td { width: 90px !important; height: 90px !important; font-size: 1.75rem; }
-      }
-    </style>
+    <link rel="stylesheet" href="tictactoe.css" /> <!-- optional: your custom styles -->
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg bg-white border-bottom py-3 sticky-top">
-      <div class="container">
-        <a class="navbar-brand fw-semibold" href="index.html">Daniel Chesla</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav" aria-controls="nav" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="nav">
-          <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
-            <li class="nav-item"><a class="nav-link" href="index.html#about">About</a></li>
-            <li class="nav-item"><a class="nav-link" href="index.html#skills">Skills</a></li>
-            <li class="nav-item"><a class="nav-link" href="index.html#industries">Industries</a></li>
-            <li class="nav-item"><a class="nav-link" href="index.html#experience">Experience</a></li>
-            <li class="nav-item"><a class="nav-link" href="index.html#education">Education</a></li>
-            <li class="nav-item"><a class="nav-link" href="index.html#photos">Photos</a></li>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Projects</a>
-              <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="Mathpage.html">Math Project</a></li>
-                <li><a class="dropdown-item" href="weather.html">Weather</a></li>
-                <li><a class="dropdown-item" href="loan.html">Loan Calculator</a></li>
-                <li><a class="dropdown-item active" href="TicTacToe.html">TicTacToe</a></li>
-                <li><a class="dropdown-item" href="contact.html">Contact</a></li>
-              </ul>
-            </li>
-            <li class="nav-item">
-              <a class="btn btn-primary ms-lg-2" href="https://danielchesla.com">Home</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
+    <!-- Header injected dynamically -->
+    <div id="header-include"></div>
 
+    <!-- HERO -->
     <header class="py-5 bg-light border-bottom">
       <div class="container">
         <div class="row align-items-center">
           <div class="col-lg-8">
             <h1 class="display-6 fw-bold mb-2">TicTacToe</h1>
-            <p class="lead text-secondary mb-0">Two players, running scores for X and O.</p>
+            <p class="lead text-secondary mb-0">
+              Play TicTacToe in your browser! Track wins, losses, and ties while practicing logic and JavaScript.
+            </p>
           </div>
         </div>
       </div>
     </header>
 
+    <!-- GAME -->
     <main class="py-5">
       <div class="container">
-        <div class="row g-4">
+        <div class="row g-4 justify-content-center">
           <div class="col-lg-6">
             <div class="card shadow-sm border-0 h-100">
-              <div class="card-body">
-                <h2 class="h4 mb-3">Game</h2>
-                <div id="tictactoe"></div>
+              <div class="card-body text-center">
+                <h2 class="h4 mb-3">Game Board</h2>
+                <div id="board" class="d-grid grid-3x3 mx-auto mb-3">
+                  <!-- JS will populate 9 cells here -->
+                </div>
+                <p class="lead fw-semibold" id="status">Player X's turn</p>
+                <div class="d-flex justify-content-center gap-2 mt-3">
+                  <button class="btn btn-primary" onclick="resetBoard()">Reset Game</button>
+                  <button class="btn btn-outline-secondary" onclick="resetScores()">Reset Scores</button>
+                </div>
               </div>
             </div>
           </div>
 
-          <div class="col-lg-6">
+          <div class="col-lg-4">
             <div class="card shadow-sm border-0 h-100">
-              <div class="card-body">
-                <h2 class="h4 mb-3">Status</h2>
-                <div class="p-3 border rounded-3 bg-white">
-                  <div class="small text-uppercase text-muted">Scores</div>
-                  <div class="d-flex align-items-center gap-4 fs-5 mt-1">
-                    <div>X: <span id="x-score">0</span></div>
-                    <div>O: <span id="o-score">0</span></div>
-                  </div>
-                  <div class="d-flex gap-2 mt-3">
-                    <button class="btn btn-outline-danger btn-sm" id="resetScoresBtn" type="button">Reset scores</button>
-                  </div>
-                </div>
-                <p class="small text-secondary mt-3 mb-0">Wins increment automatically; click “Reset scores” to clear the tally.</p>
+              <div class="card-body text-center">
+                <h2 class="h4 mb-3">Scoreboard</h2>
+                <ul class="list-group">
+                  <li class="list-group-item d-flex justify-content-between">
+                    <span>Player X Wins</span><span id="x-wins">0</span>
+                  </li>
+                  <li class="list-group-item d-flex justify-content-between">
+                    <span>Player O Wins</span><span id="o-wins">0</span>
+                  </li>
+                  <li class="list-group-item d-flex justify-content-between">
+                    <span>Ties</span><span id="ties">0</span>
+                  </li>
+                </ul>
               </div>
             </div>
           </div>
@@ -101,43 +72,13 @@
       </div>
     </main>
 
-    <footer class="py-4 border-top small">
-      <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
-        <span>© <span id="year"></span> Daniel Chesla</span>
-        <div class="d-flex gap-2">
-          <a href="index.html" class="link-body-emphasis">Home</a>
-          <a href="https://github.com/danielchesla" class="link-body-emphasis">GitHub</a>
-        </div>
-      </div>
-    </footer>
+    <!-- Footer injected dynamically -->
+    <div id="footer-include"></div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
-<script src="https://code.jquery.com/jquery-3.7.1.min.js" crossorigin="anonymous"></script>
-<script src="./tictactoe.js"></script>
-
-    <!-- Reset scores hook (runs after your game loads) -->
-    <script>
-      // Ensure globals exist even if your script declares them with var
-      window.xTally = window.xTally || 0;
-      window.oTally = window.oTally || 0;
-
-      function updateScoreboard(){
-        $('#x-score').text(window.xTally || 0);
-        $('#o-score').text(window.oTally || 0);
-      }
-
-      $(function(){
-        // Keep the UI in sync on page load
-        updateScoreboard();
-
-        // Add reset behavior
-        $('#resetScoresBtn').on('click', function(){
-          window.xTally = 0;
-          window.oTally = 0;
-          updateScoreboard();
-        });
-      });
-    </script>
+    <!-- Shared includes loader -->
+    <script src="include-loader.js"></script>
+    <!-- Your TicTacToe game logic -->
+    <script src="tictactoe.js"></script>
   </body>
 </html>

@@ -63,8 +63,9 @@ document.addEventListener("DOMContentLoaded", () => {
         window.addEventListener("scroll", onScroll, { passive: true });
       }
 
-      // Fixed-top padding so content isn't covered
-      applyFixedNavOffsets(document.querySelector(".navbar.fixed-top"));
+      // If using fixed-top, pad the page so content isn't covered
+      const fixedNav = document.querySelector(".navbar.fixed-top");
+      applyFixedNavOffsets(fixedNav);
     })
     .catch((err) => console.error("Error loading header:", err));
 
@@ -73,7 +74,12 @@ document.addEventListener("DOMContentLoaded", () => {
     .then((html) => {
       if (!footerEl) return;
       footerEl.innerHTML = html;
-      document.getElementById("year")?.textContent = new Date().getFullYear();
+
+      // Auto-set year if footer has #year
+      const yearSpan = document.getElementById("year");
+      if (yearSpan) {
+        yearSpan.textContent = new Date().getFullYear();
+      }
     })
     .catch((err) => console.error("Error loading footer:", err));
 });

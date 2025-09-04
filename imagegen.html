@@ -1,78 +1,177 @@
-<script>
-  const API_URL = "/api/generate-image-edge";
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Image Generator</title>
+    <meta name="description" content="Generate AI images based on character style, sex, and background." />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="style1.css" />
+  </head>
+  <body>
+    <!-- Header include -->
+    <div id="header-include"></div>
 
-  // ... keep the rest of your variables & helpers ...
+    <main class="py-5">
+      <div class="container">
+        <h1 class="mb-4">Image Generator</h1>
+        <p class="text-secondary">Choose options and we’ll create a prompt and generate an image.</p>
 
-  async function callApi(prompt) {
-    const backoff = [0, 1200, 2000, 3500, 5000];
-    let lastErr = null;
+        <form id="imageForm" class="row g-3 mb-4">
+          <div class="col-md-4">
+            <label class="form-label">Background</label>
+            <select id="background" class="form-select">
+              <option>snow</option>
+              <option>desert</option>
+              <option>ocean</option>
+              <option>forest</option>
+              <option>field</option>
+            </select>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Character Style</label>
+            <select id="style" class="form-select">
+              <option>Disney style</option>
+              <option>Anime style</option>
+              <option>Family Guy style</option>
+              <option>Simpsons style</option>
+            </select>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Character Sex</label>
+            <select id="sex" class="form-select">
+              <option>Male</option>
+              <option>Female</option>
+            </select>
+          </div>
 
-    for (let i = 0; i < backoff.length; i++) {
-      if (i > 0) {
-        showStatus(`Model warming up… retry ${i}/${backoff.length - 1}`, "warning", true);
-        await sleep(backoff[i]);
-      }
-      try {
-        const res = await fetch(API_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ prompt }),
-        });
+          <div class="col-12">
+            <button type="submit" class="btn btn-primary" id="generateBtn">Generate Image</button>
+            <button type="button" id="copyPrompt" class="btn btn-outline-secondary">Copy Prompt</button>
+          </div>
+        </form>
 
-        const data = await res.json().catch(async () => ({ debugText: await res.text() }));
+        <div id="promptBox" class="alert alert-info d-none"></div>
+        <div id="statusBox" class="mt-3"></div>
+        <div id="resultBox" class="mt-4 text-center"></div>
+      </div>
+    </main>
 
-        if (res.ok && (data.image || data.url)) return data;
+    <!-- Footer include -->
+    <div id="footer-include"></div>
 
-        // Show upstream error/debug to the console to help diagnose
-        console.log("API response:", { status: res.status, data });
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="include-loader.js"></script>
 
-        if ([429, 500, 502, 503, 504].includes(res.status)) {
-          lastErr = data?.error || `HTTP ${res.status}`;
-          continue;
+    <script>
+      // Wrap everything so elements exist before we query them
+      (function () {
+        if (document.readyState === "loading") {
+          document.addEventListener("DOMContentLoaded", init);
+        } else {
+          init();
         }
 
-        // Non-retriable
-        throw new Error(data?.error || `HTTP ${res.status}`);
-      } catch (e) {
-        lastErr = e.message || String(e);
-        continue;
-      }
-    }
-    throw new Error(lastErr || "Failed after retries");
-  }
+        function init() {
+          const API_URL = "/api/generate-image-edge";
 
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    resultBox.innerHTML = "";
-    generateBtn.disabled = true;
+          const formEl     = document.getElementById("imageForm");
+          const promptBox  = document.getElementById("promptBox");
+          const statusBox  = document.getElementById("statusBox");
+          const resultBox  = document.getElementById("resultBox");
+          const copyBtn    = document.getElementById("copyPrompt");
+          const generateBtn= document.getElementById("generateBtn");
 
-    const background = document.getElementById("background").value;
-    const style = document.getElementById("style").value;
-    const sex = document.getElementById("sex").value;
+          if (!formEl) {
+            console.error("imageForm element not found.");
+            return;
+          }
 
-    const prompt = `Generate a family friendly image with a ${sex} ${style} character with a ${background} background`;
+          function showStatus(message, kind = "info", withSpinner = false) {
+            const spinner = withSpinner
+              ? `<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>`
+              : "";
+            statusBox.innerHTML = `<div class="alert alert-${kind} mb-0">${spinner}${message}</div>`;
+          }
+          function clearStatus() { statusBox.innerHTML = ""; }
+          const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-    promptBox.textContent = prompt;
-    promptBox.classList.remove("d-none");
+          async function callApi(prompt) {
+            const backoff = [0, 1200, 2000, 3500, 5000];
+            let lastErr = null;
 
-    showStatus("Generating image…", "primary", true);
+            for (let i = 0; i < backoff.length; i++) {
+              if (i > 0) {
+                showStatus(`Model warming up… retry ${i}/${backoff.length - 1}`, "warning", true);
+                await sleep(backoff[i]);
+              }
+              try {
+                const res = await fetch(API_URL, {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ prompt }),
+                });
 
-    try {
-      const data = await callApi(prompt);
-      const src = data.url || data.image;
+                const data = await res.json().catch(async () => ({ debugText: await res.text() }));
 
-      if (src) {
-        resultBox.innerHTML = `<img src="${src}" class="img-fluid rounded shadow" alt="Generated image" />`;
-        clearStatus();
-      } else {
-        // Surface debug if no image is present
-        showStatus("No image in response. See console for details.", "warning");
-        console.log("No image payload. Server response:", data);
-      }
-    } catch (err) {
-      showStatus(`Error: ${err.message || err}`, "danger");
-    } finally {
-      generateBtn.disabled = false;
-    }
-  });
-</script>
+                if (res.ok && (data.image || data.url)) return data;
+
+                console.log("API response:", { status: res.status, data });
+                if ([429, 500, 502, 503, 504].includes(res.status)) {
+                  lastErr = data?.error || `HTTP ${res.status}`;
+                  continue;
+                }
+                throw new Error(data?.error || `HTTP ${res.status}`);
+              } catch (e) {
+                lastErr = e.message || String(e);
+                continue;
+              }
+            }
+            throw new Error(lastErr || "Failed after retries");
+          }
+
+          formEl.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            resultBox.innerHTML = "";
+            generateBtn.disabled = true;
+
+            const background = document.getElementById("background").value;
+            const style = document.getElementById("style").value;
+            const sex = document.getElementById("sex").value;
+
+            const prompt = `Generate a family friendly image with a ${sex} ${style} character with a ${background} background`;
+
+            promptBox.textContent = prompt;
+            promptBox.classList.remove("d-none");
+            showStatus("Generating image…", "primary", true);
+
+            try {
+              const data = await callApi(prompt);
+              const src = data.url || data.image;
+              if (src) {
+                resultBox.innerHTML = `<img src="${src}" class="img-fluid rounded shadow" alt="Generated image" />`;
+                clearStatus();
+              } else {
+                showStatus("No image in response. See console for details.", "warning");
+                console.log("No image payload. Server response:", data);
+              }
+            } catch (err) {
+              showStatus(`Error: ${err.message || err}`, "danger");
+            } finally {
+              generateBtn.disabled = false;
+            }
+          });
+
+          copyBtn?.addEventListener("click", () => {
+            if (!promptBox.textContent) return;
+            navigator.clipboard.writeText(promptBox.textContent).then(() => {
+              const original = copyBtn.textContent;
+              copyBtn.textContent = "Copied!";
+              setTimeout(() => (copyBtn.textContent = original), 1500);
+            });
+          });
+        }
+      })();
+    </script>
+  </body>
+</html>

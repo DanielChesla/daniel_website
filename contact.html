@@ -9,11 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-    <!-- Sitewide + page-specific styles -->
     <link rel="stylesheet" href="style1.css" />
-    
-
     <style>
       .hidden-honeypot{position:absolute;left:-10000px;top:auto;width:1px;height:1px;overflow:hidden;}
     </style>
@@ -104,4 +100,51 @@
     </main>
 
     <!-- Footer injected dynamically -->
-    <div i
+    <div id="footer-include"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Shared header/footer loader (relative fetch paths) -->
+    <script src="include-loader.js"></script>
+
+    <script>
+      // Fill the hidden origin field for context
+      document.getElementById('originField').value = window.location.href;
+
+      function clearAlerts(){
+        document.getElementById('contactAlert').classList.add('d-none');
+        document.getElementById('contactError').classList.add('d-none');
+      }
+
+      // AJAX submit to Formspree (keeps you on the page and shows success alert)
+      function handleAjaxSubmit(e){
+        e.preventDefault(); clearAlerts();
+        if(document.getElementById('website').value) return false; // spam trap
+
+        const form = document.getElementById('contactForm');
+        const data = {
+          name: form.name.value,
+          email: form.email.value,
+          subject: form.subject.value,
+          message: form.message.value,
+          _origin: window.location.href
+        };
+
+        fetch('https://formspree.io/f/xandewoo', {
+          method: 'POST',
+          headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        })
+        .then((res)=> res.ok ? res.json() : Promise.reject(res))
+        .then(()=>{
+          document.getElementById('contactAlert').classList.remove('d-none');
+          form.reset();
+        })
+        .catch(()=>{
+          document.getElementById('contactError').classList.remove('d-none');
+        });
+
+        return false;
+      }
+    </script>
+  </body>
+</html>

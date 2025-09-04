@@ -1,177 +1,89 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Image Generator</title>
-    <meta name="description" content="Generate AI images based on character style, sex, and background." />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="style1.css" />
-  </head>
-  <body>
-    <!-- Header include -->
-    <div id="header-include"></div>
+// /api/generate-image-edge.js
+export const config = { runtime: "edge" };
 
-    <main class="py-5">
-      <div class="container">
-        <h1 class="mb-4">Image Generator</h1>
-        <p class="text-secondary">Choose options and we’ll create a prompt and generate an image.</p>
+// Helper to send JSON consistently
+const json = (status, obj) =>
+  new Response(JSON.stringify(obj), {
+    status,
+    headers: { "content-type": "application/json" },
+  });
 
-        <form id="imageForm" class="row g-3 mb-4">
-          <div class="col-md-4">
-            <label class="form-label">Background</label>
-            <select id="background" class="form-select">
-              <option>snow</option>
-              <option>desert</option>
-              <option>ocean</option>
-              <option>forest</option>
-              <option>field</option>
-            </select>
-          </div>
-          <div class="col-md-4">
-            <label class="form-label">Character Style</label>
-            <select id="style" class="form-select">
-              <option>Disney style</option>
-              <option>Anime style</option>
-              <option>Family Guy style</option>
-              <option>Simpsons style</option>
-            </select>
-          </div>
-          <div class="col-md-4">
-            <label class="form-label">Character Sex</label>
-            <select id="sex" class="form-select">
-              <option>Male</option>
-              <option>Female</option>
-            </select>
-          </div>
+// ArrayBuffer -> base64 (Edge has no Buffer)
+const abToBase64 = (ab) => {
+  const bytes = new Uint8Array(ab);
+  let bin = "";
+  for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+  return btoa(bin);
+};
 
-          <div class="col-12">
-            <button type="submit" class="btn btn-primary" id="generateBtn">Generate Image</button>
-            <button type="button" id="copyPrompt" class="btn btn-outline-secondary">Copy Prompt</button>
-          </div>
-        </form>
+export default async function handler(req) {
+  if (req.method === "OPTIONS") return new Response(null, { status: 200 });
+  if (req.method !== "POST") return json(405, { error: "Method Not Allowed" });
 
-        <div id="promptBox" class="alert alert-info d-none"></div>
-        <div id="statusBox" class="mt-3"></div>
-        <div id="resultBox" class="mt-4 text-center"></div>
-      </div>
-    </main>
+  const HF_API_KEY = process.env.HF_API_KEY;
+  if (!HF_API_KEY) return json(500, { error: "Missing HF_API_KEY" });
 
-    <!-- Footer include -->
-    <div id="footer-include"></div>
+  let body;
+  try {
+    body = await req.json();
+  } catch {
+    return json(400, { error: "Invalid JSON" });
+  }
+  const prompt = body?.prompt;
+  if (!prompt) return json(400, { error: "Missing prompt" });
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="include-loader.js"></script>
+  // TIP: "stabilityai/sd-turbo" is much faster for demos.
+  const MODEL = process.env.HF_MODEL || "stabilityai/stable-diffusion-2";
 
-    <script>
-      // Wrap everything so elements exist before we query them
-      (function () {
-        if (document.readyState === "loading") {
-          document.addEventListener("DOMContentLoaded", init);
-        } else {
-          init();
-        }
+  try {
+    const r = await fetch(`https://api-inference.huggingface.co/models/${MODEL}`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${HF_API_KEY}`,
+        "Content-Type": "application/json",
+        "x-wait-for-model": "true", // Edge gives us ~30s to ride out cold starts
+        // "Accept": "image/*"  // optional: nudge HF to send an image
+      },
+      body: JSON.stringify({ inputs: prompt }),
+    });
 
-        function init() {
-          const API_URL = "/api/generate-image-edge";
+    const ct = (r.headers.get("content-type") || "").toLowerCase();
 
-          const formEl     = document.getElementById("imageForm");
-          const promptBox  = document.getElementById("promptBox");
-          const statusBox  = document.getElementById("statusBox");
-          const resultBox  = document.getElementById("resultBox");
-          const copyBtn    = document.getElementById("copyPrompt");
-          const generateBtn= document.getElementById("generateBtn");
+    if (!r.ok) {
+      // Return the upstream payload so you can see what's happening
+      const errPayload = ct.includes("application/json") ? await r.json() : await r.text();
+      return json(r.status, { error: "Upstream error", detail: errPayload, contentType: ct });
+    }
 
-          if (!formEl) {
-            console.error("imageForm element not found.");
-            return;
-          }
+    // If HF returned an image (common path)
+    if (ct.startsWith("image/") || ct.startsWith("application/octet-stream")) {
+      const buf = await r.arrayBuffer();
+      const b64 = abToBase64(buf);
+      // use the exact MIME if provided; default to png otherwise
+      const mime = ct.startsWith("image/") ? ct.split(";")[0] : "image/png";
+      return json(200, { image: `data:${mime};base64,${b64}` });
+    }
 
-          function showStatus(message, kind = "info", withSpinner = false) {
-            const spinner = withSpinner
-              ? `<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>`
-              : "";
-            statusBox.innerHTML = `<div class="alert alert-${kind} mb-0">${spinner}${message}</div>`;
-          }
-          function clearStatus() { statusBox.innerHTML = ""; }
-          const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+    // Some pipelines respond with JSON containing base64
+    if (ct.includes("application/json")) {
+      const j = await r.json();
+      const b64 =
+        j?.image ||
+        j?.generated_image ||
+        j?.data?.[0]?.b64_json ||
+        j?.images?.[0] ||
+        j?.[0]?.b64_json;
 
-          async function callApi(prompt) {
-            const backoff = [0, 1200, 2000, 3500, 5000];
-            let lastErr = null;
+      if (b64) return json(200, { image: `data:image/png;base64,${b64}` });
 
-            for (let i = 0; i < backoff.length; i++) {
-              if (i > 0) {
-                showStatus(`Model warming up… retry ${i}/${backoff.length - 1}`, "warning", true);
-                await sleep(backoff[i]);
-              }
-              try {
-                const res = await fetch(API_URL, {
-                  method: "POST",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({ prompt }),
-                });
+      // No obvious image payload — return debug so you can see it in Network tab
+      return json(200, { debug: j, note: "No image field in JSON; see debug payload" });
+    }
 
-                const data = await res.json().catch(async () => ({ debugText: await res.text() }));
-
-                if (res.ok && (data.image || data.url)) return data;
-
-                console.log("API response:", { status: res.status, data });
-                if ([429, 500, 502, 503, 504].includes(res.status)) {
-                  lastErr = data?.error || `HTTP ${res.status}`;
-                  continue;
-                }
-                throw new Error(data?.error || `HTTP ${res.status}`);
-              } catch (e) {
-                lastErr = e.message || String(e);
-                continue;
-              }
-            }
-            throw new Error(lastErr || "Failed after retries");
-          }
-
-          formEl.addEventListener("submit", async (e) => {
-            e.preventDefault();
-            resultBox.innerHTML = "";
-            generateBtn.disabled = true;
-
-            const background = document.getElementById("background").value;
-            const style = document.getElementById("style").value;
-            const sex = document.getElementById("sex").value;
-
-            const prompt = `Generate a family friendly image with a ${sex} ${style} character with a ${background} background`;
-
-            promptBox.textContent = prompt;
-            promptBox.classList.remove("d-none");
-            showStatus("Generating image…", "primary", true);
-
-            try {
-              const data = await callApi(prompt);
-              const src = data.url || data.image;
-              if (src) {
-                resultBox.innerHTML = `<img src="${src}" class="img-fluid rounded shadow" alt="Generated image" />`;
-                clearStatus();
-              } else {
-                showStatus("No image in response. See console for details.", "warning");
-                console.log("No image payload. Server response:", data);
-              }
-            } catch (err) {
-              showStatus(`Error: ${err.message || err}`, "danger");
-            } finally {
-              generateBtn.disabled = false;
-            }
-          });
-
-          copyBtn?.addEventListener("click", () => {
-            if (!promptBox.textContent) return;
-            navigator.clipboard.writeText(promptBox.textContent).then(() => {
-              const original = copyBtn.textContent;
-              copyBtn.textContent = "Copied!";
-              setTimeout(() => (copyBtn.textContent = original), 1500);
-            });
-          });
-        }
-      })();
-    </script>
-  </body>
-</html>
+    // Unknown content-type
+    const raw = await r.text();
+    return json(200, { debug: raw, contentType: ct, note: "Unexpected content-type" });
+  } catch (e) {
+    return json(503, { error: e?.message || "Upstream timeout; retry" });
+  }
+}

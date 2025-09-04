@@ -106,3 +106,23 @@ footer{
 #board button.x { color: var(--brand-ink); }   /* X */
 #board button.o { color: #dc2626; }            /* O (red-ish) */
 
+/* Make header wrapper sticky as a fallback */
+#header-include {
+  position: sticky;
+  position: -webkit-sticky; /* Safari */
+  top: 0;
+  z-index: 1030; /* above cards/dropdowns */
+}
+
+/* Ensure Bootstrap's sticky-top can't be overridden */
+.navbar.sticky-top {
+  position: sticky !important;
+  position: -webkit-sticky !important; /* Safari */
+  top: 0;
+  z-index: 1030;
+}
+
+/* Optional: give content breathing room when jumping to anchors */
+html { scroll-padding-top: 84px; }  /* tweak if your navbar is taller */
+
+

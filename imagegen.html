@@ -63,8 +63,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="include-loader.js"></script>
     <script>
-      // Same-origin Netlify Function (no CORS issues)
-      const API_URL = "/.netlify/functions/generate-image";
+      // Same-origin Vercel API route (Option C)
+      const API_URL = "/api/generate-image";
 
       const form = document.getElementById("imageForm");
       const promptBox = document.getElementById("promptBox");
@@ -94,7 +94,7 @@
         });
 
         if (!res.ok) {
-          // Simple retry once on 503/504 to smooth over cold starts
+          // Retry once on 503/504 to smooth over cold starts
           if (attempt === 1 && (res.status === 503 || res.status === 504)) {
             showStatus("Model is waking up… retrying", "warning", true);
             await sleep(1500);
@@ -116,9 +116,10 @@
         const style = document.getElementById("style").value;
         const sex = document.getElementById("sex").value;
 
+        // Keep wording "family friendly" to reduce safety blocks
         const prompt = `Generate a family friendly image with a ${sex} ${style} character with a ${background} background`;
 
-        // Show the prompt the app is sending
+        // Show the prompt being sent
         promptBox.textContent = prompt;
         promptBox.classList.remove("d-none");
 
@@ -126,7 +127,7 @@
 
         try {
           const data = await callApi(prompt);
-          const src = data.url || data.image; // accept either shape
+          const src = data.url || data.image; // API may return a hosted URL or a data URL
           if (!src) throw new Error("No image returned from API");
 
           resultBox.innerHTML = `<img src="${src}" class="img-fluid rounded shadow" alt="Generated image" />`;

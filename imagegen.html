@@ -46,7 +46,7 @@
           </div>
 
           <div class="col-12">
-            <button type="submit" class="btn btn-primary">Generate Image</button>
+            <button type="submit" class="btn btn-primary" id="generateBtn">Generate Image</button>
             <button type="button" id="copyPrompt" class="btn btn-outline-secondary">Copy Prompt</button>
           </div>
         </form>
@@ -63,48 +63,78 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="include-loader.js"></script>
     <script>
-      // 🔑 Use your Netlify subdomain for now
-      const API_URL = "https://gregarious-pixie-d37f1b.netlify.app/.netlify/functions/generate-image";
+      // Same-origin Netlify Function (no CORS issues)
+      const API_URL = "/.netlify/functions/generate-image";
 
       const form = document.getElementById("imageForm");
       const promptBox = document.getElementById("promptBox");
       const statusBox = document.getElementById("statusBox");
       const resultBox = document.getElementById("resultBox");
       const copyBtn = document.getElementById("copyPrompt");
+      const generateBtn = document.getElementById("generateBtn");
+
+      function showStatus(message, kind = "info", withSpinner = false) {
+        const spinner = withSpinner
+          ? `<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>`
+          : "";
+        statusBox.innerHTML = `<div class="alert alert-${kind} mb-0">${spinner}${message}</div>`;
+      }
+
+      function clearStatus() {
+        statusBox.innerHTML = "";
+      }
+
+      const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+      async function callApi(prompt, attempt = 1) {
+        const res = await fetch(API_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ prompt }),
+        });
+
+        if (!res.ok) {
+          // Simple retry once on 503/504 to smooth over cold starts
+          if (attempt === 1 && (res.status === 503 || res.status === 504)) {
+            showStatus("Model is waking up… retrying", "warning", true);
+            await sleep(1500);
+            return callApi(prompt, 2);
+          }
+          const errText = await res.text().catch(() => `HTTP ${res.status}`);
+          throw new Error(errText || `HTTP ${res.status}`);
+        }
+
+        return res.json();
+      }
 
       form.addEventListener("submit", async (e) => {
         e.preventDefault();
         resultBox.innerHTML = "";
-        statusBox.textContent = "Generating...";
+        generateBtn.disabled = true;
 
         const background = document.getElementById("background").value;
         const style = document.getElementById("style").value;
         const sex = document.getElementById("sex").value;
 
-        const prompt = `Generate an image with a ${sex} ${style} with a ${background} background`;
+        const prompt = `Generate a family friendly image with a ${sex} ${style} character with a ${background} background`;
 
-        // Show the prompt
+        // Show the prompt the app is sending
         promptBox.textContent = prompt;
         promptBox.classList.remove("d-none");
 
+        showStatus("Generating image…", "primary", true);
+
         try {
-          const res = await fetch(API_URL, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ prompt }),
-          });
+          const data = await callApi(prompt);
+          const src = data.url || data.image; // accept either shape
+          if (!src) throw new Error("No image returned from API");
 
-          if (!res.ok) throw new Error("API error " + res.status);
-
-          const data = await res.json();
-          if (data.url) {
-            resultBox.innerHTML = `<img src="${data.url}" class="img-fluid rounded shadow" alt="Generated image">`;
-            statusBox.textContent = "";
-          } else {
-            throw new Error("No image returned");
-          }
+          resultBox.innerHTML = `<img src="${src}" class="img-fluid rounded shadow" alt="Generated image" />`;
+          clearStatus();
         } catch (err) {
-          statusBox.innerHTML = `<div class="alert alert-danger">Error: ${err.message}</div>`;
+          showStatus(`Error: ${err.message || err}`, "danger");
+        } finally {
+          generateBtn.disabled = false;
         }
       });
 
@@ -112,8 +142,9 @@
       copyBtn.addEventListener("click", () => {
         if (!promptBox.textContent) return;
         navigator.clipboard.writeText(promptBox.textContent).then(() => {
+          const original = copyBtn.textContent;
           copyBtn.textContent = "Copied!";
-          setTimeout(() => (copyBtn.textContent = "Copy Prompt"), 2000);
+          setTimeout(() => (copyBtn.textContent = original), 1500);
         });
       });
     </script>

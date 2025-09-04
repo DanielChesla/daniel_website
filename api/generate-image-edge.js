@@ -77,4 +77,13 @@ export default async function handler(req) {
       if (b64) return json(200, { image: `data:image/png;base64,${b64}` });
 
       // No obvious image payload — return debug so you can see it in Network tab
-      return json(200, { debug: j, note: "No image field in JSON; see debug payload"
+      return json(200, { debug: j, note: "No image field in JSON; see debug payload" });
+    }
+
+    // Unknown content-type
+    const raw = await r.text();
+    return json(200, { debug: raw, contentType: ct, note: "Unexpected content-type" });
+  } catch (e) {
+    return json(503, { error: e?.message || "Upstream timeout; retry" });
+  }
+}

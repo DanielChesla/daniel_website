@@ -1,31 +1,49 @@
 // include-loader.js
 document.addEventListener("DOMContentLoaded", () => {
-  // Helper to apply top offsets when we have a fixed nav
+  // Try multiple paths (relative first, then root-absolute)
+  const fetchText = async (paths) => {
+    for (const p of paths) {
+      try {
+        const res = await fetch(p, { cache: "no-store" });
+        if (res.ok) return await res.text();
+        console.warn(`[include-loader] ${p} -> ${res.status}`);
+      } catch (e) {
+        console.warn(`[include-loader] fetch failed for ${p}`, e);
+      }
+    }
+    throw new Error(`[include-loader] All fetch attempts failed: ${paths.join(", ")}`);
+  };
+
   const applyFixedNavOffsets = (nav) => {
     if (!nav) return;
     const setOffsets = () => {
-      const h = nav.getBoundingClientRect().height;
+      const h = nav.getBoundingClientRect().height || 0;
       document.body.style.paddingTop = h + "px";
       document.documentElement.style.scrollPaddingTop = h + "px";
     };
     setOffsets();
 
-    // Keep in sync on resize and when the nav height changes (responsive)
-    const ro = new ResizeObserver(setOffsets);
-    ro.observe(nav);
+    // Keep in sync as layout changes
+    if (typeof ResizeObserver !== "undefined") {
+      const ro = new ResizeObserver(setOffsets);
+      ro.observe(nav);
+    }
     window.addEventListener("resize", setOffsets);
 
-    // Fonts can change height after they load
-    if (document.fonts && document.fonts.ready) {
+    // Fonts loading can change height
+    if (document.fonts?.ready) {
       document.fonts.ready.then(setOffsets).catch(() => {});
     }
   };
 
-  // Load header
-  fetch("includes/header.html", { cache: "no-store" })
-    .then((res) => res.text())
+  const headerEl = document.getElementById("header-include");
+  const footerEl = document.getElementById("footer-include");
+
+  // ---- HEADER ----
+  fetchText(["includes/header.html", "/includes/header.html"])
     .then((html) => {
-      document.getElementById("header-include").innerHTML = html;
+      if (!headerEl) return;
+      headerEl.innerHTML = html;
 
       // Active page highlight (by filename)
       const hereFile = location.pathname.split("/").pop() || "index.html";
@@ -45,17 +63,16 @@ document.addEventListener("DOMContentLoaded", () => {
         window.addEventListener("scroll", onScroll, { passive: true });
       }
 
-      // If using fixed-top, pad the page so content isn't covered
-      const fixedNav = document.querySelector(".navbar.fixed-top");
-      applyFixedNavOffsets(fixedNav);
+      // Fixed-top padding so content isn't covered
+      applyFixedNavOffsets(document.querySelector(".navbar.fixed-top"));
     })
     .catch((err) => console.error("Error loading header:", err));
 
-  // Load footer
-  fetch("includes/footer.html", { cache: "no-store" })
-    .then((res) => res.text())
+  // ---- FOOTER ----
+  fetchText(["includes/footer.html", "/includes/footer.html"])
     .then((html) => {
-      document.getElementById("footer-include").innerHTML = html;
+      if (!footerEl) return;
+      footerEl.innerHTML = html;
       document.getElementById("year")?.textContent = new Date().getFullYear();
     })
     .catch((err) => console.error("Error loading footer:", err));

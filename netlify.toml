@@ -1,0 +1,3 @@
+[build]
+  publish = "."                    # your static site root (index.html lives here)
+  functions = "netlify/functions"  # where the function above lives

@@ -9,41 +9,11 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- You said the stylesheet is named style1.css -->
     <link rel="stylesheet" href="style1.css" />
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg bg-white border-bottom py-3 sticky-top">
-      <div class="container">
-        <a class="navbar-brand fw-semibold" href="index.html">Daniel Chesla</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav" aria-controls="nav" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="nav">
-          <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
-            <li class="nav-item"><a class="nav-link" href="index.html#about">About</a></li>
-            <li class="nav-item"><a class="nav-link" href="index.html#skills">Skills</a></li>
-            <li class="nav-item"><a class="nav-link" href="index.html#industries">Industries</a></li>
-            <li class="nav-item"><a class="nav-link" href="index.html#experience">Experience</a></li>
-            <li class="nav-item"><a class="nav-link" href="index.html#education">Education</a></li>
-            <li class="nav-item"><a class="nav-link" href="index.html#photos">Photos</a></li>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Projects</a>
-              <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="Mathpage.html">Math Project</a></li>
-                <li><a class="dropdown-item active" href="weather.html">Weather</a></li>
-                <li><a class="dropdown-item" href="loan.html">Loan Calculator</a></li>
-                <li><a class="dropdown-item" href="TicTacToe.html">TicTacToe</a></li>
-                <li><a class="dropdown-item" href="contact.html">Contact</a></li>
-              </ul>
-            </li>
-            <li class="nav-item">
-              <a class="btn btn-primary ms-lg-2" href="https://danielchesla.com">Home</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
+    <!-- Header injected dynamically -->
+    <div id="header-include"></div>
 
     <header class="py-5 bg-light border-bottom">
       <div class="container">
@@ -67,7 +37,7 @@
                   <div class="col-12">
                     <label for="zip" class="form-label">ZIP code</label>
                     <input type="text" class="form-control" id="zip" placeholder="e.g., 33431" required />
-                    <div class="form-text">Your current weather.js expects a ZIP. (Optional tweak: add ',us' in the script.)</div>
+                    <div class="form-text">Your current weather.js expects a ZIP.</div>
                   </div>
                   <div class="col-12 d-flex gap-2">
                     <button type="submit" class="btn btn-primary btn-lg">Get Weather</button>
@@ -82,7 +52,7 @@
             <div class="card shadow-sm border-0 h-100">
               <div class="card-body">
                 <h2 class="h4 mb-3">Current Conditions</h2>
-                <!-- IMPORTANT: Your weather.js writes to #weather -->
+                <!-- weather.js writes here -->
                 <div id="weather" class="p-3 border rounded-3 bg-white">Enter a ZIP and click Get Weather.</div>
               </div>
             </div>
@@ -91,19 +61,13 @@
       </div>
     </main>
 
-    <footer class="py-4 border-top small">
-      <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
-        <span>© <span id="year"></span> Daniel Chesla</span>
-        <div class="d-flex gap-2">
-          <a href="index.html" class="link-body-emphasis">Home</a>
-          <a href="https://github.com/danielchesla" class="link-body-emphasis">GitHub</a>
-        </div>
-      </div>
-    </footer>
+    <!-- Footer injected dynamically -->
+    <div id="footer-include"></div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
-    <!-- Load your existing weather.js as-is -->
+    <!-- Shared includes loader (relative path for GitHub Pages) -->
+    <script src="include-loader.js"></script>
+    <!-- Your existing script (unchanged) -->
     <script src="weather.js"></script>
   </body>
 </html>

@@ -4,23 +4,21 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Image Generator</title>
-    <meta name="description" content="Generate AI images based on character style, mix, realism level, and background." />
+    <meta name="description" content="Generate AI images based on character style, sex, and background." />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="style1.css" />
   </head>
   <body>
-    <!-- Header (loaded by include-loader.js) -->
     <div id="header-include"></div>
 
     <main class="py-5">
       <div class="container">
-        <h1 class="mb-2">Image Generator</h1>
-        <p class="text-secondary mb-4">Choose options and we’ll create a clean prompt and call your image API.</p>
+        <h1 class="mb-4">Image Generator</h1>
+        <p class="text-secondary">Choose options and we’ll create a prompt and generate an image.</p>
 
         <form id="imageForm" class="row g-3 mb-4">
-          <!-- Background -->
           <div class="col-md-4">
-            <label class="form-label" for="background">Background</label>
+            <label class="form-label">Background</label>
             <select id="background" class="form-select">
               <option>City New York</option>
               <option>City London</option>
@@ -34,10 +32,8 @@
               <option>Underwater</option>
             </select>
           </div>
-
-          <!-- Character Style -->
           <div class="col-md-4">
-            <label class="form-label" for="style">Character Style</label>
+            <label class="form-label">Character Style</label>
             <select id="style" class="form-select">
               <option>Disney style</option>
               <option>Anime style</option>
@@ -47,10 +43,8 @@
               <option>Peanuts style</option>
             </select>
           </div>
-
-          <!-- Character Mix -->
           <div class="col-md-4">
-            <label class="form-label" for="mix">Character Mix</label>
+            <label class="form-label">Character Mix</label>
             <select id="mix" class="form-select">
               <option>Male and Female group of friends</option>
               <option>Male group of friends</option>
@@ -62,16 +56,14 @@
               <option>Solo Male</option>
             </select>
           </div>
-
-          <!-- Realism Level -->
-          <div class="col-md-6">
-            <label class="form-label" for="realism">Realism Level</label>
+          <div class="col-md-4">
+            <label class="form-label">Realism Level</label>
             <select id="realism" class="form-select">
-              <option value="Most Realistic">Most Realistic — photo-realistic, highly detailed, natural lighting, true-to-life colors</option>
-              <option value="Semi-Realistic">Semi-Realistic — realistic with slight stylization, softer edges, mild artistic feel</option>
-              <option value="Balanced / Stylized">Balanced / Stylized — blend of realism and cartoon, simplified details, moderate stylization</option>
-              <option value="Cartoonish">Cartoonish — cartoon style, bold outlines, exaggerated features, flat colors</option>
-              <option value="Most Cartoonish">Most Cartoonish — highly stylized cartoon, simplified shapes, strong outlines, vibrant exaggerated colors</option>
+              <option>Most Realistic: “photo-realistic, highly detailed, natural lighting, true-to-life colors”</option>
+              <option>Semi-Realistic: “realistic with slight stylization, softer edges, mild artistic feel”</option>
+              <option>Balanced / Stylized: “blend of realism and cartoon, simplified details, moderate stylization”</option>
+              <option>Cartoonish: “cartoon style, bold outlines, exaggerated features, flat colors”</option>
+              <option>Most Cartoonish: “highly stylized cartoon, simplified shapes, strong outlines, vibrant exaggerated colors”</option>
             </select>
           </div>
 
@@ -87,249 +79,146 @@
       </div>
     </main>
 
-    <!-- Footer (loaded by include-loader.js) -->
     <div id="footer-include"></div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="include-loader.js"></script>
 
     <script>
-  (function () {
-    if (document.readyState === "loading") {
-      document.addEventListener("DOMContentLoaded", init);
-    } else { init(); }
+      (function () {
+        if (document.readyState === "loading") {
+          document.addEventListener("DOMContentLoaded", init);
+        } else { init(); }
 
-    function init() {
-      const API_URL = "/api/generate-image-router";
+        function init() {
+          const API_URL = "/api/generate-image-router";
 
-      const formEl      = document.getElementById("imageForm");
-      const promptBox   = document.getElementById("promptBox");
-      const statusBox   = document.getElementById("statusBox");
-      const resultBox   = document.getElementById("resultBox");
-      const copyBtn     = document.getElementById("copyPrompt");
-      const generateBtn = document.getElementById("generateBtn");
+          const formEl      = document.getElementById("imageForm");
+          const promptBox   = document.getElementById("promptBox");
+          const statusBox   = document.getElementById("statusBox");
+          const resultBox   = document.getElementById("resultBox");
+          const copyBtn     = document.getElementById("copyPrompt");
+          const generateBtn = document.getElementById("generateBtn");
 
-      function showStatus(message, kind = "info", withSpinner = false) {
-        const spinner = withSpinner
-          ? '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>'
-          : "";
-        statusBox.innerHTML = '<div class="alert alert-' + kind + ' mb-0">' + spinner + message + '</div>';
-      }
-      function clearStatus() { statusBox.innerHTML = ""; }
-      const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+          function showStatus(message, kind = "info", withSpinner = false) {
+            const spinner = withSpinner
+              ? `<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>`
+              : "";
+            statusBox.innerHTML = `<div class="alert alert-${kind} mb-0">${spinner}${message}</div>`;
+          }
+          function clearStatus() { statusBox.innerHTML = ""; }
+          const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-      // Warm the model quietly on page load (non-blocking)
-      (async () => {
-        try {
-          await fetch(API_URL, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ prompt: "warmup" }),
+          // Warm the model quietly on page load
+          (async () => {
+            try {
+              await fetch(API_URL, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ prompt: "warmup" }),
+              });
+            } catch {}
+          })();
+
+          // Reads body ONCE; polls up to ~3 minutes (or until ready)
+          async function callApi(prompt) {
+            const deadline = Date.now() + 3 * 60 * 1000; // 3 minutes
+            let attempt = 0;
+
+            while (Date.now() < deadline) {
+              attempt++;
+              if (attempt > 1) {
+                const secondsLeft = Math.max(0, Math.ceil((deadline - Date.now()) / 1000));
+                showStatus(`Model loading… retry ${attempt} (${secondsLeft}s left)`, "warning", true);
+              }
+
+              try {
+                const res = await fetch(API_URL, {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ prompt }),
+                });
+
+                const text = await res.text();              // read ONCE
+                let data; try { data = text ? JSON.parse(text) : {}; } catch { data = { raw: text }; }
+
+                // Success
+                if (res.ok && (data.image || data.url)) return data;
+
+                // Model still loading (our Edge returns 202; sometimes HF uses 503)
+                if (res.status === 202 || res.status === 503) {
+                  const wait = Math.min(7000, Math.max(800, Number(data?.retryAfter) || 1500));
+                  await sleep(wait);
+                  continue;
+                }
+
+                // Transient errors → backoff and retry
+                if ([429, 500, 502, 504].includes(res.status)) {
+                  const wait = 1200 + Math.min(6000, attempt * 500);
+                  console.log("Transient upstream:", data);
+                  await sleep(wait);
+                  continue;
+                }
+
+                // Non-retriable
+                throw new Error(data?.error || stringify(data?.detail) || `HTTP ${res.status}`);
+              } catch (e) {
+                // Network or parse issue → brief pause then retry
+                await sleep(1200);
+              }
+            }
+
+            throw new Error("The model is still loading. Please try again in a bit.");
+          }
+
+          function stringify(v) {
+            try { return typeof v === "string" ? v : JSON.stringify(v, null, 2); }
+            catch { return String(v); }
+          }
+
+          formEl.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            resultBox.innerHTML = "";
+            generateBtn.disabled = true;
+
+            const background = document.getElementById("background").value;
+            const style      = document.getElementById("style").value;
+            const mix        = document.getElementById("mix").value;
+            const realism    = document.getElementById("realism").value;
+
+            const prompt = `Generate a family friendly ${realism} image with a ${mix} ${style} character with a ${background} background`;
+
+            promptBox.textContent = prompt;
+            promptBox.classList.remove("d-none");
+            showStatus("Generating image…", "primary", true);
+
+            try {
+              const data = await callApi(prompt);
+              const src = data.url || data.image;
+              if (src) {
+                resultBox.innerHTML = `<img src="${src}" class="img-fluid rounded shadow" alt="Generated image" />`;
+                clearStatus();
+              } else {
+                showStatus("No image in response. See console for details.", "warning");
+                console.log("No image payload. Server response:", data);
+              }
+            } catch (err) {
+              showStatus(`Error: ${err.message || err}`, "danger");
+            } finally {
+              generateBtn.disabled = false;
+            }
           });
-        } catch {}
-      })();
 
-      // Map realism label to descriptors for the model
-      const REALISM_MAP = {
-        "Most Realistic": "photo-realistic, highly detailed, natural lighting, true-to-life colors",
-        "Semi-Realistic": "realistic with slight stylization, softer edges, mild artistic feel",
-        "Balanced / Stylized": "blend of realism and cartoon, simplified details, moderate stylization",
-        "Cartoonish": "cartoon style, bold outlines, exaggerated features, flat colors",
-        "Most Cartoonish": "highly stylized cartoon, simplified shapes, strong outlines, vibrant exaggerated colors",
-      };
-
-      // Robust fetcher: handles JSON, text, and binary image responses without hanging
-      async function callApi(payload) {
-        const deadline = Date.now() + 3 * 60 * 1000; // 3 minutes
-        let attempt = 0;
-
-        while (Date.now() < deadline) {
-          attempt++;
-          if (attempt > 1) {
-            const secondsLeft = Math.max(0, Math.ceil((deadline - Date.now()) / 1000));
-            showStatus('Model loading… retry ' + attempt + ' (' + secondsLeft + 's left)', "warning", true);
-          }
-
-          try {
-            const res = await fetch(API_URL, {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify(payload),
+          copyBtn?.addEventListener("click", () => {
+            if (!promptBox.textContent) return;
+            navigator.clipboard.writeText(promptBox.textContent).then(() => {
+              const original = copyBtn.textContent;
+              copyBtn.textContent = "Copied!";
+              setTimeout(() => (copyBtn.textContent = original), 1500);
             });
-
-            const ct = res.headers.get("content-type") || "";
-            console.log("[callApi] status:", res.status, "content-type:", ct);
-
-            // Handle successful binary image directly
-            if (res.ok && ct.startsWith("image/")) {
-              const blob = await res.blob();
-              const url = URL.createObjectURL(blob);
-              return { url };
-            }
-
-            // Handle JSON (success, loading, or errors)
-            if (ct.includes("application/json")) {
-              const data = await res.json();
-              console.log("[callApi] json:", data);
-
-              if (res.ok && (data.image || data.url || data.b64_json)) {
-                if (data.b64_json) {
-                  return { url: "data:image/png;base64," + data.b64_json };
-                }
-                return data;
-              }
-
-              // Loading / queued responses
-              if (res.status === 202 || res.status === 503 || data?.status === "loading") {
-                const wait = Math.min(7000, Math.max(800, Number(data?.retryAfter) || 1500));
-                await sleep(wait);
-                continue;
-              }
-
-              // Transient upstream errors → backoff/retry
-              if ([429, 500, 502, 504].includes(res.status)) {
-                const wait = 1200 + Math.min(6000, attempt * 500);
-                await sleep(wait);
-                continue;
-              }
-
-              // Non-retriable
-              throw new Error(data?.error || JSON.stringify(data));
-            }
-
-            // Handle plain text: maybe a direct URL or status
-            if (ct.startsWith("text/")) {
-              const text = await res.text();
-              console.log("[callApi] text:", text);
-
-              // If it looks like JSON in text, attempt to parse
-              if (text.trim().startsWith("{")) {
-                try {
-                  const data = JSON.parse(text);
-                  if (res.ok && (data.image || data.url || data.b64_json)) {
-                    if (data.b64_json) {
-                      return { url: "data:image/png;base64," + data.b64_json };
-                    }
-                    return data;
-                  }
-                  if (res.status === 202 || res.status === 503 || data?.status === "loading") {
-                    const wait = Math.min(7000, Math.max(800, Number(data?.retryAfter) || 1500));
-                    await sleep(wait);
-                    continue;
-                  }
-                  if ([429, 500, 502, 504].includes(res.status)) {
-                    const wait = 1200 + Math.min(6000, attempt * 500);
-                    await sleep(wait);
-                    continue;
-                  }
-                  throw new Error(data?.error || text);
-                } catch {
-                  // fall through to treat as plain text
-                }
-              }
-
-              // Treat as plain URL if it looks like one
-              if (/^https?:\/\/\S+$/i.test(text.trim())) {
-                return { url: text.trim() };
-              }
-
-              // Otherwise, if OK but unknown text: surface it
-              if (res.ok) {
-                throw new Error("Unexpected text response: " + text.slice(0, 500));
-              }
-              // Not OK → error with body
-              throw new Error("HTTP " + res.status + ": " + text.slice(0, 500));
-            }
-
-            // Fallback: try blob anyway
-            if (res.ok) {
-              const blob = await res.blob();
-              if (blob && blob.size > 0) {
-                const url = URL.createObjectURL(blob);
-                return { url };
-              }
-            }
-
-            // If we reach here, consider retry / error based on status
-            if ([202, 503].includes(res.status)) {
-              await sleep(1500);
-              continue;
-            }
-            if ([429, 500, 502, 504].includes(res.status)) {
-              const wait = 1200 + Math.min(6000, attempt * 500);
-              await sleep(wait);
-              continue;
-            }
-
-            throw new Error("HTTP " + res.status);
-          } catch (e) {
-            console.warn("[callApi] error:", e);
-            await sleep(1200);
-          }
+          });
         }
-        throw new Error("The model is still loading. Please try again shortly.");
-      }
-
-      function stringify(v) {
-        try { return typeof v === "string" ? v : JSON.stringify(v, null, 2); }
-        catch { return String(v); }
-      }
-
-      formEl.addEventListener("submit", async (e) => {
-        e.preventDefault();
-        resultBox.innerHTML = "";
-        generateBtn.disabled = true;
-
-        const background = document.getElementById("background").value;
-        const style      = document.getElementById("style").value;
-        const mix        = document.getElementById("mix").value;
-        const realismVal = document.getElementById("realism").value;
-
-        // Build realism descriptor
-        const realismDesc = REALISM_MAP[realismVal] || realismVal;
-
-        // Build a clear, model-friendly prompt
-        const prompt =
-`Generate a family-friendly image in the ${style}.
-Scene: ${background}.
-Subjects: ${mix}.
-Style intent: ${realismVal} — ${realismDesc}.
-Please avoid gore, nudity, or unsafe content.`;
-
-        // Show the prompt for copy/debug
-        promptBox.textContent = prompt;
-        promptBox.classList.remove("d-none");
-        showStatus("Generating image…", "primary", true);
-
-        // Send richer payload (keeps backwards-compat with backends expecting just {prompt})
-        const payload = { prompt, style, background, mix, realism: realismVal };
-
-        try {
-          const data = await callApi(payload);
-          const src = data.url || data.image;
-          if (src) {
-            resultBox.innerHTML = '<img src="' + src + '" class="img-fluid rounded shadow" alt="Generated image" />';
-            clearStatus();
-          } else {
-            showStatus("No image in response. See console for details.", "warning");
-            console.log("No image payload. Server response:", data);
-          }
-        } catch (err) {
-          showStatus("Error: " + (err.message || err), "danger");
-        } finally {
-          generateBtn.disabled = false;
-        }
-      });
-
-      copyBtn?.addEventListener("click", () => {
-        if (!promptBox.textContent) return;
-        navigator.clipboard.writeText(promptBox.textContent).then(() => {
-          const original = copyBtn.textContent;
-          copyBtn.textContent = "Copied!";
-          setTimeout(() => (copyBtn.textContent = original), 1500);
-        });
-      });
-    }
-  })();
-</script>
-     
+      })();
+    </script>
+  </body>
+</html>

@@ -44,8 +44,8 @@
             </select>
           </div>
           <div class="col-md-4">
-            <label class="form-label">Character Sex</label>
-            <select id="sex" class="form-select">
+            <label class="form-label">Character Mix</label>
+            <select id="mix" class="form-select">
               <option>Male and Female group of friends</option>
               <option>Male group of friends</option>
               <option>Female group of friends</option>
@@ -54,6 +54,16 @@
               <option>Family with Pets</option>
               <option>Solo Female</option>
               <option>Solo Male</option>
+            </select>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Realism Level</label>
+            <select id="realism" class="form-select">
+              <option>Most Realistic: “photo-realistic, highly detailed, natural lighting, true-to-life colors”</option>
+              <option>Semi-Realistic: “realistic with slight stylization, softer edges, mild artistic feel”</option>
+              <option>Balanced / Stylized: “blend of realism and cartoon, simplified details, moderate stylization”</option>
+              <option>Cartoonish: “cartoon style, bold outlines, exaggerated features, flat colors”</option>
+              <option>Most Cartoonish: “highly stylized cartoon, simplified shapes, strong outlines, vibrant exaggerated colors”</option>
             </select>
           </div>
 
@@ -175,7 +185,7 @@
             const style      = document.getElementById("style").value;
             const sex        = document.getElementById("sex").value;
 
-            const prompt = `Generate a family friendly image with a ${sex} ${style} character with a ${background} background`;
+            const prompt = `Generate a family friendly ${realism} image with a ${mix} ${style} character with a ${background} background`;
 
             promptBox.textContent = prompt;
             promptBox.classList.remove("d-none");

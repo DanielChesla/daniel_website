@@ -70,4 +70,176 @@
               <option value="Most Realistic">Most Realistic — photo-realistic, highly detailed, natural lighting, true-to-life colors</option>
               <option value="Semi-Realistic">Semi-Realistic — realistic with slight stylization, softer edges, mild artistic feel</option>
               <option value="Balanced / Stylized">Balanced / Stylized — blend of realism and cartoon, simplified details, moderate stylization</option>
-              <option value="Cartoonish
+              <option value="Cartoonish">Cartoonish — cartoon style, bold outlines, exaggerated features, flat colors</option>
+              <option value="Most Cartoonish">Most Cartoonish — highly stylized cartoon, simplified shapes, strong outlines, vibrant exaggerated colors</option>
+            </select>
+          </div>
+
+          <div class="col-12">
+            <button type="submit" class="btn btn-primary" id="generateBtn">Generate Image</button>
+            <button type="button" id="copyPrompt" class="btn btn-outline-secondary">Copy Prompt</button>
+          </div>
+        </form>
+
+        <div id="promptBox" class="alert alert-info d-none"></div>
+        <div id="statusBox" class="mt-3"></div>
+        <div id="resultBox" class="mt-4 text-center"></div>
+      </div>
+    </main>
+
+    <!-- Footer (loaded by include-loader.js) -->
+    <div id="footer-include"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="include-loader.js"></script>
+
+    <script>
+      (function () {
+        if (document.readyState === "loading") {
+          document.addEventListener("DOMContentLoaded", init);
+        } else { init(); }
+
+        function init() {
+          const API_URL = "/api/generate-image-router";
+
+          const formEl      = document.getElementById("imageForm");
+          const promptBox   = document.getElementById("promptBox");
+          const statusBox   = document.getElementById("statusBox");
+          const resultBox   = document.getElementById("resultBox");
+          const copyBtn     = document.getElementById("copyPrompt");
+          const generateBtn = document.getElementById("generateBtn");
+
+          function showStatus(message, kind = "info", withSpinner = false) {
+            const spinner = withSpinner
+              ? '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>'
+              : "";
+            statusBox.innerHTML = '<div class="alert alert-' + kind + ' mb-0">' + spinner + message + '</div>';
+          }
+          function clearStatus() { statusBox.innerHTML = ""; }
+          const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+          // Warm the model quietly on page load (non-blocking)
+          (async () => {
+            try {
+              await fetch(API_URL, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ prompt: "warmup" }),
+              });
+            } catch {}
+          })();
+
+          // Map realism label to descriptors for the model
+          const REALISM_MAP = {
+            "Most Realistic": "photo-realistic, highly detailed, natural lighting, true-to-life colors",
+            "Semi-Realistic": "realistic with slight stylization, softer edges, mild artistic feel",
+            "Balanced / Stylized": "blend of realism and cartoon, simplified details, moderate stylization",
+            "Cartoonish": "cartoon style, bold outlines, exaggerated features, flat colors",
+            "Most Cartoonish": "highly stylized cartoon, simplified shapes, strong outlines, vibrant exaggerated colors",
+          };
+
+          // Reads body ONCE; polls up to ~3 minutes (or until ready)
+          async function callApi(prompt) {
+            const deadline = Date.now() + 3 * 60 * 1000; // 3 minutes
+            let attempt = 0;
+
+            while (Date.now() < deadline) {
+              attempt++;
+              if (attempt > 1) {
+                const secondsLeft = Math.max(0, Math.ceil((deadline - Date.now()) / 1000));
+                showStatus('Model loading… retry ' + attempt + ' (' + secondsLeft + 's left)', "warning", true);
+              }
+
+              try {
+                const res = await fetch(API_URL, {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ prompt }),
+                });
+
+                const text = await res.text(); // read ONCE
+                let data; try { data = text ? JSON.parse(text) : {}; } catch { data = { raw: text }; }
+
+                if (res.ok && (data.image || data.url)) return data;
+
+                if (res.status === 202 || res.status === 503) {
+                  const wait = Math.min(7000, Math.max(800, Number(data?.retryAfter) || 1500));
+                  await sleep(wait);
+                  continue;
+                }
+
+                if ([429, 500, 502, 504].includes(res.status)) {
+                  const wait = 1200 + Math.min(6000, attempt * 500);
+                  console.log("Transient upstream:", data);
+                  await sleep(wait);
+                  continue;
+                }
+
+                throw new Error(data?.error || stringify(data?.detail) || 'HTTP ' + res.status);
+              } catch (e) {
+                await sleep(1200);
+              }
+            }
+            throw new Error("The model is still loading. Please try again in a bit.");
+          }
+
+          function stringify(v) {
+            try { return typeof v === "string" ? v : JSON.stringify(v, null, 2); }
+            catch { return String(v); }
+          }
+
+          formEl.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            resultBox.innerHTML = "";
+            generateBtn.disabled = true;
+
+            const background = document.getElementById("background").value;
+            const style      = document.getElementById("style").value;
+            const mix        = document.getElementById("mix").value;
+            const realismVal = document.getElementById("realism").value;
+
+            const realismDesc = REALISM_MAP[realismVal] || realismVal;
+
+            // Build a clear, model-friendly prompt
+            const prompt =
+`Generate a family-friendly image in the ${style}.
+Scene: ${background}.
+Subjects: ${mix}.
+Style intent: ${realismVal} — ${realismDesc}.
+Please avoid gore, nudity, or unsafe content.`;
+
+            // Show the prompt for copy/debug
+            promptBox.textContent = prompt;
+            promptBox.classList.remove("d-none");
+            showStatus("Generating image…", "primary", true);
+
+            try {
+              const data = await callApi(prompt);
+              const src = data.url || data.image;
+              if (src) {
+                resultBox.innerHTML = '<img src="' + src + '" class="img-fluid rounded shadow" alt="Generated image" />';
+                clearStatus();
+              } else {
+                showStatus("No image in response. See console for details.", "warning");
+                console.log("No image payload. Server response:", data);
+              }
+            } catch (err) {
+              showStatus("Error: " + (err.message || err), "danger");
+            } finally {
+              generateBtn.disabled = false;
+            }
+          });
+
+          copyBtn?.addEventListener("click", () => {
+            if (!promptBox.textContent) return;
+            navigator.clipboard.writeText(promptBox.textContent).then(() => {
+              const original = copyBtn.textContent;
+              copyBtn.textContent = "Copied!";
+              setTimeout(() => (copyBtn.textContent = original), 1500);
+            });
+          });
+        }
+      })();
+    </script>
+  </body>
+</html>

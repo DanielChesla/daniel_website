@@ -32,124 +32,74 @@
       </div></div></div>
     </header>
     <main class="py-5"><div class="container">
-
       <div class="calc-card"><div class="row g-3">
-
-        <div class="col-md-6">
-          <label class="form-label">Current Salary</label>
-          <div class="input-group"><span class="input-group-text">$</span><input type="number" id="salary" class="form-control" placeholder="e.g., 75000" min="0" /></div>
-        </div>
-
-        <div class="col-md-3">
-          <label class="form-label">Current Age</label>
-          <input type="number" id="currentAge" class="form-control" placeholder="e.g., 30" min="18" max="80" />
-        </div>
-
-        <div class="col-md-3">
-          <label class="form-label">Retirement Age</label>
-          <input type="number" id="retireAge" class="form-control" placeholder="e.g., 65" min="18" max="90" />
-        </div>
-
-        <div class="col-md-6">
-          <label class="form-label">Annual Interest Rate (%)</label>
-          <div class="input-group"><span class="input-group-text">%</span><input type="number" id="rate" class="form-control" placeholder="e.g., 7" min="0" step="0.01" /></div>
-          <div class="field-hint">Historical average S&amp;P 500 return is ~7% inflation-adjusted.</div>
-        </div>
-
-        <div class="col-md-3">
-          <label class="form-label">Your Contribution (%)</label>
-          <div class="input-group"><span class="input-group-text">%</span><input type="number" id="contribPct" class="form-control" placeholder="e.g., 10" min="0" max="100" step="0.1" /></div>
-          <div class="field-hint">% of salary you contribute.</div>
-        </div>
-
-        <div class="col-md-3">
-          <label class="form-label">Employer Match (%)</label>
-          <div class="input-group"><span class="input-group-text">%</span><input type="number" id="matchPct" class="form-control" placeholder="e.g., 50" min="0" max="100" step="1" /></div>
-          <div class="field-hint">e.g., 100 = dollar-for-dollar, 50 = 50 cents per dollar.</div>
-        </div>
-
-        <div class="col-md-6">
-          <label class="form-label">Match Up To (% of salary)</label>
-          <div class="input-group"><span class="input-group-text">%</span><input type="number" id="matchCap" class="form-control" placeholder="e.g., 6" min="0" max="100" step="0.1" /></div>
-          <div class="field-hint">Employer only matches up to this % of your salary. Common: 3–6%.</div>
-        </div>
-
+        <div class="col-md-6"><label class="form-label">Current Salary</label><div class="input-group"><span class="input-group-text">$</span><input type="number" id="salary" class="form-control" placeholder="e.g., 75000" min="0" /></div></div>
+        <div class="col-md-3"><label class="form-label">Current Age</label><input type="number" id="currentAge" class="form-control" placeholder="e.g., 30" min="18" max="80" /></div>
+        <div class="col-md-3"><label class="form-label">Retirement Age</label><input type="number" id="retireAge" class="form-control" placeholder="e.g., 65" min="18" max="90" /></div>
+        <div class="col-md-6"><label class="form-label">Annual Interest Rate (%)</label><div class="input-group"><span class="input-group-text">%</span><input type="number" id="rate" class="form-control" placeholder="e.g., 7" min="0" step="0.01" /></div><div class="field-hint">Historical average S&amp;P 500 return is ~7% inflation-adjusted.</div></div>
+        <div class="col-md-6"><label class="form-label">Estimated Salary Increase Per Year (%)</label><div class="input-group"><span class="input-group-text">%</span><input type="number" id="salaryIncrease" class="form-control" placeholder="e.g., 3" min="0" step="0.1" /></div><div class="field-hint">Your contributions grow each year as your salary increases. Use 0 for no raises.</div></div>
+        <div class="col-md-3"><label class="form-label">Your Contribution (%)</label><div class="input-group"><span class="input-group-text">%</span><input type="number" id="contribPct" class="form-control" placeholder="e.g., 10" min="0" max="100" step="0.1" /></div><div class="field-hint">% of salary you contribute.</div></div>
+        <div class="col-md-3"><label class="form-label">Employer Match (%)</label><div class="input-group"><span class="input-group-text">%</span><input type="number" id="matchPct" class="form-control" placeholder="e.g., 50" min="0" max="100" step="1" /></div><div class="field-hint">100 = dollar-for-dollar, 50 = 50 cents per dollar.</div></div>
+        <div class="col-md-6"><label class="form-label">Employer Match Cap (% of salary)</label><div class="input-group"><span class="input-group-text">%</span><input type="number" id="matchCap" class="form-control" placeholder="e.g., 6" min="0" max="100" step="0.1" /></div><div class="field-hint">Employer only matches up to this % of your salary. Common: 3-6%.</div></div>
       </div>
-      <div class="mt-4 d-flex gap-2">
-        <button class="btn btn-primary" onclick="calculate()">Calculate</button>
-        <button class="btn btn-outline-secondary" onclick="clearForm()">Clear</button>
-      </div></div>
-
+      <div class="mt-4 d-flex gap-2"><button class="btn btn-primary" onclick="calculate()">Calculate</button><button class="btn btn-outline-secondary" onclick="clearForm()">Clear</button></div></div>
       <div id="results" style="display:none">
         <div class="calc-card"><div class="row g-3">
-          <div class="col-md-3 col-sm-6"><div class="result-box"><div class="label">Estimated Balance at Retirement</div><div class="value" id="resBalance">—</div></div></div>
-          <div class="col-md-3 col-sm-6"><div class="result-box"><div class="label">Your Total Contributions</div><div class="value" id="resYours">—</div></div></div>
-          <div class="col-md-3 col-sm-6"><div class="result-box"><div class="label">Employer Total Match</div><div class="value" id="resMatch">—</div></div></div>
-          <div class="col-md-3 col-sm-6"><div class="result-box"><div class="label">Total Growth (Interest)</div><div class="value" id="resGrowth">—</div></div></div>
+          <div class="col-md-3 col-sm-6"><div class="result-box"><div class="label">Estimated Balance at Retirement</div><div class="value" id="resBalance">-</div></div></div>
+          <div class="col-md-3 col-sm-6"><div class="result-box"><div class="label">Your Total Contributions</div><div class="value" id="resYours">-</div></div></div>
+          <div class="col-md-3 col-sm-6"><div class="result-box"><div class="label">Employer Total Match</div><div class="value" id="resMatch">-</div></div></div>
+          <div class="col-md-3 col-sm-6"><div class="result-box"><div class="label">Total Growth (Interest)</div><div class="value" id="resGrowth">-</div></div></div>
         </div>
         <div id="chartWrap"><canvas id="growthChart" height="100"></canvas></div>
         </div>
       </div>
-
     </div></main>
     <div id="footer-include"></div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="include-loader.js"></script>
     <script>
       let chart=null;
-      function fmt(n){return '$'+n.toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0})}
+      function fmt(n){return '$'+Math.round(n).toLocaleString('en-US')}
       function calculate(){
-        const salary=parseFloat(document.getElementById('salary').value)||0;
+        const baseSalary=parseFloat(document.getElementById('salary').value)||0;
         const curAge=parseInt(document.getElementById('currentAge').value)||0;
         const retAge=parseInt(document.getElementById('retireAge').value)||0;
         const rate=parseFloat(document.getElementById('rate').value)||0;
+        const salInc=parseFloat(document.getElementById('salaryIncrease').value)||0;
         const contribPct=parseFloat(document.getElementById('contribPct').value)||0;
         const matchPct=parseFloat(document.getElementById('matchPct').value)||0;
         const matchCap=parseFloat(document.getElementById('matchCap').value)||0;
         if(retAge<=curAge){alert('Retirement age must be greater than current age.');return;}
-        if(salary<=0){alert('Please enter your current salary.');return;}
+        if(baseSalary<=0){alert('Please enter your current salary.');return;}
         const years=retAge-curAge;
-        const annualContrib=(salary*contribPct/100);
-        const annualMatch=Math.min(contribPct/100,matchCap/100)*salary*(matchPct/100);
-        const annualTotal=annualContrib+annualMatch;
-        const monthlyTotal=annualTotal/12;
         const rpp=rate/100/12;
         const labels=[],yourData=[],matchData=[],growthData=[];
-        let bal=0,totalYours=0,totalMatch=0;
-        const monthlyYours=annualContrib/12;
-        const monthlyMatch=annualMatch/12;
+        let bal=0,totalYours=0,totalMatch=0,currentSalary=baseSalary;
         for(let yr=1;yr<=years;yr++){
-          for(let m=0;m<12;m++){
-            bal=bal*(1+rpp)+monthlyTotal;
-            totalYours+=monthlyYours;
-            totalMatch+=monthlyMatch;
-          }
+          const annualContrib=currentSalary*contribPct/100;
+          const annualMatch=Math.min(contribPct/100,matchCap/100)*currentSalary*(matchPct/100);
+          const monthlyTotal=(annualContrib+annualMatch)/12;
+          for(let m=0;m<12;m++){bal=bal*(1+rpp)+monthlyTotal;}
+          totalYours+=annualContrib;
+          totalMatch+=annualMatch;
           labels.push('Age '+(curAge+yr));
-          yourData.push(+(totalYours.toFixed(0)));
-          matchData.push(+(totalMatch.toFixed(0)));
-          growthData.push(+(bal-totalYours-totalMatch).toFixed(0));
+          yourData.push(Math.round(totalYours));
+          matchData.push(Math.round(totalMatch));
+          growthData.push(Math.round(bal-totalYours-totalMatch));
+          currentSalary*=(1+salInc/100);
         }
-        const totalGrowth=bal-totalYours-totalMatch;
         document.getElementById('resBalance').textContent=fmt(bal);
         document.getElementById('resYours').textContent=fmt(totalYours);
         document.getElementById('resMatch').textContent=fmt(totalMatch);
-        document.getElementById('resGrowth').textContent=fmt(totalGrowth);
+        document.getElementById('resGrowth').textContent=fmt(bal-totalYours-totalMatch);
         document.getElementById('results').style.display='block';
         document.getElementById('chartWrap').style.display='block';
         if(chart)chart.destroy();
-        chart=new Chart(document.getElementById('growthChart').getContext('2d'),{
-          type:'bar',
-          data:{labels,datasets:[
-            {label:'Your Contributions',data:yourData,backgroundColor:'#0d6efd',stack:'s'},
-            {label:'Employer Match',data:matchData,backgroundColor:'#6ea8fe',stack:'s'},
-            {label:'Growth',data:growthData,backgroundColor:'#cfe2ff',stack:'s'}
-          ]},
-          options:{responsive:true,plugins:{legend:{position:'bottom'},tooltip:{callbacks:{label:ctx=>' '+ctx.dataset.label+': '+fmt(ctx.parsed.y)}}},scales:{x:{stacked:true},y:{stacked:true,ticks:{callback:v=>'$'+(v>=1000000?(v/1000000).toFixed(1)+'M':v>=1000?(v/1000).toFixed(0)+'k':v)}}}}
-        });
+        chart=new Chart(document.getElementById('growthChart').getContext('2d'),{type:'bar',data:{labels,datasets:[{label:'Your Contributions',data:yourData,backgroundColor:'#0d6efd',stack:'s'},{label:'Employer Match',data:matchData,backgroundColor:'#6ea8fe',stack:'s'},{label:'Growth',data:growthData,backgroundColor:'#cfe2ff',stack:'s'}]},options:{responsive:true,plugins:{legend:{position:'bottom'},tooltip:{callbacks:{label:ctx=>' '+ctx.dataset.label+': '+fmt(ctx.parsed.y)}}},scales:{x:{stacked:true},y:{stacked:true,ticks:{callback:v=>'$'+(v>=1000000?(v/1000000).toFixed(1)+'M':v>=1000?(v/1000).toFixed(0)+'k':v)}}}}});
         document.getElementById('results').scrollIntoView({behavior:'smooth'});
       }
       function clearForm(){
-        ['salary','currentAge','retireAge','rate','contribPct','matchPct','matchCap'].forEach(id=>document.getElementById(id).value='');
+        ['salary','currentAge','retireAge','rate','salaryIncrease','contribPct','matchPct','matchCap'].forEach(id=>document.getElementById(id).value='');
         document.getElementById('results').style.display='none';
         if(chart){chart.destroy();chart=null;}
       }

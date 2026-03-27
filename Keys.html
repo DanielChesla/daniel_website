@@ -8,94 +8,67 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     html { scroll-behavior: smooth; }
+    body {
+      background: linear-gradient(180deg, #fffaf0 0%, #fefce8 18%, #f0fdfa 55%, #ecfeff 100%);
+    }
     .hero-bg {
       background:
-        linear-gradient(135deg, rgba(8,47,73,.92), rgba(14,116,144,.78)),
-        radial-gradient(circle at top right, rgba(255,255,255,.16), transparent 34%),
-        radial-gradient(circle at bottom left, rgba(251,191,36,.2), transparent 28%);
+        linear-gradient(135deg, rgba(14, 116, 144, 0.92), rgba(16, 185, 129, 0.82)),
+        radial-gradient(circle at top right, rgba(255,255,255,.18), transparent 30%),
+        radial-gradient(circle at bottom left, rgba(253, 224, 71, .22), transparent 28%);
+    }
+    .palm-shadow {
+      box-shadow: 0 20px 45px rgba(8, 47, 73, 0.10);
     }
   </style>
 </head>
-<body class="bg-slate-50 text-slate-800">
+<body class="text-slate-800">
   <header class="hero-bg text-white">
-    <div class="max-w-7xl mx-auto px-6 py-6 flex items-center justify-between">
-      <a href="#top" class="text-xl md:text-2xl font-bold tracking-tight">Keys Guest Upgrades</a>
-      <a href="#packages" class="inline-flex items-center justify-center rounded-2xl bg-white/12 border border-white/20 px-4 py-2 text-sm font-semibold hover:bg-white/20 transition">Browse Packages</a>
+    <div class="max-w-6xl mx-auto px-5 py-5 flex items-center justify-between">
+      <a href="#top" class="text-xl md:text-2xl font-extrabold tracking-tight">🌴 Keys Guest Upgrades</a>
+      <a href="#packages" class="inline-flex items-center justify-center rounded-full bg-white/15 border border-white/20 px-4 py-2 text-sm font-semibold hover:bg-white/25 transition">Browse Packages</a>
     </div>
 
-    <div id="top" class="max-w-7xl mx-auto px-6 pt-10 pb-20 md:pt-16 md:pb-24">
-      <div class="grid lg:grid-cols-2 gap-12 items-center">
+    <div id="top" class="max-w-6xl mx-auto px-5 pt-10 pb-16 md:pt-14 md:pb-20">
+      <div class="grid lg:grid-cols-2 gap-10 items-center">
         <div>
-          <p class="uppercase tracking-[0.22em] text-amber-200 text-xs font-semibold mb-4">Welcome to your Marathon, Florida stay</p>
-          <h1 class="text-4xl md:text-6xl font-black leading-tight mb-6">
-            Upgrade your Keys vacation to make it truly <span class="text-amber-200">memorable</span>.
+          <p class="uppercase tracking-[0.20em] text-yellow-200 text-xs font-semibold mb-4">Welcome to your Marathon, Florida stay</p>
+          <h1 class="text-4xl md:text-6xl font-black leading-tight mb-5">
+            Easy vacation upgrades, delivered with a <span class="text-yellow-200">local touch</span>.
           </h1>
-          <p class="text-lg md:text-xl text-sky-50/90 max-w-2xl leading-relaxed mb-8">
+          <p class="text-lg md:text-xl text-cyan-50/95 max-w-2xl leading-relaxed mb-7">
             Locally owned and operated by a Marathon family, we offer curated add-ons delivered directly to your rental. From beach essentials and fishing kits to special occasion upgrades, everything is designed to help you enjoy your stay without making an extra trip to the store.
           </p>
-          <div class="flex flex-col sm:flex-row gap-4">
-            <a href="#packages" class="inline-flex items-center justify-center rounded-2xl bg-amber-400 text-slate-900 px-6 py-3.5 font-semibold shadow-lg shadow-black/10 hover:bg-amber-300 transition">View Packages</a>
-            <a href="#how-it-works" class="inline-flex items-center justify-center rounded-2xl border border-white/30 px-6 py-3.5 font-semibold hover:bg-white/10 transition">How It Works</a>
+          <div class="flex flex-col sm:flex-row gap-3">
+            <a href="#packages" class="inline-flex items-center justify-center rounded-full bg-yellow-300 text-slate-900 px-6 py-3.5 font-bold hover:bg-yellow-200 transition">View Packages</a>
+            <a href="#how-it-works" class="inline-flex items-center justify-center rounded-full border border-white/30 px-6 py-3.5 font-semibold hover:bg-white/10 transition">How It Works</a>
           </div>
-          <div class="mt-10 grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-            <div class="rounded-2xl bg-white/12 border border-white/10 px-4 py-3">
-              <div class="font-bold text-lg">Delivered</div>
-              <div>to your rental</div>
-            </div>
-            <div class="rounded-2xl bg-white/12 border border-white/10 px-4 py-3">
-              <div class="font-bold text-lg">Curated</div>
-              <div>for the Keys</div>
-            </div>
-            <div class="rounded-2xl bg-white/12 border border-white/10 px-4 py-3">
-              <div class="font-bold text-lg">Simple</div>
-              <div>to order</div>
-            </div>
-            <div class="rounded-2xl bg-white/12 border border-white/10 px-4 py-3">
-              <div class="font-bold text-lg">Perfect</div>
-              <div>for gifts & upgrades</div>
-            </div>
+          <div class="mt-8 flex flex-wrap gap-3 text-sm">
+            <div class="rounded-full bg-white/15 border border-white/15 px-4 py-2">Delivered to your rental</div>
+            <div class="rounded-full bg-white/15 border border-white/15 px-4 py-2">Curated for the Keys</div>
+            <div class="rounded-full bg-white/15 border border-white/15 px-4 py-2">Simple to browse</div>
           </div>
         </div>
 
-        <div class="relative">
-          <div class="rounded-[2rem] bg-white/12 border border-white/15 p-4 md:p-6 shadow-2xl shadow-cyan-950/25">
-            <div class="rounded-[1.5rem] bg-white p-6 text-slate-900 shadow-xl">
-              <div class="flex items-center justify-between gap-4 mb-6">
-                <div>
-                  <p class="text-sm text-slate-500">Featured upgrade</p>
-                  <h2 class="text-2xl font-bold">In-Room Spa Experience</h2>
-                </div>
-                <div class="rounded-full bg-emerald-50 text-emerald-700 px-4 py-2 text-sm font-semibold">$99-$129</div>
+        <div>
+          <div class="bg-white text-slate-900 rounded-[2rem] p-6 md:p-7 palm-shadow">
+            <div class="flex items-start justify-between gap-4 mb-5">
+              <div>
+                <p class="text-sm text-teal-700 font-semibold mb-1">Featured upgrade</p>
+                <h2 class="text-2xl md:text-3xl font-black">🧖 In-Room Spa Experience</h2>
               </div>
-              <div class="space-y-4">
-                <div class="rounded-2xl bg-slate-50 p-4">
-                  <p class="font-semibold mb-2">Includes</p>
-                  <div class="grid grid-cols-2 gap-2 text-sm text-slate-600">
-                    <div>• Local salt scrub</div>
-                    <div>• Lightweight robe</div>
-                    <div>• Spa slippers</div>
-                    <div>• Coconut oil</div>
-                    <div>• LED tea lights</div>
-                    <div>• Relaxation guide</div>
-                  </div>
-                </div>
-                <div class="rounded-2xl bg-amber-50 border border-amber-100 p-4">
-                  <p class="text-sm font-semibold text-amber-900 mb-1">Perfect for</p>
-                  <p class="text-sm text-amber-800">Anniversaries, birthdays, romantic stays, or a relaxing night in.</p>
-                </div>
-                <div class="flex items-center justify-between pt-2">
-                  <div>
-                    <p class="text-sm text-slate-500">Customer favorite</p>
-                    <p class="font-bold text-lg">Premium stay upgrade</p>
-                  </div>
-                  <a href="#packages" class="rounded-xl bg-slate-900 text-white px-4 py-2.5 text-sm font-semibold hover:bg-slate-700 transition">See Packages</a>
-                </div>
-              </div>
+              <div class="rounded-full bg-emerald-100 text-emerald-700 px-4 py-2 text-sm font-bold whitespace-nowrap">$129</div>
             </div>
-          </div>
-          <div class="hidden md:block absolute -bottom-6 -left-8 rounded-3xl bg-amber-300 text-slate-900 px-5 py-4 shadow-xl">
-            <div class="text-xs uppercase tracking-[0.18em] font-bold">Scan. Choose. Enjoy.</div>
-            <div class="text-sm mt-1">Delivered directly to your stay.</div>
+            <p class="text-slate-600 mb-5">A premium in-room reset for couples, birthdays, anniversaries, or a relaxing night in.</p>
+            <div class="grid grid-cols-2 gap-3 text-sm text-slate-700 mb-6">
+              <div class="rounded-2xl bg-emerald-50 px-4 py-3">Local salt scrub</div>
+              <div class="rounded-2xl bg-emerald-50 px-4 py-3">Lightweight robe</div>
+              <div class="rounded-2xl bg-emerald-50 px-4 py-3">Spa slippers</div>
+              <div class="rounded-2xl bg-emerald-50 px-4 py-3">Coconut massage oil</div>
+              <div class="rounded-2xl bg-emerald-50 px-4 py-3">LED tea lights</div>
+              <div class="rounded-2xl bg-emerald-50 px-4 py-3">Spa guide card</div>
+            </div>
+            <a href="#packages" class="inline-flex items-center justify-center rounded-full bg-teal-600 text-white px-5 py-3 font-semibold hover:bg-teal-500 transition">See All Packages</a>
           </div>
         </div>
       </div>
@@ -103,219 +76,208 @@
   </header>
 
   <main>
-    <section class="max-w-7xl mx-auto px-6 py-16 md:py-24">
-      <div class="grid md:grid-cols-3 gap-6">
-        <div class="bg-white rounded-3xl p-7 shadow-sm border border-slate-100">
-          <div class="text-3xl mb-4">🌴</div>
-          <h3 class="text-xl font-bold mb-3">Designed for your vacation</h3>
-          <p class="text-slate-600 leading-relaxed">Skip the store and spend more time enjoying Marathon, the beach, the water, and your time away.</p>
+    <section class="max-w-6xl mx-auto px-5 py-14 md:py-18">
+      <div class="grid md:grid-cols-3 gap-5">
+        <div class="bg-white rounded-[2rem] p-6 palm-shadow border border-amber-100">
+          <div class="text-3xl mb-3">🌊</div>
+          <h3 class="text-xl font-bold mb-2">Made for vacation mode</h3>
+          <p class="text-slate-600 leading-relaxed">Spend less time shopping and more time enjoying the beach, the water, and your stay in the Keys.</p>
         </div>
-        <div class="bg-white rounded-3xl p-7 shadow-sm border border-slate-100">
-          <div class="text-3xl mb-4">🎁</div>
-          <h3 class="text-xl font-bold mb-3">Perfect for gifts and surprises</h3>
-          <p class="text-slate-600 leading-relaxed">Whether you are planning a beach day, a special occasion, or a relaxing night in, there is a package to match the moment.</p>
+        <div class="bg-white rounded-[2rem] p-6 palm-shadow border border-amber-100">
+          <div class="text-3xl mb-3">🎁</div>
+          <h3 class="text-xl font-bold mb-2">Great for gifts</h3>
+          <p class="text-slate-600 leading-relaxed">Choose an easy surprise for a spouse, birthday, anniversary, or simply a fun upgrade for your trip.</p>
         </div>
-        <div class="bg-white rounded-3xl p-7 shadow-sm border border-slate-100">
-          <div class="text-3xl mb-4">🚚</div>
-          <h3 class="text-xl font-bold mb-3">Easy delivery</h3>
-          <p class="text-slate-600 leading-relaxed">Browse the menu, choose what you want, and have it delivered directly to your rental during your stay.</p>
-        </div>
-      </div>
-    </section>
-
-    <section id="packages" class="bg-white border-y border-slate-100">
-      <div class="max-w-7xl mx-auto px-6 py-16 md:py-24">
-        <div class="max-w-3xl mb-12">
-          <p class="uppercase tracking-[0.22em] text-cyan-700 text-xs font-semibold mb-3">Guest Packages</p>
-          <h2 class="text-3xl md:text-5xl font-black tracking-tight mb-4">Choose your stay upgrade</h2>
-          <p class="text-lg text-slate-600 leading-relaxed">These curated packages are built for the Florida Keys experience. Cart and payment screens will be added later. For now, this page is focused on helping guests browse and choose.</p>
-        </div>
-
-        <div class="grid lg:grid-cols-2 xl:grid-cols-3 gap-6">
-          <article class="rounded-3xl border border-slate-200 p-6 bg-slate-50 flex flex-col">
-            <div class="flex items-start justify-between gap-4 mb-4">
-              <h3 class="text-2xl font-bold">🎣 Keys Fishing Bucket</h3>
-              <span class="rounded-full bg-slate-900 text-white text-sm px-3 py-1.5 whitespace-nowrap">$69</span>
-            </div>
-            <p class="text-slate-600 mb-5">Everything needed for a simple, fun fishing experience in the Keys without guessing what gear to buy.</p>
-            <ul class="space-y-2 text-sm text-slate-700 mb-6">
-              <li>• Small bucket</li>
-              <li>• Pre-tied rigs</li>
-              <li>• Hooks and weights</li>
-              <li>• Lure</li>
-              <li>• Fish rag and pliers</li>
-              <li>• Local fishing tips card</li>
-            </ul>
-            <div class="mt-auto flex gap-3">
-              <a href="#contact" class="flex-1 inline-flex items-center justify-center rounded-2xl bg-slate-900 text-white px-4 py-3 font-semibold hover:bg-slate-700 transition">Select Package</a>
-              <button class="rounded-2xl border border-slate-300 px-4 py-3 font-semibold text-slate-700 hover:bg-white transition">Details</button>
-            </div>
-          </article>
-
-          <article class="rounded-3xl border border-slate-200 p-6 bg-slate-50 flex flex-col">
-            <div class="flex items-start justify-between gap-4 mb-4">
-              <h3 class="text-2xl font-bold">🏖️ Beach Starter Kit</h3>
-              <span class="rounded-full bg-slate-900 text-white text-sm px-3 py-1.5 whitespace-nowrap">$29-$39</span>
-            </div>
-            <p class="text-slate-600 mb-5">A quick and easy way to start your beach day with the essentials already covered.</p>
-            <ul class="space-y-2 text-sm text-slate-700 mb-6">
-              <li>• Reusable beach bag</li>
-              <li>• Sunscreen and aloe</li>
-              <li>• Bottled waters</li>
-              <li>• Snack pack</li>
-              <li>• Optional sunglasses</li>
-              <li>• Local info card</li>
-            </ul>
-            <div class="mt-auto flex gap-3">
-              <a href="#contact" class="flex-1 inline-flex items-center justify-center rounded-2xl bg-slate-900 text-white px-4 py-3 font-semibold hover:bg-slate-700 transition">Select Package</a>
-              <button class="rounded-2xl border border-slate-300 px-4 py-3 font-semibold text-slate-700 hover:bg-white transition">Details</button>
-            </div>
-          </article>
-
-          <article class="rounded-3xl border border-slate-200 p-6 bg-slate-50 flex flex-col">
-            <div class="flex items-start justify-between gap-4 mb-4">
-              <h3 class="text-2xl font-bold">🍷 Date Night Kit</h3>
-              <span class="rounded-full bg-slate-900 text-white text-sm px-3 py-1.5 whitespace-nowrap">$59-$79</span>
-            </div>
-            <p class="text-slate-600 mb-5">A romantic in-room setup created for anniversaries, birthdays, or a simple night in together.</p>
-            <ul class="space-y-2 text-sm text-slate-700 mb-6">
-              <li>• Reusable wine glasses</li>
-              <li>• Cheese and crackers</li>
-              <li>• Chocolates</li>
-              <li>• Bottle opener</li>
-              <li>• LED candle</li>
-              <li>• Presentation setup</li>
-            </ul>
-            <div class="mt-auto flex gap-3">
-              <a href="#contact" class="flex-1 inline-flex items-center justify-center rounded-2xl bg-slate-900 text-white px-4 py-3 font-semibold hover:bg-slate-700 transition">Select Package</a>
-              <button class="rounded-2xl border border-slate-300 px-4 py-3 font-semibold text-slate-700 hover:bg-white transition">Details</button>
-            </div>
-          </article>
-
-          <article class="rounded-3xl border border-slate-200 p-6 bg-slate-50 flex flex-col">
-            <div class="flex items-start justify-between gap-4 mb-4">
-              <h3 class="text-2xl font-bold">🍳 Breakfast in Bed</h3>
-              <span class="rounded-full bg-slate-900 text-white text-sm px-3 py-1.5 whitespace-nowrap">$49</span>
-            </div>
-            <p class="text-slate-600 mb-5">A relaxed morning package with breakfast essentials to start the day without leaving the rental.</p>
-            <ul class="space-y-2 text-sm text-slate-700 mb-6">
-              <li>• Fresh pastries</li>
-              <li>• Bottled coffees</li>
-              <li>• Juices</li>
-              <li>• Fruit</li>
-              <li>• Plates, napkins, utensils</li>
-              <li>• Morning setup card</li>
-            </ul>
-            <div class="mt-auto flex gap-3">
-              <a href="#contact" class="flex-1 inline-flex items-center justify-center rounded-2xl bg-slate-900 text-white px-4 py-3 font-semibold hover:bg-slate-700 transition">Select Package</a>
-              <button class="rounded-2xl border border-slate-300 px-4 py-3 font-semibold text-slate-700 hover:bg-white transition">Details</button>
-            </div>
-          </article>
-
-          <article class="rounded-3xl border-2 border-amber-300 p-6 bg-amber-50 relative overflow-hidden flex flex-col">
-            <div class="absolute top-4 right-4 rounded-full bg-amber-400 text-slate-900 text-xs font-bold px-3 py-1">Premium</div>
-            <div class="flex items-start justify-between gap-4 mb-4 pr-16">
-              <h3 class="text-2xl font-bold">🧖 In-Room Spa Experience</h3>
-              <span class="rounded-full bg-slate-900 text-white text-sm px-3 py-1.5 whitespace-nowrap">$129</span>
-            </div>
-            <p class="text-slate-700 mb-5">A premium relaxation package for guests who want a private spa-style experience in their room.</p>
-            <ul class="space-y-2 text-sm text-slate-800 mb-6">
-              <li>• Local salt scrub</li>
-              <li>• Lightweight robe</li>
-              <li>• Spa slippers</li>
-              <li>• Coconut massage oil</li>
-              <li>• LED tea lights</li>
-              <li>• Spa guide card</li>
-            </ul>
-            <div class="mt-auto flex gap-3">
-              <a href="#contact" class="flex-1 inline-flex items-center justify-center rounded-2xl bg-slate-900 text-white px-4 py-3 font-semibold hover:bg-slate-700 transition">Select Package</a>
-              <button class="rounded-2xl border border-slate-300 px-4 py-3 font-semibold text-slate-700 hover:bg-white transition">Details</button>
-            </div>
-          </article>
-
-          <article class="rounded-3xl border border-slate-200 p-6 bg-slate-50 flex flex-col">
-            <div class="flex items-start justify-between gap-4 mb-4">
-              <h3 class="text-2xl font-bold">🧊 Keys Recovery Kit</h3>
-              <span class="rounded-full bg-slate-900 text-white text-sm px-3 py-1.5 whitespace-nowrap">$39</span>
-            </div>
-            <p class="text-slate-600 mb-5">A same-stay recovery package for sun, dehydration, and getting back to enjoying the rest of your trip.</p>
-            <ul class="space-y-2 text-sm text-slate-700 mb-6">
-              <li>• Aloe gel</li>
-              <li>• Solarcaine spray</li>
-              <li>• Electrolyte drinks</li>
-              <li>• Bottled water</li>
-              <li>• OTC sealed med packs</li>
-              <li>• Optional cooling towel</li>
-            </ul>
-            <div class="mt-auto flex gap-3">
-              <a href="#contact" class="flex-1 inline-flex items-center justify-center rounded-2xl bg-slate-900 text-white px-4 py-3 font-semibold hover:bg-slate-700 transition">Select Package</a>
-              <button class="rounded-2xl border border-slate-300 px-4 py-3 font-semibold text-slate-700 hover:bg-white transition">Details</button>
-            </div>
-          </article>
+        <div class="bg-white rounded-[2rem] p-6 palm-shadow border border-amber-100">
+          <div class="text-3xl mb-3">🚚</div>
+          <h3 class="text-xl font-bold mb-2">Delivered to your room</h3>
+          <p class="text-slate-600 leading-relaxed">Browse the menu, pick your package, and have it brought right to your rental during your stay.</p>
         </div>
       </div>
     </section>
 
-    <section id="how-it-works" class="max-w-7xl mx-auto px-6 py-16 md:py-24">
-      <div class="max-w-3xl mb-12">
-        <p class="uppercase tracking-[0.22em] text-cyan-700 text-xs font-semibold mb-3">How It Works</p>
-        <h2 class="text-3xl md:text-5xl font-black tracking-tight mb-4">Simple from scan to delivery</h2>
-        <p class="text-lg text-slate-600 leading-relaxed">This page is built to be opened by scanning a QR code in your room. Ordering and payment flow will be added next. For now, guests can browse the package lineup and decide what they want.</p>
+    <section id="packages" class="max-w-6xl mx-auto px-5 py-10 md:py-14">
+      <div class="mb-10">
+        <p class="uppercase tracking-[0.20em] text-teal-700 text-xs font-semibold mb-3">Guest Packages</p>
+        <h2 class="text-3xl md:text-5xl font-black tracking-tight mb-4 text-teal-900">Choose your tropical upgrade</h2>
+        <p class="text-lg text-slate-600 max-w-3xl leading-relaxed">Built for guests scanning a QR code in their room. This version is focused on browsing packages; cart and payment screens can be added next.</p>
       </div>
-      <div class="grid md:grid-cols-3 gap-6">
-        <div class="bg-white rounded-3xl p-7 shadow-sm border border-slate-100">
-          <div class="w-12 h-12 rounded-2xl bg-cyan-100 text-cyan-800 flex items-center justify-center font-black text-xl mb-4">1</div>
-          <h3 class="text-xl font-bold mb-3">Scan the QR code</h3>
-          <p class="text-slate-600 leading-relaxed">Open this page directly from the flyer or card in your rental.</p>
-        </div>
-        <div class="bg-white rounded-3xl p-7 shadow-sm border border-slate-100">
-          <div class="w-12 h-12 rounded-2xl bg-cyan-100 text-cyan-800 flex items-center justify-center font-black text-xl mb-4">2</div>
-          <h3 class="text-xl font-bold mb-3">Choose a package</h3>
-          <p class="text-slate-600 leading-relaxed">Browse the guest upgrades and pick the one that best fits your stay.</p>
-        </div>
-        <div class="bg-white rounded-3xl p-7 shadow-sm border border-slate-100">
-          <div class="w-12 h-12 rounded-2xl bg-cyan-100 text-cyan-800 flex items-center justify-center font-black text-xl mb-4">3</div>
-          <h3 class="text-xl font-bold mb-3">Delivery to your rental</h3>
-          <p class="text-slate-600 leading-relaxed">Once ordering is added, guests will be able to place and pay for their selections directly from this page.</p>
-        </div>
-      </div>
-    </section>
 
-    <section class="bg-slate-900 text-white">
-      <div class="max-w-7xl mx-auto px-6 py-16 md:py-24">
-        <div class="grid lg:grid-cols-2 gap-10 items-center">
-          <div>
-            <p class="uppercase tracking-[0.22em] text-amber-300 text-xs font-semibold mb-3">Good for every type of stay</p>
-            <h2 class="text-3xl md:text-5xl font-black tracking-tight mb-5">From beach days to special occasions.</h2>
-            <p class="text-lg text-slate-300 leading-relaxed mb-8">Whether you want a practical add-on, a romantic surprise, a premium spa night, or a morning recovery package, these experiences are designed to make your stay easier and more memorable.</p>
-            <div class="grid sm:grid-cols-2 gap-4">
-              <div class="rounded-3xl bg-white/5 border border-white/10 p-5">
-                <h3 class="font-bold mb-2">Vacation convenience</h3>
-                <p class="text-sm text-slate-300">Essentials delivered without an extra errand.</p>
-              </div>
-              <div class="rounded-3xl bg-white/5 border border-white/10 p-5">
-                <h3 class="font-bold mb-2">Special occasion upgrades</h3>
-                <p class="text-sm text-slate-300">Perfect for birthdays, anniversaries, or surprises.</p>
-              </div>
-              <div class="rounded-3xl bg-white/5 border border-white/10 p-5">
-                <h3 class="font-bold mb-2">Local flavor</h3>
-                <p class="text-sm text-slate-300">Packages are designed specifically for the Marathon and Keys guest experience.</p>
-              </div>
-              <div class="rounded-3xl bg-white/5 border border-white/10 p-5">
-                <h3 class="font-bold mb-2">Easy browsing</h3>
-                <p class="text-sm text-slate-300">Built for mobile guests scanning from a room flyer or QR card.</p>
-              </div>
-            </div>
+      <div class="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
+        <article class="bg-white rounded-[2rem] p-6 palm-shadow border border-cyan-100 flex flex-col">
+          <div class="flex items-start justify-between gap-4 mb-4">
+            <h3 class="text-2xl font-black text-teal-900">🎣 Keys Fishing Bucket</h3>
+            <span class="rounded-full bg-cyan-100 text-cyan-800 text-sm px-3 py-1.5 font-bold whitespace-nowrap">$69</span>
           </div>
-          <div class="bg-white text-slate-900 rounded-[2rem] p-8 shadow-2xl">
-            <p class="text-sm uppercase tracking-[0.22em] text-cyan-700 font-semibold mb-3">Coming next</p>
-            <h3 class="text-2xl font-black tracking-tight mb-4">Future flow additions</h3>
-            <div class="space-y-4 text-slate-700">
-              <div class="rounded-2xl bg-slate-50 p-4 border border-slate-200">Cart and checkout experience</div>
-              <div class="rounded-2xl bg-slate-50 p-4 border border-slate-200">Payment and confirmation flow</div>
-              <div class="rounded-2xl bg-slate-50 p-4 border border-slate-200">Delivery time selection</div>
-              <div class="rounded-2xl bg-slate-50 p-4 border border-slate-200">Special instructions field</div>
-              <div class="rounded-2xl bg-slate-50 p-4 border border-slate-200">Package detail modals or separate product pages</div>
+          <p class="text-slate-600 mb-5">Everything needed for a simple, fun fishing experience in the Keys without guessing what gear to buy.</p>
+          <ul class="space-y-2 text-sm text-slate-700 mb-6">
+            <li>• Small bucket</li>
+            <li>• Pre-tied rigs</li>
+            <li>• Hooks and weights</li>
+            <li>• Lure</li>
+            <li>• Fish rag and pliers</li>
+            <li>• Local fishing tips card</li>
+          </ul>
+          <div class="mt-auto flex gap-3">
+            <a href="#contact" class="flex-1 inline-flex items-center justify-center rounded-full bg-teal-600 text-white px-4 py-3 font-semibold hover:bg-teal-500 transition">Select Package</a>
+            <button class="rounded-full border border-teal-200 px-4 py-3 font-semibold text-teal-700 hover:bg-teal-50 transition">Details</button>
+          </div>
+        </article>
+
+        <article class="bg-white rounded-[2rem] p-6 palm-shadow border border-cyan-100 flex flex-col">
+          <div class="flex items-start justify-between gap-4 mb-4">
+            <h3 class="text-2xl font-black text-teal-900">🏖️ Beach Starter Kit</h3>
+            <span class="rounded-full bg-cyan-100 text-cyan-800 text-sm px-3 py-1.5 font-bold whitespace-nowrap">$29-$39</span>
+          </div>
+          <p class="text-slate-600 mb-5">A quick and easy way to start your beach day with the essentials already covered.</p>
+          <ul class="space-y-2 text-sm text-slate-700 mb-6">
+            <li>• Reusable beach bag</li>
+            <li>• Sunscreen and aloe</li>
+            <li>• Bottled waters</li>
+            <li>• Snack pack</li>
+            <li>• Optional sunglasses</li>
+            <li>• Local info card</li>
+          </ul>
+          <div class="mt-auto flex gap-3">
+            <a href="#contact" class="flex-1 inline-flex items-center justify-center rounded-full bg-teal-600 text-white px-4 py-3 font-semibold hover:bg-teal-500 transition">Select Package</a>
+            <button class="rounded-full border border-teal-200 px-4 py-3 font-semibold text-teal-700 hover:bg-teal-50 transition">Details</button>
+          </div>
+        </article>
+
+        <article class="bg-white rounded-[2rem] p-6 palm-shadow border border-cyan-100 flex flex-col">
+          <div class="flex items-start justify-between gap-4 mb-4">
+            <h3 class="text-2xl font-black text-teal-900">🍷 Date Night Kit</h3>
+            <span class="rounded-full bg-cyan-100 text-cyan-800 text-sm px-3 py-1.5 font-bold whitespace-nowrap">$59-$79</span>
+          </div>
+          <p class="text-slate-600 mb-5">A romantic in-room setup created for anniversaries, birthdays, or a simple night in together.</p>
+          <ul class="space-y-2 text-sm text-slate-700 mb-6">
+            <li>• Reusable wine glasses</li>
+            <li>• Cheese and crackers</li>
+            <li>• Chocolates</li>
+            <li>• Bottle opener</li>
+            <li>• LED candle</li>
+            <li>• Presentation setup</li>
+          </ul>
+          <div class="mt-auto flex gap-3">
+            <a href="#contact" class="flex-1 inline-flex items-center justify-center rounded-full bg-teal-600 text-white px-4 py-3 font-semibold hover:bg-teal-500 transition">Select Package</a>
+            <button class="rounded-full border border-teal-200 px-4 py-3 font-semibold text-teal-700 hover:bg-teal-50 transition">Details</button>
+          </div>
+        </article>
+
+        <article class="bg-white rounded-[2rem] p-6 palm-shadow border border-cyan-100 flex flex-col">
+          <div class="flex items-start justify-between gap-4 mb-4">
+            <h3 class="text-2xl font-black text-teal-900">🍳 Breakfast in Bed</h3>
+            <span class="rounded-full bg-cyan-100 text-cyan-800 text-sm px-3 py-1.5 font-bold whitespace-nowrap">$49</span>
+          </div>
+          <p class="text-slate-600 mb-5">A relaxed morning package with breakfast essentials to start the day without leaving the rental.</p>
+          <ul class="space-y-2 text-sm text-slate-700 mb-6">
+            <li>• Fresh pastries</li>
+            <li>• Bottled coffees</li>
+            <li>• Juices</li>
+            <li>• Fruit</li>
+            <li>• Plates, napkins, utensils</li>
+            <li>• Morning setup card</li>
+          </ul>
+          <div class="mt-auto flex gap-3">
+            <a href="#contact" class="flex-1 inline-flex items-center justify-center rounded-full bg-teal-600 text-white px-4 py-3 font-semibold hover:bg-teal-500 transition">Select Package</a>
+            <button class="rounded-full border border-teal-200 px-4 py-3 font-semibold text-teal-700 hover:bg-teal-50 transition">Details</button>
+          </div>
+        </article>
+
+        <article class="bg-gradient-to-br from-yellow-50 to-emerald-50 rounded-[2rem] p-6 palm-shadow border-2 border-yellow-200 flex flex-col">
+          <div class="flex items-start justify-between gap-4 mb-4">
+            <div>
+              <div class="inline-block rounded-full bg-yellow-300 text-slate-900 text-xs font-bold px-3 py-1 mb-3">Premium</div>
+              <h3 class="text-2xl font-black text-teal-900">🧖 In-Room Spa Experience</h3>
+            </div>
+            <span class="rounded-full bg-emerald-100 text-emerald-700 text-sm px-3 py-1.5 font-bold whitespace-nowrap">$129</span>
+          </div>
+          <p class="text-slate-700 mb-5">A premium relaxation package for guests who want a private spa-style experience in their room.</p>
+          <ul class="space-y-2 text-sm text-slate-800 mb-6">
+            <li>• Local salt scrub</li>
+            <li>• Lightweight robe</li>
+            <li>• Spa slippers</li>
+            <li>• Coconut massage oil</li>
+            <li>• LED tea lights</li>
+            <li>• Spa guide card</li>
+          </ul>
+          <div class="mt-auto flex gap-3">
+            <a href="#contact" class="flex-1 inline-flex items-center justify-center rounded-full bg-emerald-600 text-white px-4 py-3 font-semibold hover:bg-emerald-500 transition">Select Package</a>
+            <button class="rounded-full border border-emerald-200 px-4 py-3 font-semibold text-emerald-700 hover:bg-white/70 transition">Details</button>
+          </div>
+        </article>
+
+        <article class="bg-white rounded-[2rem] p-6 palm-shadow border border-cyan-100 flex flex-col">
+          <div class="flex items-start justify-between gap-4 mb-4">
+            <h3 class="text-2xl font-black text-teal-900">🧊 Keys Recovery Kit</h3>
+            <span class="rounded-full bg-cyan-100 text-cyan-800 text-sm px-3 py-1.5 font-bold whitespace-nowrap">$39</span>
+          </div>
+          <p class="text-slate-600 mb-5">A same-stay recovery package for sun, dehydration, and getting back to enjoying the rest of your trip.</p>
+          <ul class="space-y-2 text-sm text-slate-700 mb-6">
+            <li>• Aloe gel</li>
+            <li>• Solarcaine spray</li>
+            <li>• Electrolyte drinks</li>
+            <li>• Bottled water</li>
+            <li>• OTC sealed med packs</li>
+            <li>• Optional cooling towel</li>
+          </ul>
+          <div class="mt-auto flex gap-3">
+            <a href="#contact" class="flex-1 inline-flex items-center justify-center rounded-full bg-teal-600 text-white px-4 py-3 font-semibold hover:bg-teal-500 transition">Select Package</a>
+            <button class="rounded-full border border-teal-200 px-4 py-3 font-semibold text-teal-700 hover:bg-teal-50 transition">Details</button>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="how-it-works" class="max-w-6xl mx-auto px-5 py-14 md:py-18">
+      <div class="mb-10">
+        <p class="uppercase tracking-[0.20em] text-teal-700 text-xs font-semibold mb-3">How It Works</p>
+        <h2 class="text-3xl md:text-5xl font-black tracking-tight mb-4 text-teal-900">Simple from scan to delivery</h2>
+        <p class="text-lg text-slate-600 max-w-3xl leading-relaxed">This page is designed for guests who scan a QR code in their room. Ordering and payment can be added next. For now, the focus is a clean, mobile-friendly browsing experience.</p>
+      </div>
+      <div class="grid md:grid-cols-3 gap-5">
+        <div class="bg-white rounded-[2rem] p-6 palm-shadow border border-amber-100">
+          <div class="w-12 h-12 rounded-full bg-cyan-100 text-cyan-800 flex items-center justify-center font-black text-xl mb-4">1</div>
+          <h3 class="text-xl font-bold mb-2">Scan the QR code</h3>
+          <p class="text-slate-600 leading-relaxed">Open the page directly from the flyer or card in your rental.</p>
+        </div>
+        <div class="bg-white rounded-[2rem] p-6 palm-shadow border border-amber-100">
+          <div class="w-12 h-12 rounded-full bg-cyan-100 text-cyan-800 flex items-center justify-center font-black text-xl mb-4">2</div>
+          <h3 class="text-xl font-bold mb-2">Choose your package</h3>
+          <p class="text-slate-600 leading-relaxed">Browse the available upgrades and find the best fit for your stay.</p>
+        </div>
+        <div class="bg-white rounded-[2rem] p-6 palm-shadow border border-amber-100">
+          <div class="w-12 h-12 rounded-full bg-cyan-100 text-cyan-800 flex items-center justify-center font-black text-xl mb-4">3</div>
+          <h3 class="text-xl font-bold mb-2">Delivery to your rental</h3>
+          <p class="text-slate-600 leading-relaxed">Once checkout is added, guests will be able to place and pay for their selections directly from this page.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-gradient-to-r from-teal-700 to-emerald-600 text-white">
+      <div class="max-w-6xl mx-auto px-5 py-14 md:py-18">
+        <div class="grid lg:grid-cols-2 gap-8 items-center">
+          <div>
+            <p class="uppercase tracking-[0.20em] text-yellow-200 text-xs font-semibold mb-3">Good for every kind of stay</p>
+            <h2 class="text-3xl md:text-5xl font-black tracking-tight mb-4">Beach days, celebrations, and relaxing nights in.</h2>
+            <p class="text-lg text-emerald-50/95 leading-relaxed">Whether you want a practical add-on, a special surprise, or a premium in-room experience, these packages are designed to make your Marathon stay easier and more memorable.</p>
+          </div>
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div class="rounded-[2rem] bg-white/10 border border-white/15 p-5">
+              <h3 class="font-bold mb-2">Vacation convenience</h3>
+              <p class="text-sm text-emerald-50/90">Essentials delivered without another errand.</p>
+            </div>
+            <div class="rounded-[2rem] bg-white/10 border border-white/15 p-5">
+              <h3 class="font-bold mb-2">Special occasion ready</h3>
+              <p class="text-sm text-emerald-50/90">Great for birthdays, anniversaries, and surprises.</p>
+            </div>
+            <div class="rounded-[2rem] bg-white/10 border border-white/15 p-5">
+              <h3 class="font-bold mb-2">Locally inspired</h3>
+              <p class="text-sm text-emerald-50/90">Designed around the Marathon and Keys guest experience.</p>
+            </div>
+            <div class="rounded-[2rem] bg-white/10 border border-white/15 p-5">
+              <h3 class="font-bold mb-2">Mobile friendly</h3>
+              <p class="text-sm text-emerald-50/90">Easy to browse from a room flyer or QR card.</p>
             </div>
           </div>
         </div>
@@ -323,15 +285,15 @@
     </section>
   </main>
 
-  <footer id="contact" class="bg-white border-t border-slate-200">
-    <div class="max-w-7xl mx-auto px-6 py-12 md:py-14 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+  <footer id="contact" class="bg-white/80 border-t border-teal-100">
+    <div class="max-w-6xl mx-auto px-5 py-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-5">
       <div>
-        <h2 class="text-2xl font-black tracking-tight mb-2">Keys Guest Upgrades</h2>
+        <h2 class="text-2xl font-black tracking-tight text-teal-900 mb-2">🌴 Keys Guest Upgrades</h2>
         <p class="text-slate-600 max-w-2xl">Customer-facing demo page for guests scanning from a QR code inside their vacation rental.</p>
       </div>
       <div class="flex flex-col sm:flex-row gap-3">
-        <a href="#packages" class="inline-flex items-center justify-center rounded-2xl bg-slate-900 text-white px-5 py-3 font-semibold hover:bg-slate-700 transition">View Packages</a>
-        <a href="#top" class="inline-flex items-center justify-center rounded-2xl border border-slate-300 px-5 py-3 font-semibold hover:bg-slate-100 transition">Back to top</a>
+        <a href="#packages" class="inline-flex items-center justify-center rounded-full bg-teal-600 text-white px-5 py-3 font-semibold hover:bg-teal-500 transition">View Packages</a>
+        <a href="#top" class="inline-flex items-center justify-center rounded-full border border-teal-200 px-5 py-3 font-semibold text-teal-700 hover:bg-teal-50 transition">Back to top</a>
       </div>
     </div>
   </footer>

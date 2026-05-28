@@ -152,7 +152,20 @@ a:hover{color:var(--accent);}
   font-size:.76rem;
   font-weight:800;
 }
+.hero-image-wrapper{
+  position: relative;
+  display: inline-block;
+}
 
+.hero-image{
+  width: 100%;
+  max-width: 380px;
+  border-radius: 28px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,.08);
+  box-shadow: 0 30px 80px rgba(0,0,0,.45);
+  filter: saturate(.96) contrast(1.02);
+}
 /* Sections */
 .section-pad{padding:7rem 0;}
 .section-pad.compact{padding:4rem 0;}

@@ -14,7 +14,7 @@
     <main class="py-5">
       <div class="container">
         <h1 class="mb-4">Image Generator</h1>
-        <p class="text-secondary">Choose options and we’ll create a prompt and generate an image.</p>
+        <p class="text-secondary">Choose options and we’ll create a prompt and generate an image — free, no sign-up, powered by <a href="https://pollinations.ai" target="_blank" rel="noopener">Pollinations.ai</a>.</p>
 
         <form id="imageForm" class="row g-3 mb-4">
           <div class="col-md-4">
@@ -91,7 +91,8 @@
     } else { init(); }
 
     function init() {
-      const PROXY_URL = "/api/deepai-text2img"; // <-- new route
+      // Free, keyless image generation via Pollinations.ai — no API key, no proxy.
+      const POLLINATIONS_BASE = "https://image.pollinations.ai/prompt/";
 
       const formEl      = document.getElementById("imageForm");
       const promptBox   = document.getElementById("promptBox");
@@ -117,7 +118,7 @@
         return `Generate a family friendly ${realism} image with a ${mix} ${style} character with a ${background} background. Avoid gore, nudity, unsafe content.`;
       }
 
-      formEl.addEventListener("submit", async (e) => {
+      formEl.addEventListener("submit", (e) => {
         e.preventDefault();
         resultBox.innerHTML = "";
         generateBtn.disabled = true;
@@ -125,32 +126,34 @@
         const prompt = buildPrompt();
         promptBox.textContent = prompt;
         promptBox.classList.remove("d-none");
-        showStatus("Generating image…", "primary", true);
+        showStatus("Generating image… (this can take 10–20 seconds)", "primary", true);
 
-        try {
-          const res = await fetch(PROXY_URL, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ text: prompt })
-          });
-          const data = await res.json();
+        // Build the Pollinations URL. A random seed makes each run unique.
+        const seed = Math.floor(Math.random() * 1e9);
+        const params = new URLSearchParams({
+          width: "768", height: "768", model: "flux", nologo: "true", seed: String(seed)
+        });
+        const url = POLLINATIONS_BASE + encodeURIComponent(prompt) + "?" + params.toString();
 
-          if (!res.ok) {
-            const msg = data?.error || data?.status || JSON.stringify(data);
-            throw new Error(msg + (data?.detail ? ` — ${JSON.stringify(data.detail)}` : ""));
-          }
-
-          // DeepAI returns { output_url, ... }
-          const url = data.output_url;
-          if (!url) throw new Error("No output_url in DeepAI response.");
-          resultBox.innerHTML = '<img src="' + url + '" class="img-fluid rounded shadow" alt="Generated image" />';
+        // Loading the <img> triggers generation; onload fires when it's ready.
+        const img = new Image();
+        img.className = "img-fluid rounded shadow";
+        img.alt = "Generated image";
+        img.onload = () => {
+          resultBox.innerHTML = "";
+          resultBox.appendChild(img);
+          const link = document.createElement("div");
+          link.className = "mt-2";
+          link.innerHTML = '<a href="' + url + '" target="_blank" rel="noopener" class="small">Open full size ↗</a>';
+          resultBox.appendChild(link);
           clearStatus();
-        } catch (err) {
-          showStatus("Error: " + (err.message || err), "danger");
-          console.error("DeepAI error:", err);
-        } finally {
           generateBtn.disabled = false;
-        }
+        };
+        img.onerror = () => {
+          showStatus("Error: image generation failed. Please try again in a moment.", "danger");
+          generateBtn.disabled = false;
+        };
+        img.src = url;
       });
 
       copyBtn?.addEventListener("click", () => {

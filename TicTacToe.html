@@ -14,15 +14,15 @@
   </head>
   <body>
     <!-- Header injected dynamically -->
-    <div id="header-include"></div>
+    <div id="header-include" data-testid="header-include-div-1"></div>
 
     <!-- HERO -->
-    <header class="py-5 bg-light border-bottom">
-      <div class="container">
-        <div class="row align-items-center">
-          <div class="col-lg-8">
-            <h1 class="display-6 fw-bold mb-2">TicTacToe</h1>
-            <p class="lead text-secondary mb-0">
+    <header class="py-5 bg-light border-bottom" data-testid="tictactoe-play-tictactoe-in-your-browser-header-1">
+      <div class="container" data-testid="tictactoe-play-tictactoe-in-your-browser-div-1">
+        <div class="row align-items-center" data-testid="tictactoe-play-tictactoe-in-your-browser-div-2">
+          <div class="col-lg-8" data-testid="tictactoe-play-tictactoe-in-your-browser-div-3">
+            <h1 class="display-6 fw-bold mb-2" data-testid="tictactoe-h1-1">TicTacToe</h1>
+            <p class="lead text-secondary mb-0" data-testid="play-tictactoe-in-your-browser-track-win-p-1">
               Play TicTacToe in your browser! Track wins, losses, and ties while practicing logic and JavaScript.
             </p>
           </div>
@@ -31,18 +31,18 @@
     </header>
 
     <!-- GAME -->
-    <main class="py-5">
-      <div class="container">
-        <div class="row g-4 justify-content-center">
-          <div class="col-lg-6">
-            <div class="card shadow-sm border-0 h-100">
-              <div class="card-body text-center">
-                <h2 class="h4 mb-3">Game Board</h2>
-                <div id="board" class="d-grid grid-3x3 mx-auto mb-3">
+    <main class="py-5" data-testid="game-board-player-x-s-turn-reset-game-re-main-1">
+      <div class="container" data-testid="game-board-div-1">
+        <div class="row g-4 justify-content-center" data-testid="game-board-div-2">
+          <div class="col-lg-6" data-testid="game-board-div-3">
+            <div class="card shadow-sm border-0 h-100" data-testid="game-board-div-4">
+              <div class="card-body text-center" data-testid="game-board-div-5">
+                <h2 class="h4 mb-3" data-testid="game-board-h2-1">Game Board</h2>
+                <div id="board" class="d-grid grid-3x3 mx-auto mb-3" data-testid="board-div-1">
                   <!-- JS will populate 9 cells here -->
                 </div>
-                <p class="lead fw-semibold" id="status">Player X's turn</p>
-                <div class="d-flex justify-content-center gap-2 mt-3">
+                <p class="lead fw-semibold" id="status" data-testid="status-p-1">Player X's turn</p>
+                <div class="d-flex justify-content-center gap-2 mt-3" data-testid="reset-game-reset-scores-div-1">
                   <button class="btn btn-primary" onclick="resetBoard()" data-testid="reset-game-button-1">Reset Game</button>
                   <button class="btn btn-outline-secondary" onclick="resetScores()" data-testid="reset-scores-button-1">Reset Scores</button>
                 </div>
@@ -50,19 +50,19 @@
             </div>
           </div>
 
-          <div class="col-lg-4">
-            <div class="card shadow-sm border-0 h-100">
-              <div class="card-body text-center">
-                <h2 class="h4 mb-3">Scoreboard</h2>
-                <ul class="list-group">
-                  <li class="list-group-item d-flex justify-content-between">
-                    <span>Player X Wins</span><span id="x-wins">0</span>
+          <div class="col-lg-4" data-testid="scoreboard-player-x-wins-0-player-o-wins-div-1">
+            <div class="card shadow-sm border-0 h-100" data-testid="scoreboard-player-x-wins-0-player-o-wins-div-2">
+              <div class="card-body text-center" data-testid="scoreboard-player-x-wins-0-player-o-wins-div-3">
+                <h2 class="h4 mb-3" data-testid="scoreboard-h2-1">Scoreboard</h2>
+                <ul class="list-group" data-testid="player-x-wins-0-player-o-wins-0-ties-0-ul-1">
+                  <li class="list-group-item d-flex justify-content-between" data-testid="player-x-wins-0-li-1">
+                    <span data-testid="player-x-wins-span-1">Player X Wins</span><span id="x-wins" data-testid="x-wins-span-1">0</span>
                   </li>
-                  <li class="list-group-item d-flex justify-content-between">
-                    <span>Player O Wins</span><span id="o-wins">0</span>
+                  <li class="list-group-item d-flex justify-content-between" data-testid="player-o-wins-0-li-1">
+                    <span data-testid="player-o-wins-span-1">Player O Wins</span><span id="o-wins" data-testid="o-wins-span-1">0</span>
                   </li>
-                  <li class="list-group-item d-flex justify-content-between">
-                    <span>Ties</span><span id="ties">0</span>
+                  <li class="list-group-item d-flex justify-content-between" data-testid="ties-0-li-1">
+                    <span data-testid="ties-span-1">Ties</span><span id="ties" data-testid="ties-span-2">0</span>
                   </li>
                 </ul>
               </div>
@@ -73,7 +73,7 @@
     </main>
 
     <!-- Footer injected dynamically -->
-    <div id="footer-include"></div>
+    <div id="footer-include" data-testid="footer-include-div-1"></div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Shared includes loader -->

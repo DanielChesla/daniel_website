@@ -24,37 +24,37 @@
     </style>
   </head>
   <body>
-    <div id="header-include"></div>
-    <header class="py-5 bg-light border-bottom">
-      <div class="container"><div class="row align-items-center"><div class="col-lg-8">
-        <h1 class="display-6 fw-bold mb-2">401k Calculator</h1>
-        <p class="lead text-secondary mb-0">Estimate your 401k balance at retirement based on your salary, contributions, and employer match.</p>
+    <div id="header-include" data-testid="header-include-div-1"></div>
+    <header class="py-5 bg-light border-bottom" data-testid="401k-calculator-estimate-your-401k-balan-header-1">
+      <div class="container" data-testid="401k-calculator-estimate-your-401k-balan-div-1"><div class="row align-items-center" data-testid="401k-calculator-estimate-your-401k-balan-div-2"><div class="col-lg-8" data-testid="401k-calculator-estimate-your-401k-balan-div-3">
+        <h1 class="display-6 fw-bold mb-2" data-testid="401k-calculator-h1-1">401k Calculator</h1>
+        <p class="lead text-secondary mb-0" data-testid="estimate-your-401k-balance-at-retirement-p-1">Estimate your 401k balance at retirement based on your salary, contributions, and employer match.</p>
       </div></div></div>
     </header>
-    <main class="py-5"><div class="container">
-      <div class="calc-card"><div class="row g-3">
-        <div class="col-md-6"><label class="form-label">Current Salary</label><div class="input-group"><span class="input-group-text">$</span><input type="number" id="salary" class="form-control" placeholder="e.g., 75000" min="0" data-testid="salary-number-1" /></div></div>
-        <div class="col-md-3"><label class="form-label">Current Age</label><input type="number" id="currentAge" class="form-control" placeholder="e.g., 30" min="18" max="80" data-testid="currentage-number-1" /></div>
-        <div class="col-md-3"><label class="form-label">Retirement Age</label><input type="number" id="retireAge" class="form-control" placeholder="e.g., 65" min="18" max="90" data-testid="retireage-number-1" /></div>
-        <div class="col-md-6"><label class="form-label">Annual Interest Rate (%)</label><div class="input-group"><span class="input-group-text">%</span><input type="number" id="rate" class="form-control" placeholder="e.g., 7" min="0" step="0.01" data-testid="rate-number-1" /></div><div class="field-hint">Historical average S&amp;P 500 return is ~7% inflation-adjusted.</div></div>
-        <div class="col-md-6"><label class="form-label">Estimated Salary Increase Per Year (%)</label><div class="input-group"><span class="input-group-text">%</span><input type="number" id="salaryIncrease" class="form-control" placeholder="e.g., 3" min="0" step="0.1" data-testid="salaryincrease-number-1" /></div><div class="field-hint">Your contributions grow each year as your salary increases. Use 0 for no raises.</div></div>
-        <div class="col-md-3"><label class="form-label">Your Contribution (%)</label><div class="input-group"><span class="input-group-text">%</span><input type="number" id="contribPct" class="form-control" placeholder="e.g., 10" min="0" max="100" step="0.1" data-testid="contribpct-number-1" /></div><div class="field-hint">% of salary you contribute.</div></div>
-        <div class="col-md-3"><label class="form-label">Employer Match (%)</label><div class="input-group"><span class="input-group-text">%</span><input type="number" id="matchPct" class="form-control" placeholder="e.g., 50" min="0" max="100" step="1" data-testid="matchpct-number-1" /></div><div class="field-hint">100 = dollar-for-dollar, 50 = 50 cents per dollar.</div></div>
-        <div class="col-md-6"><label class="form-label">Employer Match Cap (% of salary)</label><div class="input-group"><span class="input-group-text">%</span><input type="number" id="matchCap" class="form-control" placeholder="e.g., 6" min="0" max="100" step="0.1" data-testid="matchcap-number-1" /></div><div class="field-hint">Employer only matches up to this % of your salary. Common: 3-6%.</div></div>
+    <main class="py-5" data-testid="current-salary-current-age-retirement-ag-main-1"><div class="container" data-testid="current-salary-div-1">
+      <div class="calc-card" data-testid="current-salary-div-2"><div class="row g-3" data-testid="current-salary-div-3">
+        <div class="col-md-6" data-testid="current-salary-div-4"><label class="form-label" data-testid="current-salary-label-1">Current Salary</label><div class="input-group" data-testid="401k-calculator-div-1"><span class="input-group-text" data-testid="401k-calculator-span-1">$</span><input type="number" id="salary" class="form-control" placeholder="e.g., 75000" min="0" data-testid="salary-number-1" /></div></div>
+        <div class="col-md-3" data-testid="current-age-div-1"><label class="form-label" data-testid="current-age-label-1">Current Age</label><input type="number" id="currentAge" class="form-control" placeholder="e.g., 30" min="18" max="80" data-testid="currentage-number-1" /></div>
+        <div class="col-md-3" data-testid="retirement-age-div-1"><label class="form-label" data-testid="retirement-age-label-1">Retirement Age</label><input type="number" id="retireAge" class="form-control" placeholder="e.g., 65" min="18" max="90" data-testid="retireage-number-1" /></div>
+        <div class="col-md-6" data-testid="annual-interest-rate-div-1"><label class="form-label" data-testid="annual-interest-rate-label-1">Annual Interest Rate (%)</label><div class="input-group" data-testid="401k-calculator-div-2"><span class="input-group-text" data-testid="401k-calculator-span-2">%</span><input type="number" id="rate" class="form-control" placeholder="e.g., 7" min="0" step="0.01" data-testid="rate-number-1" /></div><div class="field-hint" data-testid="historical-average-s-p-500-return-is-7-i-div-1">Historical average S&amp;P 500 return is ~7% inflation-adjusted.</div></div>
+        <div class="col-md-6" data-testid="estimated-salary-increase-per-year-div-1"><label class="form-label" data-testid="estimated-salary-increase-per-year-label-1">Estimated Salary Increase Per Year (%)</label><div class="input-group" data-testid="401k-calculator-div-3"><span class="input-group-text" data-testid="401k-calculator-span-3">%</span><input type="number" id="salaryIncrease" class="form-control" placeholder="e.g., 3" min="0" step="0.1" data-testid="salaryincrease-number-1" /></div><div class="field-hint" data-testid="your-contributions-grow-each-year-as-you-div-1">Your contributions grow each year as your salary increases. Use 0 for no raises.</div></div>
+        <div class="col-md-3" data-testid="your-contribution-div-1"><label class="form-label" data-testid="your-contribution-label-1">Your Contribution (%)</label><div class="input-group" data-testid="401k-calculator-div-4"><span class="input-group-text" data-testid="401k-calculator-span-4">%</span><input type="number" id="contribPct" class="form-control" placeholder="e.g., 10" min="0" max="100" step="0.1" data-testid="contribpct-number-1" /></div><div class="field-hint" data-testid="of-salary-you-contribute-div-1">% of salary you contribute.</div></div>
+        <div class="col-md-3" data-testid="employer-match-div-1"><label class="form-label" data-testid="employer-match-label-1">Employer Match (%)</label><div class="input-group" data-testid="401k-calculator-div-5"><span class="input-group-text" data-testid="401k-calculator-span-5">%</span><input type="number" id="matchPct" class="form-control" placeholder="e.g., 50" min="0" max="100" step="1" data-testid="matchpct-number-1" /></div><div class="field-hint" data-testid="100-dollar-for-dollar-50-50-cents-per-do-div-1">100 = dollar-for-dollar, 50 = 50 cents per dollar.</div></div>
+        <div class="col-md-6" data-testid="employer-match-cap-of-salary-div-1"><label class="form-label" data-testid="employer-match-cap-of-salary-label-1">Employer Match Cap (% of salary)</label><div class="input-group" data-testid="401k-calculator-div-6"><span class="input-group-text" data-testid="401k-calculator-span-6">%</span><input type="number" id="matchCap" class="form-control" placeholder="e.g., 6" min="0" max="100" step="0.1" data-testid="matchcap-number-1" /></div><div class="field-hint" data-testid="employer-only-matches-up-to-this-of-your-div-1">Employer only matches up to this % of your salary. Common: 3-6%.</div></div>
       </div>
-      <div class="mt-4 d-flex gap-2"><button class="btn btn-primary" onclick="calculate()" data-testid="calculate-button-1">Calculate</button><button class="btn btn-outline-secondary" onclick="clearForm()" data-testid="clear-button-1">Clear</button></div></div>
-      <div id="results" style="display:none">
-        <div class="calc-card"><div class="row g-3">
-          <div class="col-md-3 col-sm-6"><div class="result-box"><div class="label">Estimated Balance at Retirement</div><div class="value" id="resBalance">-</div></div></div>
-          <div class="col-md-3 col-sm-6"><div class="result-box"><div class="label">Your Total Contributions</div><div class="value" id="resYours">-</div></div></div>
-          <div class="col-md-3 col-sm-6"><div class="result-box"><div class="label">Employer Total Match</div><div class="value" id="resMatch">-</div></div></div>
-          <div class="col-md-3 col-sm-6"><div class="result-box"><div class="label">Total Growth (Interest)</div><div class="value" id="resGrowth">-</div></div></div>
+      <div class="mt-4 d-flex gap-2" data-testid="calculate-clear-div-1"><button class="btn btn-primary" onclick="calculate()" data-testid="calculate-button-1">Calculate</button><button class="btn btn-outline-secondary" onclick="clearForm()" data-testid="clear-button-1">Clear</button></div></div>
+      <div id="results" style="display:none" data-testid="results-div-1">
+        <div class="calc-card" data-testid="estimated-balance-at-retirement-div-1"><div class="row g-3" data-testid="estimated-balance-at-retirement-div-2">
+          <div class="col-md-3 col-sm-6" data-testid="estimated-balance-at-retirement-div-3"><div class="result-box" data-testid="estimated-balance-at-retirement-div-4"><div class="label" data-testid="estimated-balance-at-retirement-div-5">Estimated Balance at Retirement</div><div class="value" id="resBalance" data-testid="resbalance-div-1">-</div></div></div>
+          <div class="col-md-3 col-sm-6" data-testid="your-total-contributions-div-1"><div class="result-box" data-testid="your-total-contributions-div-2"><div class="label" data-testid="your-total-contributions-div-3">Your Total Contributions</div><div class="value" id="resYours" data-testid="resyours-div-1">-</div></div></div>
+          <div class="col-md-3 col-sm-6" data-testid="employer-total-match-div-1"><div class="result-box" data-testid="employer-total-match-div-2"><div class="label" data-testid="employer-total-match-div-3">Employer Total Match</div><div class="value" id="resMatch" data-testid="resmatch-div-1">-</div></div></div>
+          <div class="col-md-3 col-sm-6" data-testid="total-growth-interest-div-1"><div class="result-box" data-testid="total-growth-interest-div-2"><div class="label" data-testid="total-growth-interest-div-3">Total Growth (Interest)</div><div class="value" id="resGrowth" data-testid="resgrowth-div-1">-</div></div></div>
         </div>
-        <div id="chartWrap"><canvas id="growthChart" height="100"></canvas></div>
+        <div id="chartWrap" data-testid="chartwrap-div-1"><canvas id="growthChart" height="100" data-testid="growthchart-canvas-1"></canvas></div>
         </div>
       </div>
     </div></main>
-    <div id="footer-include"></div>
+    <div id="footer-include" data-testid="footer-include-div-1"></div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="include-loader.js"></script>
     <script>

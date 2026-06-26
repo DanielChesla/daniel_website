@@ -20,16 +20,16 @@
   </head>
   <body>
     <!-- Header injected dynamically -->
-    <div id="header-include"></div>
+    <div id="header-include" data-testid="header-include-div-1"></div>
 
     <!-- HERO -->
-    <header class="py-5 bg-light border-bottom">
-      <div class="container">
-        <div class="row align-items-center">
-          <div class="col-lg-8">
-            <h1 class="display-6 fw-bold mb-2">Loan Amortization Calculator</h1>
-            <p class="lead text-secondary mb-0">
-              <strong>Borrowed Amount</strong> is computed as <strong>Sale Price − Down Payment</strong>.
+    <header class="py-5 bg-light border-bottom" data-testid="loan-amortization-calculator-borrowed-am-header-1">
+      <div class="container" data-testid="loan-amortization-calculator-borrowed-am-div-1">
+        <div class="row align-items-center" data-testid="loan-amortization-calculator-borrowed-am-div-2">
+          <div class="col-lg-8" data-testid="loan-amortization-calculator-borrowed-am-div-3">
+            <h1 class="display-6 fw-bold mb-2" data-testid="loan-amortization-calculator-h1-1">Loan Amortization Calculator</h1>
+            <p class="lead text-secondary mb-0" data-testid="borrowed-amount-is-computed-as-sale-pric-p-1">
+              <strong data-testid="borrowed-amount-strong-1">Borrowed Amount</strong> is computed as <strong data-testid="sale-price-down-payment-strong-1">Sale Price − Down Payment</strong>.
               Add taxes & insurance for your full monthly picture.
             </p>
           </div>
@@ -38,84 +38,84 @@
     </header>
 
     <!-- CONTENT -->
-    <main class="py-5">
-      <div class="container">
-        <div class="row g-4">
-          <div class="col-12">
-            <div class="card shadow-sm border-0 calc-card">
-              <div class="card-body">
-                <form id="loan-form" onsubmit="event.preventDefault(); calculateAmortization();">
-                  <div class="row g-3">
-                    <div class="col-md-6">
-                      <label for="salePrice" class="form-label">Sale Price</label>
-                      <div class="input-group">
-                        <span class="input-group-text">$</span>
+    <main class="py-5" data-testid="sale-price-down-payment-borrowed-amount-main-1">
+      <div class="container" data-testid="sale-price-div-1">
+        <div class="row g-4" data-testid="sale-price-div-2">
+          <div class="col-12" data-testid="sale-price-div-3">
+            <div class="card shadow-sm border-0 calc-card" data-testid="sale-price-div-4">
+              <div class="card-body" data-testid="sale-price-div-5">
+                <form id="loan-form" onsubmit="event.preventDefault(); calculateAmortization();" data-testid="loan-form-form-1">
+                  <div class="row g-3" data-testid="sale-price-div-6">
+                    <div class="col-md-6" data-testid="sale-price-div-7">
+                      <label for="salePrice" class="form-label" data-testid="sale-price-label-1">Sale Price</label>
+                      <div class="input-group" data-testid="loan-amortization-calculator-div-1">
+                        <span class="input-group-text" data-testid="loan-amortization-calculator-span-1">$</span>
                         <input type="number" class="form-control" id="salePrice" placeholder="e.g., 350000" min="0" step="0.01" required data-testid="sale-price-number-1">
                       </div>
                     </div>
-                    <div class="col-md-6">
-                      <label for="downPayment" class="form-label">Down Payment</label>
-                      <div class="input-group">
-                        <span class="input-group-text">$</span>
+                    <div class="col-md-6" data-testid="down-payment-div-1">
+                      <label for="downPayment" class="form-label" data-testid="down-payment-label-1">Down Payment</label>
+                      <div class="input-group" data-testid="loan-amortization-calculator-div-2">
+                        <span class="input-group-text" data-testid="loan-amortization-calculator-span-2">$</span>
                         <input type="number" class="form-control" id="downPayment" placeholder="e.g., 70000" min="0" step="0.01" required data-testid="down-payment-number-1">
                       </div>
                     </div>
 
                     <!-- Borrowed amount (readonly) -->
-                    <div class="col-md-6">
-                      <label for="principal" class="form-label">Borrowed Amount</label>
-                      <div class="input-group">
-                        <span class="input-group-text">$</span>
+                    <div class="col-md-6" data-testid="borrowed-amount-div-1">
+                      <label for="principal" class="form-label" data-testid="borrowed-amount-label-1">Borrowed Amount</label>
+                      <div class="input-group" data-testid="loan-amortization-calculator-div-3">
+                        <span class="input-group-text" data-testid="loan-amortization-calculator-span-3">$</span>
                         <input type="number" class="form-control" id="principal" value="0" readonly data-testid="borrowed-amount-number-1">
                       </div>
-                      <div id="principalWarn" class="form-text text-warning d-none">
+                      <div id="principalWarn" class="form-text text-warning d-none" data-testid="principalwarn-div-1">
                         Down payment exceeds sale price. Borrowed amount set to $0.00.
                       </div>
                     </div>
 
-                    <div class="col-md-3">
-                      <label for="interest" class="form-label">Annual Interest Rate (%)</label>
+                    <div class="col-md-3" data-testid="annual-interest-rate-div-1">
+                      <label for="interest" class="form-label" data-testid="annual-interest-rate-label-1">Annual Interest Rate (%)</label>
                       <input type="number" class="form-control" step="0.01" id="interest" placeholder="e.g., 6.75" required data-testid="annual-interest-rate-number-1">
                     </div>
-                    <div class="col-md-3">
-                      <label for="term" class="form-label">Loan Term (years)</label>
+                    <div class="col-md-3" data-testid="loan-term-years-div-1">
+                      <label for="term" class="form-label" data-testid="loan-term-years-label-1">Loan Term (years)</label>
                       <input type="number" class="form-control" step="1" id="term" placeholder="e.g., 30" required data-testid="loan-term-years-number-1">
                     </div>
 
                     <!-- Property tax -->
-                    <div class="col-md-6">
-                      <label for="propertyTax" class="form-label">Property Tax</label>
-                      <div class="input-group">
-                        <span class="input-group-text">$</span>
+                    <div class="col-md-6" data-testid="property-tax-per-year-per-month-div-1">
+                      <label for="propertyTax" class="form-label" data-testid="property-tax-label-1">Property Tax</label>
+                      <div class="input-group" data-testid="per-year-per-month-div-1">
+                        <span class="input-group-text" data-testid="loan-amortization-calculator-span-4">$</span>
                         <input type="number" class="form-control" id="propertyTax" placeholder="e.g., 7200" min="0" step="0.01" data-testid="property-tax-number-1">
                         <select id="taxPeriod" class="form-select" style="max-width: 10rem" data-testid="taxperiod-select-1">
-                          <option value="year" selected>per year</option>
-                          <option value="month">per month</option>
+                          <option value="year" selected data-testid="per-year-option-1">per year</option>
+                          <option value="month" data-testid="per-month-option-1">per month</option>
                         </select>
                       </div>
-                      <div class="form-text muted">
+                      <div class="form-text muted" data-testid="optional-if-set-to-per-year-we-divide-by-div-1">
                         Optional. If set to “per year”, we divide by 12 to get the monthly tax.
                       </div>
                     </div>
 
                     <!-- Homeowners insurance -->
-                    <div class="col-md-6">
-                      <label for="homeIns" class="form-label">Homeowners Insurance</label>
-                      <div class="input-group">
-                        <span class="input-group-text">$</span>
+                    <div class="col-md-6" data-testid="homeowners-insurance-per-year-per-month-div-1">
+                      <label for="homeIns" class="form-label" data-testid="homeowners-insurance-label-1">Homeowners Insurance</label>
+                      <div class="input-group" data-testid="per-year-per-month-div-2">
+                        <span class="input-group-text" data-testid="loan-amortization-calculator-span-5">$</span>
                         <input type="number" class="form-control" id="homeIns" placeholder="e.g., 1800" min="0" step="0.01" data-testid="homeowners-insurance-number-1">
                         <select id="insPeriod" class="form-select" style="max-width: 10rem" data-testid="insperiod-select-1">
-                          <option value="year" selected>per year</option>
-                          <option value="month">per month</option>
+                          <option value="year" selected data-testid="per-year-option-2">per year</option>
+                          <option value="month" data-testid="per-month-option-2">per month</option>
                         </select>
                       </div>
-                      <div class="form-text muted">
+                      <div class="form-text muted" data-testid="optional-if-set-to-per-year-we-divide-by-div-2">
                         Optional. If set to “per year”, we divide by 12 to get the monthly premium.
                       </div>
                     </div>
                   </div>
 
-                  <div class="mt-3 d-flex gap-2">
+                  <div class="mt-3 d-flex gap-2" data-testid="calculate-clear-div-1">
                     <button type="submit" class="btn btn-primary" data-testid="calculate-button-1">Calculate</button>
                     <button type="button" class="btn btn-outline-secondary" onclick="resetAmortization()" data-testid="clear-button-1">Clear</button>
                   </div>
@@ -125,54 +125,54 @@
           </div>
 
           <!-- RESULTS -->
-          <div class="col-12">
-            <div id="results" class="card shadow-sm calc-card" style="display:none;">
-              <div class="card-body">
-                <h2 class="h4">Results</h2>
-                <div class="row g-3">
-                  <div class="col-md-4">
-                    <div class="p-3 border rounded-3 bg-light-subtle">
-                      <div class="small text-uppercase text-muted">P&I Monthly Payment</div>
-                      <div class="fs-4 fw-semibold"><span id="monthly-payment" class="money">—</span></div>
+          <div class="col-12" data-testid="results-p-i-monthly-payment-div-1">
+            <div id="results" class="card shadow-sm calc-card" style="display:none;" data-testid="results-div-1">
+              <div class="card-body" data-testid="results-p-i-monthly-payment-div-2">
+                <h2 class="h4" data-testid="results-h2-1">Results</h2>
+                <div class="row g-3" data-testid="p-i-monthly-payment-div-1">
+                  <div class="col-md-4" data-testid="p-i-monthly-payment-div-2">
+                    <div class="p-3 border rounded-3 bg-light-subtle" data-testid="p-i-monthly-payment-div-3">
+                      <div class="small text-uppercase text-muted" data-testid="p-i-monthly-payment-div-4">P&I Monthly Payment</div>
+                      <div class="fs-4 fw-semibold" data-testid="results-div-2"><span id="monthly-payment" class="money" data-testid="monthly-payment-span-1">—</span></div>
                     </div>
                   </div>
-                  <div class="col-md-4">
-                    <div class="p-3 border rounded-3 bg-light-subtle">
-                      <div class="small text-uppercase text-muted">Monthly Property Tax</div>
-                      <div class="fs-4 fw-semibold"><span id="monthly-tax" class="money">—</span></div>
+                  <div class="col-md-4" data-testid="monthly-property-tax-div-1">
+                    <div class="p-3 border rounded-3 bg-light-subtle" data-testid="monthly-property-tax-div-2">
+                      <div class="small text-uppercase text-muted" data-testid="monthly-property-tax-div-3">Monthly Property Tax</div>
+                      <div class="fs-4 fw-semibold" data-testid="results-div-3"><span id="monthly-tax" class="money" data-testid="monthly-tax-span-1">—</span></div>
                     </div>
                   </div>
-                  <div class="col-md-4">
-                    <div class="p-3 border rounded-3 bg-light-subtle">
-                      <div class="small text-uppercase text-muted">Monthly Insurance</div>
-                      <div class="fs-4 fw-semibold"><span id="monthly-ins" class="money">—</span></div>
+                  <div class="col-md-4" data-testid="monthly-insurance-div-1">
+                    <div class="p-3 border rounded-3 bg-light-subtle" data-testid="monthly-insurance-div-2">
+                      <div class="small text-uppercase text-muted" data-testid="monthly-insurance-div-3">Monthly Insurance</div>
+                      <div class="fs-4 fw-semibold" data-testid="results-div-4"><span id="monthly-ins" class="money" data-testid="monthly-ins-span-1">—</span></div>
                     </div>
                   </div>
-                  <div class="col-md-12">
-                    <div class="p-3 border rounded-3 bg-white">
-                      <div class="small text-uppercase text-muted">Total Monthly (P&I + Tax + Insurance)</div>
-                      <div class="display-5 fw-bold"><span id="monthly-total" class="money">—</span></div>
-                      <div class="small text-secondary mt-2">
+                  <div class="col-md-12" data-testid="total-monthly-p-i-tax-insurance-div-1">
+                    <div class="p-3 border rounded-3 bg-white" data-testid="total-monthly-p-i-tax-insurance-div-2">
+                      <div class="small text-uppercase text-muted" data-testid="total-monthly-p-i-tax-insurance-div-3">Total Monthly (P&I + Tax + Insurance)</div>
+                      <div class="display-5 fw-bold" data-testid="results-div-5"><span id="monthly-total" class="money" data-testid="monthly-total-span-1">—</span></div>
+                      <div class="small text-secondary mt-2" data-testid="note-taxes-insurance-are-not-part-of-the-div-1">
                         Note: Taxes & insurance are not part of the loan amortization—they’re shown here for monthly budgeting.
                       </div>
                     </div>
                   </div>
                 </div>
 
-                <p class="mt-4">Total Interest Paid: $<span id="total-interest" class="money"></span></p>
-                <h2 class="h4 mt-3">Amortization Schedule</h2>
-                <div class="table-responsive">
-                  <table id="amortization-schedule" class="table table-sm table-striped align-middle">
-                    <thead>
-                      <tr>
-                        <th>Month</th>
-                        <th>Payment</th>
-                        <th>Principal Payment</th>
-                        <th>Interest Payment</th>
-                        <th>Remaining Balance</th>
+                <p class="mt-4" data-testid="total-interest-paid-p-1">Total Interest Paid: $<span id="total-interest" class="money" data-testid="total-interest-span-1"></span></p>
+                <h2 class="h4 mt-3" data-testid="amortization-schedule-h2-1">Amortization Schedule</h2>
+                <div class="table-responsive" data-testid="month-payment-principal-payment-interest-div-1">
+                  <table id="amortization-schedule" class="table table-sm table-striped align-middle" data-testid="amortization-schedule-table-1">
+                    <thead data-testid="month-payment-principal-payment-interest-thead-1">
+                      <tr data-testid="month-payment-principal-payment-interest-tr-1">
+                        <th data-testid="month-th-1">Month</th>
+                        <th data-testid="payment-th-1">Payment</th>
+                        <th data-testid="principal-payment-th-1">Principal Payment</th>
+                        <th data-testid="interest-payment-th-1">Interest Payment</th>
+                        <th data-testid="remaining-balance-th-1">Remaining Balance</th>
                       </tr>
                     </thead>
-                    <tbody></tbody>
+                    <tbody data-testid="amortization-schedule-tbody-1"></tbody>
                   </table>
                 </div>
               </div>
@@ -183,7 +183,7 @@
     </main>
 
     <!-- Footer injected dynamically -->
-    <div id="footer-include"></div>
+    <div id="footer-include" data-testid="footer-include-div-1"></div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Loader that pulls in header & footer -->

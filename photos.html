@@ -12,31 +12,31 @@
     <meta name="description" content="Photo gallery." />
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg bg-white border-bottom py-3 sticky-top">
-      <div class="container">
+    <nav class="navbar navbar-expand-lg bg-white border-bottom py-3 sticky-top" data-testid="daniel-chesla-about-skills-industries-ex-nav-1">
+      <div class="container" data-testid="daniel-chesla-about-skills-industries-ex-div-1">
         <a class="navbar-brand fw-semibold" href="index.html#top" data-testid="daniel-chesla-link-1">Daniel Chesla</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav" aria-controls="nav" aria-expanded="false" aria-label="Toggle navigation" data-testid="toggle-navigation-button-1">
-          <span class="navbar-toggler-icon"></span>
+          <span class="navbar-toggler-icon" data-testid="field-span-1"></span>
         </button>
-        <div class="collapse navbar-collapse" id="nav">
-          <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
-            <li class="nav-item"><a class="nav-link" href="index.html#about" data-testid="about-link-1">About</a></li>
-            <li class="nav-item"><a class="nav-link" href="index.html#skills" data-testid="skills-link-1">Skills</a></li>
-            <li class="nav-item"><a class="nav-link" href="index.html#industries" data-testid="industries-link-1">Industries</a></li>
-            <li class="nav-item"><a class="nav-link" href="index.html#experience" data-testid="experience-link-1">Experience</a></li>
-            <li class="nav-item"><a class="nav-link" href="index.html#education" data-testid="education-link-1">Education</a></li>
-            <li class="nav-item dropdown">
+        <div class="collapse navbar-collapse" id="nav" data-testid="nav-div-1">
+          <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2" data-testid="about-skills-industries-experience-educa-ul-1">
+            <li class="nav-item" data-testid="about-li-1"><a class="nav-link" href="index.html#about" data-testid="about-link-1">About</a></li>
+            <li class="nav-item" data-testid="skills-li-1"><a class="nav-link" href="index.html#skills" data-testid="skills-link-1">Skills</a></li>
+            <li class="nav-item" data-testid="industries-li-1"><a class="nav-link" href="index.html#industries" data-testid="industries-link-1">Industries</a></li>
+            <li class="nav-item" data-testid="experience-li-1"><a class="nav-link" href="index.html#experience" data-testid="experience-link-1">Experience</a></li>
+            <li class="nav-item" data-testid="education-li-1"><a class="nav-link" href="index.html#education" data-testid="education-link-1">Education</a></li>
+            <li class="nav-item dropdown" data-testid="projects-math-project-li-1">
               <a class="nav-link dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" data-testid="projects-link-1">Projects</a>
-              <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="Mathpage.html" data-testid="math-project-link-1">Math Project</a></li>
-                <li><a class="dropdown-item" href="weather.html" data-testid="weather-link-1">Weather</a></li>
-                <li><a class="dropdown-item" href="loan.html" data-testid="loan-calculator-link-1">Loan Calculator</a></li>
-                <li><a class="dropdown-item" href="TicTacToe.html" data-testid="tictactoe-link-1">TicTacToe</a></li>
-                <li><a class="dropdown-item active" href="photos.html" data-testid="photos-link-1">Photos</a></li>
-                <li><a class="dropdown-item" href="contact.html" data-testid="contact-link-1">Contact</a></li>
+              <ul class="dropdown-menu" data-testid="math-project-weather-loan-calculator-tic-ul-1">
+                <li data-testid="math-project-li-1"><a class="dropdown-item" href="Mathpage.html" data-testid="math-project-link-1">Math Project</a></li>
+                <li data-testid="weather-li-1"><a class="dropdown-item" href="weather.html" data-testid="weather-link-1">Weather</a></li>
+                <li data-testid="loan-calculator-li-1"><a class="dropdown-item" href="loan.html" data-testid="loan-calculator-link-1">Loan Calculator</a></li>
+                <li data-testid="tictactoe-li-1"><a class="dropdown-item" href="TicTacToe.html" data-testid="tictactoe-link-1">TicTacToe</a></li>
+                <li data-testid="photos-li-1"><a class="dropdown-item active" href="photos.html" data-testid="photos-link-1">Photos</a></li>
+                <li data-testid="contact-li-1"><a class="dropdown-item" href="contact.html" data-testid="contact-link-1">Contact</a></li>
               </ul>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" data-testid="home-li-1">
               <a class="btn btn-primary ms-lg-2" href="https://danielchesla.com" data-testid="home-link-1">Home</a>
             </li>
           </ul>
@@ -44,39 +44,39 @@
       </div>
     </nav>
 
-    <main>
-      <header class="py-5 bg-light border-bottom">
-        <div class="container">
-          <h1 class="display-6 fw-bold mb-1">Photos</h1>
-          <p class="text-secondary mb-0">A responsive gallery with a simple lightbox.</p>
+    <main data-testid="photos-a-responsive-gallery-with-a-simpl-main-1">
+      <header class="py-5 bg-light border-bottom" data-testid="photos-a-responsive-gallery-with-a-simpl-header-1">
+        <div class="container" data-testid="photos-a-responsive-gallery-with-a-simpl-div-1">
+          <h1 class="display-6 fw-bold mb-1" data-testid="photos-h1-1">Photos</h1>
+          <p class="text-secondary mb-0" data-testid="a-responsive-gallery-with-a-simple-light-p-1">A responsive gallery with a simple lightbox.</p>
         </div>
       </header>
 
-      <section class="py-5" id="photos">
-        <div class="container">
-          <div class="row g-3">
-            <div class="col-6 col-md-4 col-lg-3"><img loading="lazy" class="img-fluid rounded-3 shadow-sm gallery-img" src="bird.jpg" alt="Bird" data-bs-toggle="modal" data-bs-target="#lightbox" /></div>
-            <div class="col-6 col-md-4 col-lg-3"><img loading="lazy" class="img-fluid rounded-3 shadow-sm gallery-img" src="flower.jpg" alt="Hibiscus" data-bs-toggle="modal" data-bs-target="#lightbox" /></div>
-            <div class="col-6 col-md-4 col-lg-3"><img loading="lazy" class="img-fluid rounded-3 shadow-sm gallery-img" src="lizard.jpg" alt="Lizard" data-bs-toggle="modal" data-bs-target="#lightbox" /></div>
-            <div class="col-6 col-md-4 col-lg-3"><img loading="lazy" class="img-fluid rounded-3 shadow-sm gallery-img" src="suzuki.jpg" alt="Suzuki Samurai" data-bs-toggle="modal" data-bs-target="#lightbox" /></div>
-            <div class="col-6 col-md-4 col-lg-3"><img loading="lazy" class="img-fluid rounded-3 shadow-sm gallery-img" src="frog.jpg" alt="Frog" data-bs-toggle="modal" data-bs-target="#lightbox" /></div>
-            <div class="col-6 col-md-4 col-lg-3"><img loading="lazy" class="img-fluid rounded-3 shadow-sm gallery-img" src="ocean.jpg" alt="Ocean sunrise" data-bs-toggle="modal" data-bs-target="#lightbox" /></div>
-            <div class="col-6 col-md-4 col-lg-3"><img loading="lazy" class="img-fluid rounded-3 shadow-sm gallery-img" src="banana.jpg" alt="Banana" data-bs-toggle="modal" data-bs-target="#lightbox" /></div>
-            <div class="col-6 col-md-4 col-lg-3"><img loading="lazy" class="img-fluid rounded-3 shadow-sm gallery-img" src="pineapple.jpg" alt="Pineapple" data-bs-toggle="modal" data-bs-target="#lightbox" /></div>
-            <div class="col-6 col-md-4 col-lg-3"><img loading="lazy" class="img-fluid rounded-3 shadow-sm gallery-img" src="squirrel.jpg" alt="Squirrel" data-bs-toggle="modal" data-bs-target="#lightbox" /></div>
-            <div class="col-6 col-md-4 col-lg-3"><img loading="lazy" class="img-fluid rounded-3 shadow-sm gallery-img" src="cat.jpg" alt="Cat" data-bs-toggle="modal" data-bs-target="#lightbox" /></div>
-            <div class="col-6 col-md-4 col-lg-3"><img loading="lazy" class="img-fluid rounded-3 shadow-sm gallery-img" src="cactus.jpg" alt="Cactus" data-bs-toggle="modal" data-bs-target="#lightbox" /></div>
-            <div class="col-6 col-md-4 col-lg-3"><img loading="lazy" class="img-fluid rounded-3 shadow-sm gallery-img" src="fish.jpg" alt="Fish" data-bs-toggle="modal" data-bs-target="#lightbox" /></div>
+      <section class="py-5" id="photos" data-testid="photos-section-1">
+        <div class="container" data-testid="photos-div-1">
+          <div class="row g-3" data-testid="photos-div-2">
+            <div class="col-6 col-md-4 col-lg-3" data-testid="photos-div-3"><img loading="lazy" class="img-fluid rounded-3 shadow-sm gallery-img" src="bird.jpg" alt="Bird" data-bs-toggle="modal" data-bs-target="#lightbox" data-testid="bird-img-1" /></div>
+            <div class="col-6 col-md-4 col-lg-3" data-testid="photos-div-4"><img loading="lazy" class="img-fluid rounded-3 shadow-sm gallery-img" src="flower.jpg" alt="Hibiscus" data-bs-toggle="modal" data-bs-target="#lightbox" data-testid="hibiscus-img-1" /></div>
+            <div class="col-6 col-md-4 col-lg-3" data-testid="photos-div-5"><img loading="lazy" class="img-fluid rounded-3 shadow-sm gallery-img" src="lizard.jpg" alt="Lizard" data-bs-toggle="modal" data-bs-target="#lightbox" data-testid="lizard-img-1" /></div>
+            <div class="col-6 col-md-4 col-lg-3" data-testid="photos-div-6"><img loading="lazy" class="img-fluid rounded-3 shadow-sm gallery-img" src="suzuki.jpg" alt="Suzuki Samurai" data-bs-toggle="modal" data-bs-target="#lightbox" data-testid="suzuki-samurai-img-1" /></div>
+            <div class="col-6 col-md-4 col-lg-3" data-testid="photos-div-7"><img loading="lazy" class="img-fluid rounded-3 shadow-sm gallery-img" src="frog.jpg" alt="Frog" data-bs-toggle="modal" data-bs-target="#lightbox" data-testid="frog-img-1" /></div>
+            <div class="col-6 col-md-4 col-lg-3" data-testid="photos-div-8"><img loading="lazy" class="img-fluid rounded-3 shadow-sm gallery-img" src="ocean.jpg" alt="Ocean sunrise" data-bs-toggle="modal" data-bs-target="#lightbox" data-testid="ocean-sunrise-img-1" /></div>
+            <div class="col-6 col-md-4 col-lg-3" data-testid="photos-div-9"><img loading="lazy" class="img-fluid rounded-3 shadow-sm gallery-img" src="banana.jpg" alt="Banana" data-bs-toggle="modal" data-bs-target="#lightbox" data-testid="banana-img-1" /></div>
+            <div class="col-6 col-md-4 col-lg-3" data-testid="photos-div-10"><img loading="lazy" class="img-fluid rounded-3 shadow-sm gallery-img" src="pineapple.jpg" alt="Pineapple" data-bs-toggle="modal" data-bs-target="#lightbox" data-testid="pineapple-img-1" /></div>
+            <div class="col-6 col-md-4 col-lg-3" data-testid="photos-div-11"><img loading="lazy" class="img-fluid rounded-3 shadow-sm gallery-img" src="squirrel.jpg" alt="Squirrel" data-bs-toggle="modal" data-bs-target="#lightbox" data-testid="squirrel-img-1" /></div>
+            <div class="col-6 col-md-4 col-lg-3" data-testid="photos-div-12"><img loading="lazy" class="img-fluid rounded-3 shadow-sm gallery-img" src="cat.jpg" alt="Cat" data-bs-toggle="modal" data-bs-target="#lightbox" data-testid="cat-img-1" /></div>
+            <div class="col-6 col-md-4 col-lg-3" data-testid="photos-div-13"><img loading="lazy" class="img-fluid rounded-3 shadow-sm gallery-img" src="cactus.jpg" alt="Cactus" data-bs-toggle="modal" data-bs-target="#lightbox" data-testid="cactus-img-1" /></div>
+            <div class="col-6 col-md-4 col-lg-3" data-testid="photos-div-14"><img loading="lazy" class="img-fluid rounded-3 shadow-sm gallery-img" src="fish.jpg" alt="Fish" data-bs-toggle="modal" data-bs-target="#lightbox" data-testid="fish-img-1" /></div>
           </div>
         </div>
 
-        <div class="modal fade" id="lightbox" tabindex="-1" aria-hidden="true">
-          <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content border-0">
-              <div class="modal-body p-0">
-                <img id="lightbox-img" class="img-fluid w-100 rounded" alt="Preview" />
+        <div class="modal fade" id="lightbox" tabindex="-1" aria-hidden="true" data-testid="lightbox-div-1">
+          <div class="modal-dialog modal-dialog-centered modal-lg" data-testid="photos-div-15">
+            <div class="modal-content border-0" data-testid="photos-div-16">
+              <div class="modal-body p-0" data-testid="photos-div-17">
+                <img id="lightbox-img" class="img-fluid w-100 rounded" alt="Preview" data-testid="lightbox-img-img-1" />
               </div>
-              <div class="modal-footer border-0">
+              <div class="modal-footer border-0" data-testid="close-div-1">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-testid="close-button-1">Close</button>
               </div>
             </div>
@@ -85,10 +85,10 @@
       </section>
     </main>
 
-    <footer class="py-4 border-top small">
-      <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
-        <span>© <span id="year"></span> Daniel Chesla</span>
-        <div class="d-flex gap-2">
+    <footer class="py-4 border-top small" data-testid="daniel-chesla-home-github-footer-1">
+      <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center gap-2" data-testid="daniel-chesla-home-github-div-1">
+        <span data-testid="photos-span-1">© <span id="year" data-testid="year-span-1"></span> Daniel Chesla</span>
+        <div class="d-flex gap-2" data-testid="home-github-div-1">
           <a href="https://danielchesla.com" class="link-body-emphasis" data-testid="home-link-2">Home</a>
           <a href="https://github.com/danielchesla" class="link-body-emphasis" data-testid="github-link-1">GitHub</a>
         </div>

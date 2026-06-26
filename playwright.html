@@ -18,28 +18,28 @@
     </style>
   </head>
   <body>
-    <div id="header-include"></div>
+    <div id="header-include" data-testid="header-include-div-1"></div>
 
-    <main class="py-5">
-      <div class="container">
-        <h1 class="mb-2">Playwright Test Runner</h1>
-        <p class="text-secondary">
+    <main class="py-5" data-testid="playwright-test-runner-click-run-to-trig-main-1">
+      <div class="container" data-testid="playwright-test-runner-click-run-to-trig-div-1">
+        <h1 class="mb-2" data-testid="playwright-test-runner-h1-1">Playwright Test Runner</h1>
+        <p class="text-secondary" data-testid="click-run-to-trigger-the-site-s-smoke-te-p-1">
           Click run to trigger the site's smoke-test suite on GitHub Actions. Results stream back here when the run finishes
           (about a minute). The suite checks the navigation, contact form, and image generator against the live site.
         </p>
 
-        <div class="d-flex align-items-center gap-3 flex-wrap mb-2">
-          <button id="runBtn" class="btn btn-primary" data-testid="run-tests-button-1">▶ Run tests</button>
-          <a id="reportLink" class="btn btn-outline-secondary d-none" target="_blank" rel="noopener" data-testid="view-report-link-1">View full HTML report ↗</a>
-          <a id="runLink" class="small d-none" target="_blank" rel="noopener" data-testid="view-run-link-1">View run on GitHub ↗</a>
+        <div class="d-flex align-items-center gap-3 flex-wrap mb-2" data-testid="run-tests-view-full-html-report-view-run-div-1">
+          <button id="runBtn" class="btn btn-primary" data-testid="runbtn-button-1">▶ Run tests</button>
+          <a id="reportLink" class="btn btn-outline-secondary d-none" target="_blank" rel="noopener" data-testid="reportlink-link-1">View full HTML report ↗</a>
+          <a id="runLink" class="small d-none" target="_blank" rel="noopener" data-testid="runlink-link-1">View run on GitHub ↗</a>
         </div>
 
-        <div id="status" class="mt-3"></div>
-        <div id="results" class="mt-3"></div>
+        <div id="status" class="mt-3" data-testid="status-div-1"></div>
+        <div id="results" class="mt-3" data-testid="results-div-1"></div>
       </div>
     </main>
 
-    <div id="footer-include"></div>
+    <div id="footer-include" data-testid="footer-include-div-1"></div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="include-loader.js"></script>

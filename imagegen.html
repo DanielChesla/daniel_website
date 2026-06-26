@@ -9,77 +9,77 @@
     <link rel="stylesheet" href="style1.css" />
   </head>
   <body>
-    <div id="header-include"></div>
+    <div id="header-include" data-testid="header-include-div-1"></div>
 
-    <main class="py-5">
-      <div class="container">
-        <h1 class="mb-4">Image Generator</h1>
-        <p class="text-secondary">Choose options and we’ll create a prompt and generate an image — free, no sign-up, powered by <a href="https://pollinations.ai" target="_blank" rel="noopener" data-testid="pollinations-ai-link-1">Pollinations.ai</a>.</p>
+    <main class="py-5" data-testid="image-generator-choose-options-and-we-ll-main-1">
+      <div class="container" data-testid="image-generator-choose-options-and-we-ll-div-1">
+        <h1 class="mb-4" data-testid="image-generator-h1-1">Image Generator</h1>
+        <p class="text-secondary" data-testid="choose-options-and-we-ll-create-a-prompt-p-1">Choose options and we’ll create a prompt and generate an image — free, no sign-up, powered by <a href="https://pollinations.ai" target="_blank" rel="noopener" data-testid="pollinations-ai-link-1">Pollinations.ai</a>.</p>
 
-        <form id="imageForm" class="row g-3 mb-4">
-          <div class="col-md-4">
-            <label class="form-label">Background</label>
+        <form id="imageForm" class="row g-3 mb-4" data-testid="imageform-form-1">
+          <div class="col-md-4" data-testid="background-city-new-york-city-london-cit-div-1">
+            <label class="form-label" data-testid="background-label-1">Background</label>
             <select id="background" class="form-select" data-testid="background-select-1">
-              <option>City New York</option>
-              <option>City London</option>
-              <option>City Tokyo</option>
-              <option>Medieval Village</option>
-              <option>Snowy Mountain</option>
-              <option>Desert</option>
-              <option>Beach</option>
-              <option>Forest</option>
-              <option>Field</option>
-              <option>Underwater</option>
+              <option data-testid="city-new-york-option-1">City New York</option>
+              <option data-testid="city-london-option-1">City London</option>
+              <option data-testid="city-tokyo-option-1">City Tokyo</option>
+              <option data-testid="medieval-village-option-1">Medieval Village</option>
+              <option data-testid="snowy-mountain-option-1">Snowy Mountain</option>
+              <option data-testid="desert-option-1">Desert</option>
+              <option data-testid="beach-option-1">Beach</option>
+              <option data-testid="forest-option-1">Forest</option>
+              <option data-testid="field-option-1">Field</option>
+              <option data-testid="underwater-option-1">Underwater</option>
             </select>
           </div>
-          <div class="col-md-4">
-            <label class="form-label">Character Style</label>
+          <div class="col-md-4" data-testid="character-style-disney-style-anime-style-div-1">
+            <label class="form-label" data-testid="character-style-label-1">Character Style</label>
             <select id="style" class="form-select" data-testid="style-select-1">
-              <option>Disney style</option>
-              <option>Anime style</option>
-              <option>Family Guy style</option>
-              <option>Simpsons style</option>
-              <option>Looney Tunes style</option>
-              <option>Peanuts style</option>
+              <option data-testid="disney-style-option-1">Disney style</option>
+              <option data-testid="anime-style-option-1">Anime style</option>
+              <option data-testid="family-guy-style-option-1">Family Guy style</option>
+              <option data-testid="simpsons-style-option-1">Simpsons style</option>
+              <option data-testid="looney-tunes-style-option-1">Looney Tunes style</option>
+              <option data-testid="peanuts-style-option-1">Peanuts style</option>
             </select>
           </div>
-          <div class="col-md-4">
-            <label class="form-label">Character Mix</label>
+          <div class="col-md-4" data-testid="character-mix-male-and-female-group-of-f-div-1">
+            <label class="form-label" data-testid="character-mix-label-1">Character Mix</label>
             <select id="mix" class="form-select" data-testid="mix-select-1">
-              <option>Male and Female group of friends</option>
-              <option>Male group of friends</option>
-              <option>Female group of friends</option>
-              <option>Small Family</option>
-              <option>Large Family</option>
-              <option>Family with Pets</option>
-              <option>Solo Female</option>
-              <option>Solo Male</option>
+              <option data-testid="male-and-female-group-of-friends-option-1">Male and Female group of friends</option>
+              <option data-testid="male-group-of-friends-option-1">Male group of friends</option>
+              <option data-testid="female-group-of-friends-option-1">Female group of friends</option>
+              <option data-testid="small-family-option-1">Small Family</option>
+              <option data-testid="large-family-option-1">Large Family</option>
+              <option data-testid="family-with-pets-option-1">Family with Pets</option>
+              <option data-testid="solo-female-option-1">Solo Female</option>
+              <option data-testid="solo-male-option-1">Solo Male</option>
             </select>
           </div>
-          <div class="col-md-4">
-            <label class="form-label">Realism Level</label>
+          <div class="col-md-4" data-testid="realism-level-most-realistic-photo-reali-div-1">
+            <label class="form-label" data-testid="realism-level-label-1">Realism Level</label>
             <select id="realism" class="form-select" data-testid="realism-select-1">
-              <option>Most Realistic: “photo-realistic, highly detailed, natural lighting, true-to-life colors”</option>
-              <option>Semi-Realistic: “realistic with slight stylization, softer edges, mild artistic feel”</option>
-              <option>Balanced / Stylized: “blend of realism and cartoon, simplified details, moderate stylization”</option>
-              <option>Cartoonish: “cartoon style, bold outlines, exaggerated features, flat colors”</option>
-              <option>Most Cartoonish: “highly stylized cartoon, simplified shapes, strong outlines, vibrant exaggerated colors”</option>
+              <option data-testid="most-realistic-photo-realistic-highly-de-option-1">Most Realistic: “photo-realistic, highly detailed, natural lighting, true-to-life colors”</option>
+              <option data-testid="semi-realistic-realistic-with-slight-sty-option-1">Semi-Realistic: “realistic with slight stylization, softer edges, mild artistic feel”</option>
+              <option data-testid="balanced-stylized-blend-of-realism-and-c-option-1">Balanced / Stylized: “blend of realism and cartoon, simplified details, moderate stylization”</option>
+              <option data-testid="cartoonish-cartoon-style-bold-outlines-e-option-1">Cartoonish: “cartoon style, bold outlines, exaggerated features, flat colors”</option>
+              <option data-testid="most-cartoonish-highly-stylized-cartoon-option-1">Most Cartoonish: “highly stylized cartoon, simplified shapes, strong outlines, vibrant exaggerated colors”</option>
             </select>
           </div>
 
-          <div class="col-12">
+          <div class="col-12" data-testid="generate-image-copy-prompt-div-1">
             <button type="submit" class="btn btn-primary" id="generateBtn" data-testid="generatebtn-button-1">Generate Image</button>
             <button type="button" id="copyPrompt" class="btn btn-outline-secondary" data-testid="copyprompt-button-1">Copy Prompt</button>
           </div>
         </form>
 
-        <div id="promptBox" class="alert alert-info d-none"></div>
-        <div id="statusBox" class="mt-3"></div>
-        <div id="resultBox" class="mt-4 text-center"></div>
+        <div id="promptBox" class="alert alert-info d-none" data-testid="promptbox-div-1"></div>
+        <div id="statusBox" class="mt-3" data-testid="statusbox-div-1"></div>
+        <div id="resultBox" class="mt-4 text-center" data-testid="resultbox-div-1"></div>
       </div>
     </main>
 
-    <div id="footer-include"></div>
+    <div id="footer-include" data-testid="footer-include-div-1"></div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="include-loader.js"></script>

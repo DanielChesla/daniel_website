@@ -23,29 +23,29 @@
     </style>
   </head>
   <body>
-    <div id="header-include"></div>
-    <header class="py-5 bg-light border-bottom">
-      <div class="container"><div class="row align-items-center"><div class="col-lg-8">
-        <h1 class="display-6 fw-bold mb-2">Compound Interest Calculator</h1>
-        <p class="lead text-secondary mb-0">See how your money grows over time with the power of compounding.</p>
+    <div id="header-include" data-testid="header-include-div-1"></div>
+    <header class="py-5 bg-light border-bottom" data-testid="compound-interest-calculator-see-how-you-header-1">
+      <div class="container" data-testid="compound-interest-calculator-see-how-you-div-1"><div class="row align-items-center" data-testid="compound-interest-calculator-see-how-you-div-2"><div class="col-lg-8" data-testid="compound-interest-calculator-see-how-you-div-3">
+        <h1 class="display-6 fw-bold mb-2" data-testid="compound-interest-calculator-h1-1">Compound Interest Calculator</h1>
+        <p class="lead text-secondary mb-0" data-testid="see-how-your-money-grows-over-time-with-p-1">See how your money grows over time with the power of compounding.</p>
       </div></div></div>
     </header>
-    <main class="py-5"><div class="container">
-      <div class="calc-card"><div class="row g-3">
-        <div class="col-md-6"><label class="form-label">Principal Amount</label><div class="input-group"><span class="input-group-text">$</span><input type="number" id="principal" class="form-control" placeholder="e.g., 10000" min="0" data-testid="principal-number-1" /></div></div>
-        <div class="col-md-6"><label class="form-label">Annual Interest Rate (%)</label><div class="input-group"><span class="input-group-text">%</span><input type="number" id="rate" class="form-control" placeholder="e.g., 7" min="0" step="0.01" data-testid="rate-number-1" /></div></div>
-        <div class="col-md-6"><label class="form-label">Time Period (years)</label><input type="number" id="years" class="form-control" placeholder="e.g., 20" min="1" max="100" data-testid="years-number-1" /></div>
-        <div class="col-md-6"><label class="form-label">Compounding Frequency</label><select id="frequency" class="form-select" data-testid="frequency-select-1"><option value="1">Annually</option><option value="2">Semi-Annually</option><option value="4">Quarterly</option><option value="12" selected>Monthly</option><option value="365">Daily</option></select></div>
-        <div class="col-md-6"><label class="form-label">Additional Contributions</label><div class="input-group"><span class="input-group-text">$</span><input type="number" id="contribution" class="form-control" placeholder="e.g., 1200" min="0" data-testid="contribution-number-1" /><select id="contribFreq" class="form-select" style="max-width:130px;border-left:1px solid #ced4da" data-testid="contribfreq-select-1"><option value="12">per month</option><option value="1">per year</option></select></div><div class="field-hint">Optional.</div></div>
-      </div><div class="mt-4 d-flex gap-2"><button class="btn btn-primary" onclick="calculate()" data-testid="calculate-button-1">Calculate</button><button class="btn btn-outline-secondary" onclick="clearForm()" data-testid="clear-button-1">Clear</button></div></div>
-      <div id="results" style="display:none"><div class="calc-card"><div class="row g-3">
-        <div class="col-md-3 col-sm-6"><div class="result-box"><div class="label">Future Value</div><div class="value" id="resFutureValue">—</div></div></div>
-        <div class="col-md-3 col-sm-6"><div class="result-box"><div class="label">Total Principal</div><div class="value" id="resPrincipal">—</div></div></div>
-        <div class="col-md-3 col-sm-6"><div class="result-box"><div class="label">Total Contributions</div><div class="value" id="resContribs">—</div></div></div>
-        <div class="col-md-3 col-sm-6"><div class="result-box"><div class="label">Interest Earned</div><div class="value" id="resInterest">—</div></div></div>
-      </div><div id="chartWrap"><canvas id="growthChart" height="100"></canvas></div></div></div>
+    <main class="py-5" data-testid="principal-amount-annual-interest-rate-ti-main-1"><div class="container" data-testid="principal-amount-div-1">
+      <div class="calc-card" data-testid="principal-amount-div-2"><div class="row g-3" data-testid="principal-amount-div-3">
+        <div class="col-md-6" data-testid="principal-amount-div-4"><label class="form-label" data-testid="principal-amount-label-1">Principal Amount</label><div class="input-group" data-testid="compound-interest-calculator-div-1"><span class="input-group-text" data-testid="compound-interest-calculator-span-1">$</span><input type="number" id="principal" class="form-control" placeholder="e.g., 10000" min="0" data-testid="principal-number-1" /></div></div>
+        <div class="col-md-6" data-testid="annual-interest-rate-div-1"><label class="form-label" data-testid="annual-interest-rate-label-1">Annual Interest Rate (%)</label><div class="input-group" data-testid="compound-interest-calculator-div-2"><span class="input-group-text" data-testid="compound-interest-calculator-span-2">%</span><input type="number" id="rate" class="form-control" placeholder="e.g., 7" min="0" step="0.01" data-testid="rate-number-1" /></div></div>
+        <div class="col-md-6" data-testid="time-period-years-div-1"><label class="form-label" data-testid="time-period-years-label-1">Time Period (years)</label><input type="number" id="years" class="form-control" placeholder="e.g., 20" min="1" max="100" data-testid="years-number-1" /></div>
+        <div class="col-md-6" data-testid="compounding-frequency-annually-semi-annu-div-1"><label class="form-label" data-testid="compounding-frequency-label-1">Compounding Frequency</label><select id="frequency" class="form-select" data-testid="frequency-select-1"><option value="1" data-testid="annually-option-1">Annually</option><option value="2" data-testid="semi-annually-option-1">Semi-Annually</option><option value="4" data-testid="quarterly-option-1">Quarterly</option><option value="12" selected data-testid="monthly-option-1">Monthly</option><option value="365" data-testid="daily-option-1">Daily</option></select></div>
+        <div class="col-md-6" data-testid="additional-contributions-per-month-per-y-div-1"><label class="form-label" data-testid="additional-contributions-label-1">Additional Contributions</label><div class="input-group" data-testid="per-month-per-year-div-1"><span class="input-group-text" data-testid="compound-interest-calculator-span-3">$</span><input type="number" id="contribution" class="form-control" placeholder="e.g., 1200" min="0" data-testid="contribution-number-1" /><select id="contribFreq" class="form-select" style="max-width:130px;border-left:1px solid #ced4da" data-testid="contribfreq-select-1"><option value="12" data-testid="per-month-option-1">per month</option><option value="1" data-testid="per-year-option-1">per year</option></select></div><div class="field-hint" data-testid="optional-div-1">Optional.</div></div>
+      </div><div class="mt-4 d-flex gap-2" data-testid="calculate-clear-div-1"><button class="btn btn-primary" onclick="calculate()" data-testid="calculate-button-1">Calculate</button><button class="btn btn-outline-secondary" onclick="clearForm()" data-testid="clear-button-1">Clear</button></div></div>
+      <div id="results" style="display:none" data-testid="results-div-1"><div class="calc-card" data-testid="future-value-div-1"><div class="row g-3" data-testid="future-value-div-2">
+        <div class="col-md-3 col-sm-6" data-testid="future-value-div-3"><div class="result-box" data-testid="future-value-div-4"><div class="label" data-testid="future-value-div-5">Future Value</div><div class="value" id="resFutureValue" data-testid="resfuturevalue-div-1">—</div></div></div>
+        <div class="col-md-3 col-sm-6" data-testid="total-principal-div-1"><div class="result-box" data-testid="total-principal-div-2"><div class="label" data-testid="total-principal-div-3">Total Principal</div><div class="value" id="resPrincipal" data-testid="resprincipal-div-1">—</div></div></div>
+        <div class="col-md-3 col-sm-6" data-testid="total-contributions-div-1"><div class="result-box" data-testid="total-contributions-div-2"><div class="label" data-testid="total-contributions-div-3">Total Contributions</div><div class="value" id="resContribs" data-testid="rescontribs-div-1">—</div></div></div>
+        <div class="col-md-3 col-sm-6" data-testid="interest-earned-div-1"><div class="result-box" data-testid="interest-earned-div-2"><div class="label" data-testid="interest-earned-div-3">Interest Earned</div><div class="value" id="resInterest" data-testid="resinterest-div-1">—</div></div></div>
+      </div><div id="chartWrap" data-testid="chartwrap-div-1"><canvas id="growthChart" height="100" data-testid="growthchart-canvas-1"></canvas></div></div></div>
     </div></main>
-    <div id="footer-include"></div>
+    <div id="footer-include" data-testid="footer-include-div-1"></div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="include-loader.js"></script>
     <script>

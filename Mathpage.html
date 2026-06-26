@@ -14,17 +14,17 @@
   </head>
   <body>
     <!-- Header injected dynamically -->
-    <div id="header-include"></div>
+    <div id="header-include" data-testid="header-include-div-1"></div>
 
     <!-- HERO -->
-    <header class="py-5 bg-light border-bottom">
-      <div class="container">
-        <div class="row align-items-center">
-          <div class="col-lg-8">
-            <h1 class="display-6 fw-bold mb-2">Basic Statistics Calculator</h1>
-            <p class="lead text-secondary mb-0">
-              Enter three numbers to compute <strong>Maximum</strong>, <strong>Minimum</strong>,
-              <strong>Mean</strong>, <strong>Median</strong>, and <strong>Range</strong>.
+    <header class="py-5 bg-light border-bottom" data-testid="basic-statistics-calculator-enter-three-header-1">
+      <div class="container" data-testid="basic-statistics-calculator-enter-three-div-1">
+        <div class="row align-items-center" data-testid="basic-statistics-calculator-enter-three-div-2">
+          <div class="col-lg-8" data-testid="basic-statistics-calculator-enter-three-div-3">
+            <h1 class="display-6 fw-bold mb-2" data-testid="basic-statistics-calculator-h1-1">Basic Statistics Calculator</h1>
+            <p class="lead text-secondary mb-0" data-testid="enter-three-numbers-to-compute-maximum-m-p-1">
+              Enter three numbers to compute <strong data-testid="maximum-strong-1">Maximum</strong>, <strong data-testid="minimum-strong-1">Minimum</strong>,
+              <strong data-testid="mean-strong-1">Mean</strong>, <strong data-testid="median-strong-1">Median</strong>, and <strong data-testid="range-strong-1">Range</strong>.
             </p>
           </div>
         </div>
@@ -32,33 +32,33 @@
     </header>
 
     <!-- CALCULATOR -->
-    <main class="py-5">
-      <div class="container">
-        <div class="row g-4">
-          <div class="col-lg-7">
-            <div class="card shadow-sm border-0 h-100">
-              <div class="card-body">
-                <h2 class="h4 mb-3">Your Inputs</h2>
-                <p class="text-secondary small mb-4">
+    <main class="py-5" data-testid="your-inputs-this-page-was-built-for-a-cl-main-1">
+      <div class="container" data-testid="your-inputs-this-page-was-built-for-a-cl-div-1">
+        <div class="row g-4" data-testid="your-inputs-this-page-was-built-for-a-cl-div-2">
+          <div class="col-lg-7" data-testid="your-inputs-this-page-was-built-for-a-cl-div-3">
+            <div class="card shadow-sm border-0 h-100" data-testid="your-inputs-this-page-was-built-for-a-cl-div-4">
+              <div class="card-body" data-testid="your-inputs-this-page-was-built-for-a-cl-div-5">
+                <h2 class="h4 mb-3" data-testid="your-inputs-h2-1">Your Inputs</h2>
+                <p class="text-secondary small mb-4" data-testid="this-page-was-built-for-a-class-project-p-1">
                   This page was built for a class project to practice HTML, CSS, JavaScript, and Bootstrap.
                   The form accepts positive/negative numbers and decimals.
                 </p>
 
-                <form class="row g-3" onsubmit="calculate(); return false;">
-                  <div class="col-md-4">
-                    <label for="firstnumber" class="form-label">First number</label>
+                <form class="row g-3" onsubmit="calculate(); return false;" data-testid="first-number-second-number-third-number-form-1">
+                  <div class="col-md-4" data-testid="first-number-div-1">
+                    <label for="firstnumber" class="form-label" data-testid="first-number-label-1">First number</label>
                     <input class="form-control" id="firstnumber" type="number" step="any" placeholder="e.g., 7.5" required data-testid="first-number-number-1" />
                   </div>
-                  <div class="col-md-4">
-                    <label for="secondnumber" class="form-label">Second number</label>
+                  <div class="col-md-4" data-testid="second-number-div-1">
+                    <label for="secondnumber" class="form-label" data-testid="second-number-label-1">Second number</label>
                     <input class="form-control" id="secondnumber" type="number" step="any" placeholder="e.g., -2" required data-testid="second-number-number-1" />
                   </div>
-                  <div class="col-md-4">
-                    <label for="thirdnumber" class="form-label">Third number</label>
+                  <div class="col-md-4" data-testid="third-number-div-1">
+                    <label for="thirdnumber" class="form-label" data-testid="third-number-label-1">Third number</label>
                     <input class="form-control" id="thirdnumber" type="number" step="any" placeholder="e.g., 10" required data-testid="third-number-number-1" />
                   </div>
 
-                  <div class="col-12 d-flex gap-2">
+                  <div class="col-12 d-flex gap-2" data-testid="calculate-clear-div-1">
                     <button id="calcButton" type="submit" class="btn btn-primary btn-lg" data-testid="calcbutton-button-1">Calculate</button>
                     <button type="reset" class="btn btn-outline-secondary" data-testid="clear-button-1">Clear</button>
                   </div>
@@ -67,45 +67,45 @@
             </div>
           </div>
 
-          <div class="col-lg-5">
-            <div class="card shadow-sm border-0 h-100">
-              <div class="card-body">
-                <h2 class="h4 mb-3">Results</h2>
-                <div class="row g-3">
-                  <div class="col-6">
-                    <div class="p-3 border rounded-3 bg-white">
-                      <div class="small text-uppercase text-muted">Max</div>
-                      <div class="fs-4 fw-semibold" id="maximum">—</div>
+          <div class="col-lg-5" data-testid="results-max-div-1">
+            <div class="card shadow-sm border-0 h-100" data-testid="results-max-div-2">
+              <div class="card-body" data-testid="results-max-div-3">
+                <h2 class="h4 mb-3" data-testid="results-h2-1">Results</h2>
+                <div class="row g-3" data-testid="max-div-1">
+                  <div class="col-6" data-testid="max-div-2">
+                    <div class="p-3 border rounded-3 bg-white" data-testid="max-div-3">
+                      <div class="small text-uppercase text-muted" data-testid="max-div-4">Max</div>
+                      <div class="fs-4 fw-semibold" id="maximum" data-testid="maximum-div-1">—</div>
                     </div>
                   </div>
-                  <div class="col-6">
-                    <div class="p-3 border rounded-3 bg-white">
-                      <div class="small text-uppercase text-muted">Min</div>
-                      <div class="fs-4 fw-semibold" id="minimum">—</div>
+                  <div class="col-6" data-testid="min-div-1">
+                    <div class="p-3 border rounded-3 bg-white" data-testid="min-div-2">
+                      <div class="small text-uppercase text-muted" data-testid="min-div-3">Min</div>
+                      <div class="fs-4 fw-semibold" id="minimum" data-testid="minimum-div-1">—</div>
                     </div>
                   </div>
-                  <div class="col-6">
-                    <div class="p-3 border rounded-3 bg-white">
-                      <div class="small text-uppercase text-muted">Mean</div>
-                      <div class="fs-4 fw-semibold" id="mean">—</div>
+                  <div class="col-6" data-testid="mean-div-1">
+                    <div class="p-3 border rounded-3 bg-white" data-testid="mean-div-2">
+                      <div class="small text-uppercase text-muted" data-testid="mean-div-3">Mean</div>
+                      <div class="fs-4 fw-semibold" id="mean" data-testid="mean-div-4">—</div>
                     </div>
                   </div>
-                  <div class="col-6">
-                    <div class="p-3 border rounded-3 bg-white">
-                      <div class="small text-uppercase text-muted">Median</div>
-                      <div class="fs-4 fw-semibold" id="median">—</div>
+                  <div class="col-6" data-testid="median-div-1">
+                    <div class="p-3 border rounded-3 bg-white" data-testid="median-div-2">
+                      <div class="small text-uppercase text-muted" data-testid="median-div-3">Median</div>
+                      <div class="fs-4 fw-semibold" id="median" data-testid="median-div-4">—</div>
                     </div>
                   </div>
-                  <div class="col-12">
-                    <div class="p-3 border rounded-3 bg-white">
-                      <div class="small text-uppercase text-muted">Range</div>
-                      <div class="fs-4 fw-semibold" id="range">—</div>
+                  <div class="col-12" data-testid="range-div-1">
+                    <div class="p-3 border rounded-3 bg-white" data-testid="range-div-2">
+                      <div class="small text-uppercase text-muted" data-testid="range-div-3">Range</div>
+                      <div class="fs-4 fw-semibold" id="range" data-testid="range-div-4">—</div>
                     </div>
                   </div>
                 </div>
 
-                <p class="small text-secondary mt-3 mb-0">
-                  Tip: Press <kbd>Enter</kbd> in any field to calculate.
+                <p class="small text-secondary mt-3 mb-0" data-testid="tip-press-enter-in-any-field-to-calculat-p-1">
+                  Tip: Press <kbd data-testid="enter-kbd-1">Enter</kbd> in any field to calculate.
                 </p>
               </div>
             </div>
@@ -115,7 +115,7 @@
     </main>
 
     <!-- Footer injected dynamically -->
-    <div id="footer-include"></div>
+    <div id="footer-include" data-testid="footer-include-div-1"></div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Loader that pulls in header & footer -->

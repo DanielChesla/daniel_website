@@ -16,59 +16,59 @@
   </head>
   <body>
     <!-- Header injected dynamically -->
-    <div id="header-include"></div>
+    <div id="header-include" data-testid="header-include-div-1"></div>
 
-    <header class="py-5 bg-light border-bottom">
-      <div class="container">
-        <div class="row align-items-center">
-          <div class="col-lg-8">
-            <h1 class="display-6 fw-bold mb-2">Contact</h1>
-            <p class="lead text-secondary mb-0">Send a message—I'll get back to you.</p>
+    <header class="py-5 bg-light border-bottom" data-testid="contact-send-a-message-i-ll-get-back-to-header-1">
+      <div class="container" data-testid="contact-send-a-message-i-ll-get-back-to-div-1">
+        <div class="row align-items-center" data-testid="contact-send-a-message-i-ll-get-back-to-div-2">
+          <div class="col-lg-8" data-testid="contact-send-a-message-i-ll-get-back-to-div-3">
+            <h1 class="display-6 fw-bold mb-2" data-testid="contact-h1-1">Contact</h1>
+            <p class="lead text-secondary mb-0" data-testid="send-a-message-i-ll-get-back-to-you-p-1">Send a message—I'll get back to you.</p>
           </div>
         </div>
       </div>
     </header>
 
-    <main class="py-5">
-      <div class="container">
-        <div class="row g-4">
-          <div class="col-lg-7">
-            <div class="card shadow-sm border-0 h-100">
-              <div class="card-body">
-                <h2 class="h4 mb-3">Message</h2>
+    <main class="py-5" data-testid="message-website-name-email-subject-messa-main-1">
+      <div class="container" data-testid="message-website-div-1">
+        <div class="row g-4" data-testid="message-website-div-2">
+          <div class="col-lg-7" data-testid="message-website-div-3">
+            <div class="card shadow-sm border-0 h-100" data-testid="message-website-div-4">
+              <div class="card-body" data-testid="message-website-div-5">
+                <h2 class="h4 mb-3" data-testid="message-h2-1">Message</h2>
 
                 <!-- HTML fallback: native POST to Formspree (works even if JS is disabled) -->
-                <form id="contactForm" class="row g-3" action="https://formspree.io/f/xandewoo" method="POST" onsubmit="return handleAjaxSubmit(event)">
-                  <div class="hidden-honeypot">
-                    <label for="website">Website</label>
+                <form id="contactForm" class="row g-3" action="https://formspree.io/f/xandewoo" method="POST" onsubmit="return handleAjaxSubmit(event)" data-testid="contactform-form-1">
+                  <div class="hidden-honeypot" data-testid="website-div-1">
+                    <label for="website" data-testid="website-label-1">Website</label>
                     <input id="website" type="text" name="website" autocomplete="off" tabindex="-1" data-testid="website-text-1" />
                   </div>
 
-                  <div class="col-md-6">
-                    <label for="name" class="form-label">Name</label>
+                  <div class="col-md-6" data-testid="name-div-1">
+                    <label for="name" class="form-label" data-testid="name-label-1">Name</label>
                     <input type="text" class="form-control" id="name" name="name" placeholder="Your name" required data-testid="name-text-1" />
                   </div>
 
-                  <div class="col-md-6">
-                    <label for="email" class="form-label">Email</label>
+                  <div class="col-md-6" data-testid="email-div-1">
+                    <label for="email" class="form-label" data-testid="email-label-1">Email</label>
                     <input type="email" class="form-control" id="email" name="email" placeholder="you@example.com" required data-testid="email-email-1" />
                   </div>
 
-                  <div class="col-12">
-                    <label for="subject" class="form-label">Subject</label>
+                  <div class="col-12" data-testid="subject-div-1">
+                    <label for="subject" class="form-label" data-testid="subject-label-1">Subject</label>
                     <input type="text" class="form-control" id="subject" name="subject" placeholder="What’s this about?" required data-testid="subject-text-1" />
                   </div>
 
-                  <div class="col-12">
-                    <label for="message" class="form-label">Message</label>
+                  <div class="col-12" data-testid="message-div-1">
+                    <label for="message" class="form-label" data-testid="message-label-1">Message</label>
                     <textarea class="form-control" id="message" name="message" rows="6" placeholder="Write your message here..." required data-testid="message-textarea-1"></textarea>
                   </div>
 
-                  <input type="hidden" name="_subject" value="Website contact" />
-                  <input type="hidden" name="_language" value="en" />
-                  <input type="hidden" name="_origin" value="" id="originField" />
+                  <input type="hidden" name="_subject" value="Website contact" data-testid="subject-hidden-1" />
+                  <input type="hidden" name="_language" value="en" data-testid="language-hidden-1" />
+                  <input type="hidden" name="_origin" value="" id="originField" data-testid="origin-hidden-1" />
 
-                  <div class="col-12 d-flex gap-2">
+                  <div class="col-12 d-flex gap-2" data-testid="send-clear-div-1">
                     <button type="submit" class="btn btn-primary btn-lg" data-testid="send-button-1">Send</button>
                     <button type="reset" class="btn btn-outline-secondary" onclick="clearAlerts()" data-testid="clear-button-1">Clear</button>
                   </div>
@@ -76,26 +76,26 @@
 
                 <div id="contactAlert" class="alert alert-success mt-3 d-none" role="alert" data-testid="contactalert-div-1">Thanks! Your message was sent.</div>
                 <div id="contactError" class="alert alert-danger mt-3 d-none" role="alert" data-testid="contacterror-div-1">Sorry, something went wrong. Please try again.</div>
-                <p class="small text-secondary mt-3 mb-0">
-                  Powered by Formspree (<code>https://formspree.io/f/xandewoo</code>). This form uses AJAX when JS is enabled, and falls back to a regular POST when it’s not.
+                <p class="small text-secondary mt-3 mb-0" data-testid="powered-by-formspree-https-formspree-io-p-1">
+                  Powered by Formspree (<code data-testid="https-formspree-io-f-xandewoo-code-1">https://formspree.io/f/xandewoo</code>). This form uses AJAX when JS is enabled, and falls back to a regular POST when it’s not.
                 </p>
               </div>
             </div>
           </div>
 
-          <div class="col-lg-5">
-            <div class="card shadow-sm border-0 h-100">
-              <div class="card-body">
-                <h2 class="h4 mb-3">Other ways</h2>
-                <ul class="list-unstyled mb-0">
-                  <li class="mb-2"><strong>Email:</strong> <a href="mailto:daniel.j.chesla@gmail.com" data-testid="daniel-j-chesla-gmail-com-link-1">daniel.j.chesla@gmail.com</a></li>
-                  <li class="mb-2"><strong>GitHub:</strong> <a href="https://github.com/danielchesla" data-testid="github-com-danielchesla-link-1">github.com/danielchesla</a></li>
-                  <li class="mb-2"><strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/daniel-j-chesla/" data-testid="connect-on-linkedin-link-1">connect on LinkedIn</a></li>
+          <div class="col-lg-5" data-testid="other-ways-email-daniel-j-chesla-gmail-c-div-1">
+            <div class="card shadow-sm border-0 h-100" data-testid="other-ways-email-daniel-j-chesla-gmail-c-div-2">
+              <div class="card-body" data-testid="other-ways-email-daniel-j-chesla-gmail-c-div-3">
+                <h2 class="h4 mb-3" data-testid="other-ways-h2-1">Other ways</h2>
+                <ul class="list-unstyled mb-0" data-testid="email-daniel-j-chesla-gmail-com-github-g-ul-1">
+                  <li class="mb-2" data-testid="email-daniel-j-chesla-gmail-com-li-1"><strong data-testid="email-strong-1">Email:</strong> <a href="mailto:daniel.j.chesla@gmail.com" data-testid="daniel-j-chesla-gmail-com-link-1">daniel.j.chesla@gmail.com</a></li>
+                  <li class="mb-2" data-testid="github-github-com-danielchesla-li-1"><strong data-testid="github-strong-1">GitHub:</strong> <a href="https://github.com/danielchesla" data-testid="github-com-danielchesla-link-1">github.com/danielchesla</a></li>
+                  <li class="mb-2" data-testid="linkedin-connect-on-linkedin-li-1"><strong data-testid="linkedin-strong-1">LinkedIn:</strong> <a href="https://www.linkedin.com/in/daniel-j-chesla/" data-testid="connect-on-linkedin-link-1">connect on LinkedIn</a></li>
                 </ul>
 
-                      <hr class="my-4">
+                      <hr class="my-4" data-testid="other-ways-hr-1">
 
-      <div class="resume-download">
+      <div class="resume-download" data-testid="download-executive-resume-detailed-leade-div-1">
 
         <a href="Daniel_Chesla_Resume.docx"
            class="btn btn-ghost btn-lg w-100"
@@ -103,7 +103,7 @@
           Download Executive Resume
         </a>
 
-        <p class="resume-note mt-3 mb-0">
+        <p class="resume-note mt-3 mb-0" data-testid="detailed-leadership-experience-enterpris-p-1">
           Detailed leadership experience, enterprise transformation initiatives,
           technical expertise, and certifications.
         </p>
@@ -122,7 +122,7 @@
     </main>
 
     <!-- Footer injected dynamically -->
-    <div id="footer-include"></div>
+    <div id="footer-include" data-testid="footer-include-div-1"></div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Shared header/footer loader (relative fetch paths) -->

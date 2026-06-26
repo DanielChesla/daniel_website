@@ -24,11 +24,18 @@
       <div class="container" data-testid="playwright-test-runner-click-run-to-trig-div-1">
         <h1 class="mb-2" data-testid="playwright-test-runner-h1-1">Playwright Test Runner</h1>
         <p class="text-secondary" data-testid="click-run-to-trigger-the-site-s-smoke-te-p-1">
-          Click run to trigger the site's smoke-test suite on GitHub Actions. Results stream back here when the run finishes
-          (about a minute). The suite checks the navigation, contact form, and image generator against the live site.
+          Pick a test group (or run them all) and click run to trigger the suite on GitHub Actions against the live site.
+          Results stream back here when the run finishes (about a minute).
         </p>
 
         <div class="d-flex align-items-center gap-3 flex-wrap mb-2" data-testid="run-tests-view-full-html-report-view-run-div-1">
+          <label for="groupSelect" class="form-label mb-0" data-testid="test-group-label-1">Test group:</label>
+          <select id="groupSelect" class="form-select" style="max-width:280px" data-testid="group-select-1">
+            <option value="all">All tests</option>
+            <option value="profile">Profile Page</option>
+            <option value="contact">Contact Page</option>
+            <option value="labs">Mentoring/Training Labs</option>
+          </select>
           <button id="runBtn" class="btn btn-primary" data-testid="runbtn-button-1">▶ Run tests</button>
           <a id="reportLink" class="btn btn-outline-secondary d-none" target="_blank" rel="noopener" data-testid="reportlink-link-1">View full HTML report ↗</a>
           <a id="runLink" class="small d-none" target="_blank" rel="noopener" data-testid="runlink-link-1">View run on GitHub ↗</a>
@@ -46,6 +53,7 @@
     <script>
       (function () {
         const runBtn = document.getElementById("runBtn");
+        const groupSelect = document.getElementById("groupSelect");
         const reportLink = document.getElementById("reportLink");
         const runLink = document.getElementById("runLink");
         const statusEl = document.getElementById("status");
@@ -131,14 +139,16 @@
           reportLink.classList.add("d-none");
           runLink.classList.add("d-none");
           resultsEl.innerHTML = "";
-          setStatus("Dispatching the workflow…", "primary", true);
+          const group = groupSelect.value;
+          const groupLabel = groupSelect.options[groupSelect.selectedIndex].text;
+          setStatus("Dispatching the workflow — " + groupLabel + "…", "primary", true);
           try {
-            const res = await fetch("/api/run-tests", { method: "POST" });
+            const res = await fetch("/api/run-tests?group=" + encodeURIComponent(group), { method: "POST" });
             const d = await res.json();
             if (!res.ok || !d.ok) throw new Error(d.error || "dispatch failed");
             startedAt = d.dispatchedAt;
             deadline = Date.now() + MAX_MS;
-            setStatus("Queued — waiting for the run to start…", "primary", true);
+            setStatus("Queued — waiting for the run to start (" + groupLabel + ")…", "primary", true);
             setTimeout(poll, POLL_MS);
           } catch (e) {
             setStatus("Error: " + (e.message || e), "danger");

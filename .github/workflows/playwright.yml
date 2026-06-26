@@ -9,6 +9,12 @@ on:
       - "archive/**"
       - "**/*.md"
   workflow_dispatch:
+    inputs:
+      group:
+        description: "Which test group to run"
+        type: choice
+        default: all
+        options: [all, profile, contact, labs]
 
 permissions:
   contents: read
@@ -37,7 +43,13 @@ jobs:
         run: npx playwright install --with-deps chromium
 
       - name: Run Playwright tests
-        run: npx playwright test
+        run: |
+          case "${{ github.event.inputs.group || 'all' }}" in
+            profile) npx playwright test tests/profile.spec.js ;;
+            contact) npx playwright test tests/contact.spec.js ;;
+            labs)    npx playwright test tests/labs.spec.js ;;
+            *)       npx playwright test ;;
+          esac
 
       - name: Write results to job summary
         if: always()

@@ -17,6 +17,11 @@ export default async function handler(req, res) {
   const token = process.env.GH_DISPATCH_TOKEN;
   if (!token) return res.status(500).json({ error: "GH_DISPATCH_TOKEN is not configured on the server." });
 
+  // Which test group to run (must match the workflow's choice options).
+  const ALLOWED = new Set(["all", "profile", "contact", "labs"]);
+  let group = (req.query && req.query.group) || "all";
+  if (!ALLOWED.has(group)) group = "all";
+
   try {
     const r = await fetch(`https://api.github.com/repos/${REPO}/actions/workflows/${WORKFLOW}/dispatches`, {
       method: "POST",
@@ -26,13 +31,13 @@ export default async function handler(req, res) {
         "Content-Type": "application/json",
         "User-Agent": "danielchesla-site",
       },
-      body: JSON.stringify({ ref: "main" }),
+      body: JSON.stringify({ ref: "main", inputs: { group } }),
     });
     if (r.status !== 204) {
       const detail = (await r.text()).slice(0, 300);
       return res.status(502).json({ error: `dispatch failed (HTTP ${r.status})`, detail });
     }
-    return res.status(200).json({ ok: true, dispatchedAt: new Date().toISOString() });
+    return res.status(200).json({ ok: true, group, dispatchedAt: new Date().toISOString() });
   } catch (e) {
     return res.status(502).json({ error: String(e.message || e) });
   }

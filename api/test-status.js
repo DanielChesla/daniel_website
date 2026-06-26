@@ -59,12 +59,17 @@ export default async function handler(req, res) {
 
     if (run.status === "completed") {
       out.reportUrl = PAGES + "/";
+      out.resultsReady = false;
       try {
-        const rj = await fetch(`${PAGES}/results.json?cb=${Date.now()}`, {
-          headers: { "User-Agent": "danielchesla-site" },
-        });
-        if (rj.ok) out.results = summarize(await rj.json());
-      } catch { /* report may lag briefly; page can still link out */ }
+        // Only trust the Pages report if it was stamped with THIS run's id —
+        // otherwise it belongs to a different/earlier run (shared Pages report).
+        const idRes = await fetch(`${PAGES}/run-id.txt?cb=${Date.now()}`, { headers: { "User-Agent": "danielchesla-site" } });
+        const stamped = idRes.ok ? (await idRes.text()).trim() : "";
+        if (stamped === String(run.id)) {
+          const rj = await fetch(`${PAGES}/results.json?cb=${Date.now()}`, { headers: { "User-Agent": "danielchesla-site" } });
+          if (rj.ok) { out.results = summarize(await rj.json()); out.resultsReady = true; }
+        }
+      } catch { /* report still syncing; page keeps polling */ }
     }
     return res.status(200).json(out);
   } catch (e) {

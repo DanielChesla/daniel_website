@@ -116,15 +116,18 @@
               setStatus("Queued — waiting for the run to start…", "primary", true);
             } else if (d.state !== "completed") {
               setStatus("Running tests on GitHub Actions…", "primary", true);
+            } else if (d.conclusion === "success" && !d.resultsReady) {
+              // Run finished but the report for THIS run hasn't synced yet — keep waiting.
+              setStatus("Run finished — syncing this run's results…", "primary", true);
             } else {
               const ok = d.conclusion === "success";
               setStatus(
-                (ok ? "✅ All tests passed" : "❌ Tests failed") + " (conclusion: " + d.conclusion + ")",
+                (ok ? "✅ All tests passed" : "❌ Run " + d.conclusion) + (ok ? "" : " (see report/run)"),
                 ok ? "success" : "danger"
               );
               if (d.reportUrl) showLink(reportLink, d.reportUrl);
-              if (d.results) renderResults(d.results);
-              else resultsEl.innerHTML = '<div class="text-secondary small">Report is finalizing — open the full report for details.</div>';
+              if (d.resultsReady && d.results) renderResults(d.results);
+              else resultsEl.innerHTML = '<div class="text-secondary small">No synced results for this run — open the full report for details.</div>';
               runBtn.disabled = false;
               return;
             }

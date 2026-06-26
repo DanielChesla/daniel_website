@@ -21,9 +21,11 @@ permissions:
   pages: write
   id-token: write
 
+# Serialize runs so each one completes and publishes its report in order
+# (avoids cancelling a user-triggered run and racing the shared Pages report).
 concurrency:
   group: playwright-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   test:
@@ -50,6 +52,12 @@ jobs:
             labs)    npx playwright test tests/labs.spec.js ;;
             *)       npx playwright test ;;
           esac
+
+      - name: Stamp report with this run's id
+        if: always()
+        run: |
+          mkdir -p playwright-report
+          echo -n "${{ github.run_id }}" > playwright-report/run-id.txt
 
       - name: Write results to job summary
         if: always()

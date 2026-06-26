@@ -72,6 +72,9 @@ a:hover{color:var(--accent);}
 }
 .navbar .nav-link:hover,
 .navbar .nav-link:focus{color:var(--text);}
+/* Active page link (set by include-loader) — use the light accent so it
+   doesn't blend into the dark header. Matches the .eyebrow tagline color. */
+.navbar .nav-link.active{color:var(--accent) !important;}
 .navbar-toggler{
   border-color:var(--border);
   background:rgba(255,255,255,.03);

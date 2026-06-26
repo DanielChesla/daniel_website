@@ -41,27 +41,27 @@
                 <form id="contactForm" class="row g-3" action="https://formspree.io/f/xandewoo" method="POST" onsubmit="return handleAjaxSubmit(event)">
                   <div class="hidden-honeypot">
                     <label for="website">Website</label>
-                    <input id="website" type="text" name="website" autocomplete="off" tabindex="-1" />
+                    <input id="website" type="text" name="website" autocomplete="off" tabindex="-1" data-testid="website-text-1" />
                   </div>
 
                   <div class="col-md-6">
                     <label for="name" class="form-label">Name</label>
-                    <input type="text" class="form-control" id="name" name="name" placeholder="Your name" required />
+                    <input type="text" class="form-control" id="name" name="name" placeholder="Your name" required data-testid="name-text-1" />
                   </div>
 
                   <div class="col-md-6">
                     <label for="email" class="form-label">Email</label>
-                    <input type="email" class="form-control" id="email" name="email" placeholder="you@example.com" required />
+                    <input type="email" class="form-control" id="email" name="email" placeholder="you@example.com" required data-testid="email-email-1" />
                   </div>
 
                   <div class="col-12">
                     <label for="subject" class="form-label">Subject</label>
-                    <input type="text" class="form-control" id="subject" name="subject" placeholder="What’s this about?" required />
+                    <input type="text" class="form-control" id="subject" name="subject" placeholder="What’s this about?" required data-testid="subject-text-1" />
                   </div>
 
                   <div class="col-12">
                     <label for="message" class="form-label">Message</label>
-                    <textarea class="form-control" id="message" name="message" rows="6" placeholder="Write your message here..." required></textarea>
+                    <textarea class="form-control" id="message" name="message" rows="6" placeholder="Write your message here..." required data-testid="message-textarea-1"></textarea>
                   </div>
 
                   <input type="hidden" name="_subject" value="Website contact" />
@@ -69,13 +69,13 @@
                   <input type="hidden" name="_origin" value="" id="originField" />
 
                   <div class="col-12 d-flex gap-2">
-                    <button type="submit" class="btn btn-primary btn-lg">Send</button>
-                    <button type="reset" class="btn btn-outline-secondary" onclick="clearAlerts()">Clear</button>
+                    <button type="submit" class="btn btn-primary btn-lg" data-testid="send-button-1">Send</button>
+                    <button type="reset" class="btn btn-outline-secondary" onclick="clearAlerts()" data-testid="clear-button-1">Clear</button>
                   </div>
                 </form>
 
-                <div id="contactAlert" class="alert alert-success mt-3 d-none" role="alert">Thanks! Your message was sent.</div>
-                <div id="contactError" class="alert alert-danger mt-3 d-none" role="alert">Sorry, something went wrong. Please try again.</div>
+                <div id="contactAlert" class="alert alert-success mt-3 d-none" role="alert" data-testid="contactalert-div-1">Thanks! Your message was sent.</div>
+                <div id="contactError" class="alert alert-danger mt-3 d-none" role="alert" data-testid="contacterror-div-1">Sorry, something went wrong. Please try again.</div>
                 <p class="small text-secondary mt-3 mb-0">
                   Powered by Formspree (<code>https://formspree.io/f/xandewoo</code>). This form uses AJAX when JS is enabled, and falls back to a regular POST when it’s not.
                 </p>
@@ -88,9 +88,9 @@
               <div class="card-body">
                 <h2 class="h4 mb-3">Other ways</h2>
                 <ul class="list-unstyled mb-0">
-                  <li class="mb-2"><strong>Email:</strong> <a href="mailto:daniel.j.chesla@gmail.com">daniel.j.chesla@gmail.com</a></li>
-                  <li class="mb-2"><strong>GitHub:</strong> <a href="https://github.com/danielchesla">github.com/danielchesla</a></li>
-                  <li class="mb-2"><strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/daniel-j-chesla/">connect on LinkedIn</a></li>
+                  <li class="mb-2"><strong>Email:</strong> <a href="mailto:daniel.j.chesla@gmail.com" data-testid="daniel-j-chesla-gmail-com-link-1">daniel.j.chesla@gmail.com</a></li>
+                  <li class="mb-2"><strong>GitHub:</strong> <a href="https://github.com/danielchesla" data-testid="github-com-danielchesla-link-1">github.com/danielchesla</a></li>
+                  <li class="mb-2"><strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/daniel-j-chesla/" data-testid="connect-on-linkedin-link-1">connect on LinkedIn</a></li>
                 </ul>
 
                       <hr class="my-4">
@@ -99,7 +99,7 @@
 
         <a href="Daniel_Chesla_Resume.docx"
            class="btn btn-ghost btn-lg w-100"
-           download>
+           download data-testid="download-executive-resume-link-1">
           Download Executive Resume
         </a>
 

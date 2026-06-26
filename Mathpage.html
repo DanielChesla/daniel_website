@@ -47,20 +47,20 @@
                 <form class="row g-3" onsubmit="calculate(); return false;">
                   <div class="col-md-4">
                     <label for="firstnumber" class="form-label">First number</label>
-                    <input class="form-control" id="firstnumber" type="number" step="any" placeholder="e.g., 7.5" required />
+                    <input class="form-control" id="firstnumber" type="number" step="any" placeholder="e.g., 7.5" required data-testid="first-number-number-1" />
                   </div>
                   <div class="col-md-4">
                     <label for="secondnumber" class="form-label">Second number</label>
-                    <input class="form-control" id="secondnumber" type="number" step="any" placeholder="e.g., -2" required />
+                    <input class="form-control" id="secondnumber" type="number" step="any" placeholder="e.g., -2" required data-testid="second-number-number-1" />
                   </div>
                   <div class="col-md-4">
                     <label for="thirdnumber" class="form-label">Third number</label>
-                    <input class="form-control" id="thirdnumber" type="number" step="any" placeholder="e.g., 10" required />
+                    <input class="form-control" id="thirdnumber" type="number" step="any" placeholder="e.g., 10" required data-testid="third-number-number-1" />
                   </div>
 
                   <div class="col-12 d-flex gap-2">
-                    <button id="calcButton" type="submit" class="btn btn-primary btn-lg">Calculate</button>
-                    <button type="reset" class="btn btn-outline-secondary">Clear</button>
+                    <button id="calcButton" type="submit" class="btn btn-primary btn-lg" data-testid="calcbutton-button-1">Calculate</button>
+                    <button type="reset" class="btn btn-outline-secondary" data-testid="clear-button-1">Clear</button>
                   </div>
                 </form>
               </div>

@@ -14,12 +14,12 @@
     <main class="py-5">
       <div class="container">
         <h1 class="mb-4">Image Generator</h1>
-        <p class="text-secondary">Choose options and we’ll create a prompt and generate an image — free, no sign-up, powered by <a href="https://pollinations.ai" target="_blank" rel="noopener">Pollinations.ai</a>.</p>
+        <p class="text-secondary">Choose options and we’ll create a prompt and generate an image — free, no sign-up, powered by <a href="https://pollinations.ai" target="_blank" rel="noopener" data-testid="pollinations-ai-link-1">Pollinations.ai</a>.</p>
 
         <form id="imageForm" class="row g-3 mb-4">
           <div class="col-md-4">
             <label class="form-label">Background</label>
-            <select id="background" class="form-select">
+            <select id="background" class="form-select" data-testid="background-select-1">
               <option>City New York</option>
               <option>City London</option>
               <option>City Tokyo</option>
@@ -34,7 +34,7 @@
           </div>
           <div class="col-md-4">
             <label class="form-label">Character Style</label>
-            <select id="style" class="form-select">
+            <select id="style" class="form-select" data-testid="style-select-1">
               <option>Disney style</option>
               <option>Anime style</option>
               <option>Family Guy style</option>
@@ -45,7 +45,7 @@
           </div>
           <div class="col-md-4">
             <label class="form-label">Character Mix</label>
-            <select id="mix" class="form-select">
+            <select id="mix" class="form-select" data-testid="mix-select-1">
               <option>Male and Female group of friends</option>
               <option>Male group of friends</option>
               <option>Female group of friends</option>
@@ -58,7 +58,7 @@
           </div>
           <div class="col-md-4">
             <label class="form-label">Realism Level</label>
-            <select id="realism" class="form-select">
+            <select id="realism" class="form-select" data-testid="realism-select-1">
               <option>Most Realistic: “photo-realistic, highly detailed, natural lighting, true-to-life colors”</option>
               <option>Semi-Realistic: “realistic with slight stylization, softer edges, mild artistic feel”</option>
               <option>Balanced / Stylized: “blend of realism and cartoon, simplified details, moderate stylization”</option>
@@ -68,8 +68,8 @@
           </div>
 
           <div class="col-12">
-            <button type="submit" class="btn btn-primary" id="generateBtn">Generate Image</button>
-            <button type="button" id="copyPrompt" class="btn btn-outline-secondary">Copy Prompt</button>
+            <button type="submit" class="btn btn-primary" id="generateBtn" data-testid="generatebtn-button-1">Generate Image</button>
+            <button type="button" id="copyPrompt" class="btn btn-outline-secondary" data-testid="copyprompt-button-1">Copy Prompt</button>
           </div>
         </form>
 

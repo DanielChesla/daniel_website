@@ -50,14 +50,14 @@
                       <label for="salePrice" class="form-label">Sale Price</label>
                       <div class="input-group">
                         <span class="input-group-text">$</span>
-                        <input type="number" class="form-control" id="salePrice" placeholder="e.g., 350000" min="0" step="0.01" required>
+                        <input type="number" class="form-control" id="salePrice" placeholder="e.g., 350000" min="0" step="0.01" required data-testid="sale-price-number-1">
                       </div>
                     </div>
                     <div class="col-md-6">
                       <label for="downPayment" class="form-label">Down Payment</label>
                       <div class="input-group">
                         <span class="input-group-text">$</span>
-                        <input type="number" class="form-control" id="downPayment" placeholder="e.g., 70000" min="0" step="0.01" required>
+                        <input type="number" class="form-control" id="downPayment" placeholder="e.g., 70000" min="0" step="0.01" required data-testid="down-payment-number-1">
                       </div>
                     </div>
 
@@ -66,7 +66,7 @@
                       <label for="principal" class="form-label">Borrowed Amount</label>
                       <div class="input-group">
                         <span class="input-group-text">$</span>
-                        <input type="number" class="form-control" id="principal" value="0" readonly>
+                        <input type="number" class="form-control" id="principal" value="0" readonly data-testid="borrowed-amount-number-1">
                       </div>
                       <div id="principalWarn" class="form-text text-warning d-none">
                         Down payment exceeds sale price. Borrowed amount set to $0.00.
@@ -75,11 +75,11 @@
 
                     <div class="col-md-3">
                       <label for="interest" class="form-label">Annual Interest Rate (%)</label>
-                      <input type="number" class="form-control" step="0.01" id="interest" placeholder="e.g., 6.75" required>
+                      <input type="number" class="form-control" step="0.01" id="interest" placeholder="e.g., 6.75" required data-testid="annual-interest-rate-number-1">
                     </div>
                     <div class="col-md-3">
                       <label for="term" class="form-label">Loan Term (years)</label>
-                      <input type="number" class="form-control" step="1" id="term" placeholder="e.g., 30" required>
+                      <input type="number" class="form-control" step="1" id="term" placeholder="e.g., 30" required data-testid="loan-term-years-number-1">
                     </div>
 
                     <!-- Property tax -->
@@ -87,8 +87,8 @@
                       <label for="propertyTax" class="form-label">Property Tax</label>
                       <div class="input-group">
                         <span class="input-group-text">$</span>
-                        <input type="number" class="form-control" id="propertyTax" placeholder="e.g., 7200" min="0" step="0.01">
-                        <select id="taxPeriod" class="form-select" style="max-width: 10rem">
+                        <input type="number" class="form-control" id="propertyTax" placeholder="e.g., 7200" min="0" step="0.01" data-testid="property-tax-number-1">
+                        <select id="taxPeriod" class="form-select" style="max-width: 10rem" data-testid="taxperiod-select-1">
                           <option value="year" selected>per year</option>
                           <option value="month">per month</option>
                         </select>
@@ -103,8 +103,8 @@
                       <label for="homeIns" class="form-label">Homeowners Insurance</label>
                       <div class="input-group">
                         <span class="input-group-text">$</span>
-                        <input type="number" class="form-control" id="homeIns" placeholder="e.g., 1800" min="0" step="0.01">
-                        <select id="insPeriod" class="form-select" style="max-width: 10rem">
+                        <input type="number" class="form-control" id="homeIns" placeholder="e.g., 1800" min="0" step="0.01" data-testid="homeowners-insurance-number-1">
+                        <select id="insPeriod" class="form-select" style="max-width: 10rem" data-testid="insperiod-select-1">
                           <option value="year" selected>per year</option>
                           <option value="month">per month</option>
                         </select>
@@ -116,8 +116,8 @@
                   </div>
 
                   <div class="mt-3 d-flex gap-2">
-                    <button type="submit" class="btn btn-primary">Calculate</button>
-                    <button type="button" class="btn btn-outline-secondary" onclick="resetAmortization()">Clear</button>
+                    <button type="submit" class="btn btn-primary" data-testid="calculate-button-1">Calculate</button>
+                    <button type="button" class="btn btn-outline-secondary" onclick="resetAmortization()" data-testid="clear-button-1">Clear</button>
                   </div>
                 </form>
               </div>

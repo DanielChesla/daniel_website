@@ -36,12 +36,12 @@
                 <form class="row g-3" onsubmit="event.preventDefault(); const z=document.getElementById('zip').value.trim(); if(z) getWeather(z);">
                   <div class="col-12">
                     <label for="zip" class="form-label">ZIP code</label>
-                    <input type="text" class="form-control" id="zip" placeholder="e.g., 33431" required />
+                    <input type="text" class="form-control" id="zip" placeholder="e.g., 33431" required data-testid="zip-code-text-1" />
                     <div class="form-text">Your current weather.js expects a ZIP.</div>
                   </div>
                   <div class="col-12 d-flex gap-2">
-                    <button type="submit" class="btn btn-primary btn-lg">Get Weather</button>
-                    <button type="reset" class="btn btn-outline-secondary" onclick="document.getElementById('weather').innerHTML='';">Clear</button>
+                    <button type="submit" class="btn btn-primary btn-lg" data-testid="get-weather-button-1">Get Weather</button>
+                    <button type="reset" class="btn btn-outline-secondary" onclick="document.getElementById('weather').innerHTML='';" data-testid="clear-button-1">Clear</button>
                   </div>
                 </form>
               </div>

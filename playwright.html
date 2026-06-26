@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Playwright Test Runner · Daniel Chesla</title>
+    <meta name="description" content="Trigger the site's Playwright smoke-test suite on GitHub Actions and watch the results live." />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="style1.css" />
+    <style>
+      .pw-test-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid rgba(128,128,128,.2); }
+      .pw-test-row:last-child { border-bottom: none; }
+      .pw-badge { font-size: 1.1rem; width: 1.4rem; text-align: center; flex-shrink: 0; }
+      .pw-title { flex: 1; }
+      .pw-ms { color: #8b949e; font-variant-numeric: tabular-nums; font-size: .85rem; }
+      .pw-summary-num { font-variant-numeric: tabular-nums; font-weight: 700; }
+      #results { max-width: 720px; }
+    </style>
+  </head>
+  <body>
+    <div id="header-include"></div>
+
+    <main class="py-5">
+      <div class="container">
+        <h1 class="mb-2">Playwright Test Runner</h1>
+        <p class="text-secondary">
+          Click run to trigger the site's smoke-test suite on GitHub Actions. Results stream back here when the run finishes
+          (about a minute). The suite checks the navigation, contact form, and image generator against the live site.
+        </p>
+
+        <div class="d-flex align-items-center gap-3 flex-wrap mb-2">
+          <button id="runBtn" class="btn btn-primary" data-testid="run-tests-button-1">▶ Run tests</button>
+          <a id="reportLink" class="btn btn-outline-secondary d-none" target="_blank" rel="noopener" data-testid="view-report-link-1">View full HTML report ↗</a>
+          <a id="runLink" class="small d-none" target="_blank" rel="noopener" data-testid="view-run-link-1">View run on GitHub ↗</a>
+        </div>
+
+        <div id="status" class="mt-3"></div>
+        <div id="results" class="mt-3"></div>
+      </div>
+    </main>
+
+    <div id="footer-include"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="include-loader.js"></script>
+    <script>
+      (function () {
+        const runBtn = document.getElementById("runBtn");
+        const reportLink = document.getElementById("reportLink");
+        const runLink = document.getElementById("runLink");
+        const statusEl = document.getElementById("status");
+        const resultsEl = document.getElementById("results");
+
+        const POLL_MS = 4000;
+        const MAX_MS = 6 * 60 * 1000; // give up after 6 minutes
+        let startedAt = null;
+        let deadline = 0;
+
+        function setStatus(message, kind, spinner) {
+          const sp = spinner
+            ? '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>'
+            : "";
+          statusEl.innerHTML = '<div class="alert alert-' + (kind || "info") + ' mb-0">' + sp + message + "</div>";
+        }
+
+        function showLink(el, href) { el.href = href; el.classList.remove("d-none"); }
+
+        function renderResults(r) {
+          const rows = r.tests
+            .map(
+              (t) =>
+                '<div class="pw-test-row"><span class="pw-badge">' +
+                (t.ok ? "✅" : "❌") +
+                '</span><span class="pw-title">' +
+                t.title +
+                '</span><span class="pw-ms">' +
+                Math.round(t.ms) +
+                " ms</span></div>"
+            )
+            .join("");
+          resultsEl.innerHTML =
+            '<div class="mb-2"><span class="pw-summary-num text-success">' +
+            r.passed +
+            " passed</span> · <span class=\"pw-summary-num " +
+            (r.failed ? "text-danger" : "text-secondary") +
+            '">' +
+            r.failed +
+            " failed</span> · " +
+            r.total +
+            " total</div>" +
+            rows;
+        }
+
+        async function poll() {
+          if (Date.now() > deadline) {
+            setStatus("Timed out waiting for results. Check the run on GitHub.", "warning");
+            runBtn.disabled = false;
+            return;
+          }
+          try {
+            const res = await fetch("/api/test-status?since=" + encodeURIComponent(startedAt), { cache: "no-store" });
+            const d = await res.json();
+            if (!res.ok) throw new Error(d.error || "status error");
+
+            if (d.runUrl) showLink(runLink, d.runUrl);
+
+            if (d.state === "pending") {
+              setStatus("Queued — waiting for the run to start…", "primary", true);
+            } else if (d.state !== "completed") {
+              setStatus("Running tests on GitHub Actions…", "primary", true);
+            } else {
+              const ok = d.conclusion === "success";
+              setStatus(
+                (ok ? "✅ All tests passed" : "❌ Tests failed") + " (conclusion: " + d.conclusion + ")",
+                ok ? "success" : "danger"
+              );
+              if (d.reportUrl) showLink(reportLink, d.reportUrl);
+              if (d.results) renderResults(d.results);
+              else resultsEl.innerHTML = '<div class="text-secondary small">Report is finalizing — open the full report for details.</div>';
+              runBtn.disabled = false;
+              return;
+            }
+          } catch (e) {
+            // transient network/API hiccup — keep polling
+          }
+          setTimeout(poll, POLL_MS);
+        }
+
+        runBtn.addEventListener("click", async () => {
+          runBtn.disabled = true;
+          reportLink.classList.add("d-none");
+          runLink.classList.add("d-none");
+          resultsEl.innerHTML = "";
+          setStatus("Dispatching the workflow…", "primary", true);
+          try {
+            const res = await fetch("/api/run-tests", { method: "POST" });
+            const d = await res.json();
+            if (!res.ok || !d.ok) throw new Error(d.error || "dispatch failed");
+            startedAt = d.dispatchedAt;
+            deadline = Date.now() + MAX_MS;
+            setStatus("Queued — waiting for the run to start…", "primary", true);
+            setTimeout(poll, POLL_MS);
+          } catch (e) {
+            setStatus("Error: " + (e.message || e), "danger");
+            runBtn.disabled = false;
+          }
+        });
+      })();
+    </script>
+    <script type="module" src="/analytics.js"></script>
+  </body>
+</html>

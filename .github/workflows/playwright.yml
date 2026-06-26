@@ -1,0 +1,86 @@
+name: Playwright Tests
+
+# Run on pushes to main and on manual / API dispatch (the latter is what a
+# "Run tests" button on the site would trigger).
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - "archive/**"
+      - "**/*.md"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: playwright-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright (Chromium)
+        run: npx playwright install --with-deps chromium
+
+      - name: Run Playwright tests
+        run: npx playwright test
+
+      - name: Write results to job summary
+        if: always()
+        run: |
+          node -e '
+            const fs = require("fs");
+            let r; try { r = JSON.parse(fs.readFileSync("playwright-report/results.json","utf8")); }
+            catch (e) { fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, "No results.json produced.\n"); process.exit(0); }
+            let pass = 0, fail = 0; const rows = [];
+            const walk = (s) => {
+              (s.suites||[]).forEach(walk);
+              (s.specs||[]).forEach((sp) => { sp.ok ? pass++ : fail++; rows.push(`| ${sp.ok ? "✅" : "❌"} | ${sp.title} |`); });
+            };
+            (r.suites||[]).forEach(walk);
+            const md = ["## 🎭 Playwright results", "", `**${pass} passed, ${fail} failed**`, "",
+                        "| | Test |", "|--|------|", ...rows, ""].join("\n");
+            fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, md);
+          '
+
+      - name: Upload HTML report (downloadable artifact)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report
+          retention-days: 14
+
+      - name: Upload report as Pages artifact
+        if: always()
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: playwright-report
+
+  # Publish the HTML report to GitHub Pages even when tests fail, so results are
+  # always viewable. Pages URL: https://danielchesla.github.io/daniel_website/
+  deploy-report:
+    needs: test
+    if: always()
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

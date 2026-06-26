@@ -4,12 +4,17 @@
   "description": "Daniel Chesla's personal website",
   "scripts": {
     "dev": "npx serve .",
-    "build": "echo 'Static site - no build required'"
+    "build": "echo 'Static site - no build required'",
+    "test": "playwright test",
+    "test:report": "playwright show-report"
   },
   "keywords": [],
   "author": "Daniel Chesla",
   "license": "MIT",
   "dependencies": {
     "@vercel/analytics": "^2.0.1"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.49.1"
   }
 }

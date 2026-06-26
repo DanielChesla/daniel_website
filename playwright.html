@@ -61,6 +61,7 @@
         const MAX_MS = 6 * 60 * 1000; // give up after 6 minutes
         let nonce = null;             // identifies THIS browser's run
         let deadline = 0;
+        let errCount = 0;             // consecutive status errors
 
         function setStatus(message, kind, spinner) {
           const sp = spinner
@@ -107,6 +108,7 @@
             const res = await fetch("/api/test-status?nonce=" + encodeURIComponent(nonce), { cache: "no-store" });
             const d = await res.json();
             if (!res.ok) throw new Error(d.error || "status error");
+            errCount = 0; // got a good response
 
             if (d.runUrl) showLink(runLink, d.runUrl);
 
@@ -129,7 +131,13 @@
               return;
             }
           } catch (e) {
-            // transient network/API hiccup — keep polling
+            // Tolerate a few transient hiccups, then surface the error instead
+            // of spinning forever (e.g. a stale tab from before a deploy).
+            if (++errCount >= 3) {
+              setStatus("Couldn't get the test status. Please refresh the page (Ctrl/Cmd+Shift+R) and try again.", "danger");
+              runBtn.disabled = false;
+              return;
+            }
           }
           setTimeout(poll, POLL_MS);
         }
@@ -138,6 +146,7 @@
           runBtn.disabled = true;
           runLink.classList.add("d-none");
           resultsEl.innerHTML = "";
+          errCount = 0;
           const group = groupSelect.value;
           const groupLabel = groupSelect.options[groupSelect.selectedIndex].text;
           setStatus("Dispatching the workflow — " + groupLabel + "…", "primary", true);

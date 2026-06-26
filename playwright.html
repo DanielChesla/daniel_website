@@ -37,8 +37,7 @@
             <option value="labs">Mentoring/Training Labs</option>
           </select>
           <button id="runBtn" class="btn btn-primary" data-testid="runbtn-button-1">▶ Run tests</button>
-          <a id="reportLink" class="btn btn-outline-secondary d-none" target="_blank" rel="noopener" data-testid="reportlink-link-1">View full HTML report ↗</a>
-          <a id="runLink" class="small d-none" target="_blank" rel="noopener" data-testid="runlink-link-1">View run on GitHub ↗</a>
+          <a id="runLink" class="btn btn-outline-secondary d-none" target="_blank" rel="noopener" data-testid="runlink-link-1">View run &amp; full report on GitHub ↗</a>
         </div>
 
         <div id="status" class="mt-3" data-testid="status-div-1"></div>
@@ -54,14 +53,13 @@
       (function () {
         const runBtn = document.getElementById("runBtn");
         const groupSelect = document.getElementById("groupSelect");
-        const reportLink = document.getElementById("reportLink");
         const runLink = document.getElementById("runLink");
         const statusEl = document.getElementById("status");
         const resultsEl = document.getElementById("results");
 
         const POLL_MS = 4000;
         const MAX_MS = 6 * 60 * 1000; // give up after 6 minutes
-        let startedAt = null;
+        let nonce = null;             // identifies THIS browser's run
         let deadline = 0;
 
         function setStatus(message, kind, spinner) {
@@ -106,7 +104,7 @@
             return;
           }
           try {
-            const res = await fetch("/api/test-status?since=" + encodeURIComponent(startedAt), { cache: "no-store" });
+            const res = await fetch("/api/test-status?nonce=" + encodeURIComponent(nonce), { cache: "no-store" });
             const d = await res.json();
             if (!res.ok) throw new Error(d.error || "status error");
 
@@ -122,12 +120,11 @@
             } else {
               const ok = d.conclusion === "success";
               setStatus(
-                (ok ? "✅ All tests passed" : "❌ Run " + d.conclusion) + (ok ? "" : " (see report/run)"),
+                (ok ? "✅ All tests passed" : "❌ Run " + d.conclusion) + " — see the run on GitHub for the full report",
                 ok ? "success" : "danger"
               );
-              if (d.reportUrl) showLink(reportLink, d.reportUrl);
               if (d.resultsReady && d.results) renderResults(d.results);
-              else resultsEl.innerHTML = '<div class="text-secondary small">No synced results for this run — open the full report for details.</div>';
+              else resultsEl.innerHTML = '<div class="text-secondary small">Results unavailable — open the run on GitHub for the full report.</div>';
               runBtn.disabled = false;
               return;
             }
@@ -139,7 +136,6 @@
 
         runBtn.addEventListener("click", async () => {
           runBtn.disabled = true;
-          reportLink.classList.add("d-none");
           runLink.classList.add("d-none");
           resultsEl.innerHTML = "";
           const group = groupSelect.value;
@@ -149,7 +145,7 @@
             const res = await fetch("/api/run-tests?group=" + encodeURIComponent(group), { method: "POST" });
             const d = await res.json();
             if (!res.ok || !d.ok) throw new Error(d.error || "dispatch failed");
-            startedAt = d.dispatchedAt;
+            nonce = d.nonce;
             deadline = Date.now() + MAX_MS;
             setStatus("Queued — waiting for the run to start (" + groupLabel + ")…", "primary", true);
             setTimeout(poll, POLL_MS);

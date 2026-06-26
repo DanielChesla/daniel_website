@@ -22,6 +22,10 @@ export default async function handler(req, res) {
   let group = (req.query && req.query.group) || "all";
   if (!ALLOWED.has(group)) group = "all";
 
+  // Unique id so the triggering browser can find *its own* run (isolates
+  // concurrent users). Surfaced in the run name via the workflow.
+  const nonce = "n" + Date.now().toString(36) + Math.random().toString(36).slice(2, 10);
+
   try {
     const r = await fetch(`https://api.github.com/repos/${REPO}/actions/workflows/${WORKFLOW}/dispatches`, {
       method: "POST",
@@ -31,13 +35,13 @@ export default async function handler(req, res) {
         "Content-Type": "application/json",
         "User-Agent": "danielchesla-site",
       },
-      body: JSON.stringify({ ref: "main", inputs: { group } }),
+      body: JSON.stringify({ ref: "main", inputs: { group, nonce } }),
     });
     if (r.status !== 204) {
       const detail = (await r.text()).slice(0, 300);
       return res.status(502).json({ error: `dispatch failed (HTTP ${r.status})`, detail });
     }
-    return res.status(200).json({ ok: true, group, dispatchedAt: new Date().toISOString() });
+    return res.status(200).json({ ok: true, group, nonce, dispatchedAt: new Date().toISOString() });
   } catch (e) {
     return res.status(502).json({ error: String(e.message || e) });
   }

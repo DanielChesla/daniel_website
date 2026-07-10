@@ -203,19 +203,38 @@
       "latitude=" + BRIDGE_LAT,
       "longitude=" + BRIDGE_LON,
       "current=temperature_2m,precipitation,weather_code",
+      "daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum,precipitation_probability_max,wind_speed_10m_max,wind_direction_10m_dominant",
       "temperature_unit=fahrenheit",
+      "wind_speed_unit=mph",
       "precipitation_unit=inch",
+      "timezone=America%2FNew_York",
+      "forecast_days=2"
+    ].join("&");
+    return fetch(url, { cache: "no-store" })
+      .then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
+      .then(function (j) { if (!j.current) throw new Error("weather unavailable"); return j; });
+  }
+
+  function fetchMarine() {
+    var url = "https://marine-api.open-meteo.com/v1/marine?" + [
+      "latitude=" + BRIDGE_LAT,
+      "longitude=" + BRIDGE_LON,
+      "current=wave_height,wave_direction,wave_period",
+      "length_unit=imperial",
       "timezone=America%2FNew_York"
     ].join("&");
     return fetch(url, { cache: "no-store" })
       .then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
-      .then(function (j) { if (!j.current) throw new Error("weather unavailable"); return j.current; });
+      .then(function (j) {
+        if (!j.current || j.current.wave_height == null) throw new Error("wave data unavailable");
+        return j.current;
+      });
   }
 
   function val(settled) { return settled.status === "fulfilled" ? settled.value : null; }
 
   function tile(icon, label, value, sub, testid) {
-    return "<div class=\"col-6 col-lg-3\" data-testid=\"" + testid + "\">" +
+    return "<div class=\"col\" data-testid=\"" + testid + "\">" +
       "<div class=\"card border-0 shadow-sm h-100 cond-tile\">" +
       "<div class=\"card-body text-center\">" +
       "<div class=\"cond-icon\">" + icon + "</div>" +
@@ -226,10 +245,11 @@
   }
 
   function renderConditions(results) {
-    var wind  = val(results[0]);
-    var air   = val(results[1]);
-    var water = val(results[2]);
-    var wx    = val(results[3]);
+    var wind   = val(results[0]);
+    var air    = val(results[1]);
+    var water  = val(results[2]);
+    var wx     = val(results[3]);
+    var marine = val(results[4]);
 
     // Wind
     var windVal = "—", windSub = "";
@@ -241,17 +261,28 @@
       if (!isNaN(parseFloat(wind.g))) windSub += " · gusts " + knotsToMph(parseFloat(wind.g)).toFixed(0) + " mph";
     }
 
-    // Precip + sky condition (Open-Meteo)
+    // Precip + sky condition (Open-Meteo current)
     var precipVal = "—", precipSub = "";
-    if (wx) {
-      precipVal = parseFloat(wx.precipitation).toFixed(2) + " in";
-      precipSub = WMO[wx.weather_code] || "";
+    if (wx && wx.current) {
+      precipVal = parseFloat(wx.current.precipitation).toFixed(2) + " in";
+      precipSub = WMO[wx.current.weather_code] || "";
+    }
+
+    // Wave height (Open-Meteo marine)
+    var waveVal = "—", waveSub = "";
+    if (marine) {
+      waveVal = parseFloat(marine.wave_height).toFixed(1) + " ft";
+      var wparts = [];
+      if (marine.wave_direction != null) wparts.push(degToCompass(marine.wave_direction) + " (" + Math.round(marine.wave_direction) + "°)");
+      if (marine.wave_period != null) wparts.push(Math.round(marine.wave_period) + "s period");
+      waveSub = wparts.join(" · ");
     }
 
     var html =
       tile("🌬️", "Wind", windVal, windSub, "cond-tile-wind") +
       tile("🌡️", "Air Temp", air ? Math.round(air.v) + "°F" : "—", "", "cond-tile-air") +
       tile("🌊", "Water Temp", water ? Math.round(water.v) + "°F" : "—", "", "cond-tile-water") +
+      tile("🌊", "Wave Height", waveVal, waveSub, "cond-tile-wave") +
       tile("🌧️", "Precipitation", precipVal, precipSub, "cond-tile-precip");
 
     setHTML("conditions", html);
@@ -264,18 +295,64 @@
       when = "Observed " + fmtTime(s.hh, s.mm) + " · ";
     }
     setHTML("conditions-meta",
-      when + "Wind/air/water: NOAA Vaca Key (8723970). Precipitation: Open-Meteo.");
+      when + "Wind/air/water: NOAA Vaca Key (8723970). Precipitation & waves: Open-Meteo.");
+  }
+
+  function renderForecast(settled) {
+    var wx = val(settled);
+    if (!wx || !wx.daily || !wx.daily.time || wx.daily.time.length < 2) {
+      setHTML("forecast", "<div class=\"alert alert-warning mb-0\" role=\"alert\">Forecast is currently unavailable.</div>");
+      return;
+    }
+    var d = wx.daily;
+    var i = 1; // index 1 = tomorrow (index 0 = today)
+
+    var dObj = (function () {
+      var p = d.time[i].split("-");
+      return new Date(+p[0], +p[1] - 1, +p[2]);
+    })();
+    var heading = dObj.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" });
+
+    var cond = WMO[d.weather_code[i]] || "—";
+    var hi = Math.round(d.temperature_2m_max[i]);
+    var lo = Math.round(d.temperature_2m_min[i]);
+    var pop = d.precipitation_probability_max[i];
+    var psum = parseFloat(d.precipitation_sum[i]).toFixed(2);
+    var wspd = Math.round(d.wind_speed_10m_max[i]);
+    var wdir = degToCompass(d.wind_direction_10m_dominant[i]);
+
+    var html =
+      "<div class=\"card border-0 shadow-sm\" data-testid=\"forecast-card-1\">" +
+      "<div class=\"card-body\">" +
+      "<div class=\"row g-3 align-items-center\">" +
+        "<div class=\"col-lg-4\">" +
+          "<div class=\"text-secondary small\">Tomorrow &middot; " + heading + "</div>" +
+          "<div class=\"fc-cond mt-1\">" + cond + "</div>" +
+        "</div>" +
+        "<div class=\"col-6 col-lg-2 fc-metric\">🌡️ High / Low<br><span class=\"fc-num\">" + hi + "° / " + lo + "°F</span></div>" +
+        "<div class=\"col-6 col-lg-2 fc-metric\">🌧️ Precip<br><span class=\"fc-num\">" + pop + "%</span> <span class=\"text-secondary\">(" + psum + " in)</span></div>" +
+        "<div class=\"col-6 col-lg-2 fc-metric\">🌬️ Wind<br><span class=\"fc-num\">" + wspd + " mph</span> " + wdir + "</div>" +
+        "<div class=\"col-6 col-lg-2 fc-metric text-lg-end\"><a class=\"small\" href=\"https://open-meteo.com/\" target=\"_blank\" rel=\"noopener\">Open-Meteo</a></div>" +
+      "</div>" +
+      "</div></div>";
+
+    setHTML("forecast", html);
   }
 
   function loadConditions() {
     setHTML("conditions", "<div class=\"col-12\"><p class=\"text-secondary mb-0\" data-testid=\"conditions-loading-1\">Loading current conditions…</p></div>");
     setHTML("conditions-meta", "");
+    setHTML("forecast", "<p class=\"text-secondary mb-0\" data-testid=\"forecast-loading-1\">Loading forecast…</p>");
     Promise.allSettled([
       fetchNoaaLatest("wind"),
       fetchNoaaLatest("air_temperature"),
       fetchNoaaLatest("water_temperature"),
-      fetchOpenMeteo()
-    ]).then(renderConditions);
+      fetchOpenMeteo(),
+      fetchMarine()
+    ]).then(function (results) {
+      renderConditions(results);
+      renderForecast(results[3]);
+    });
   }
 
   // expose + auto-run

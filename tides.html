@@ -27,6 +27,9 @@
       .cond-value { font-size: 1.5rem; font-weight: 700; margin-top: .35rem; }
       .cond-label { font-size: .8rem; text-transform: uppercase; letter-spacing: .04em; color: #6c757d; }
       .cond-sub   { font-size: .8rem; margin-top: .15rem; }
+      .fc-cond { font-size: 1.05rem; font-weight: 600; }
+      .fc-metric { font-size: .95rem; }
+      .fc-metric .fc-num { font-weight: 700; }
     </style>
   </head>
   <body>
@@ -52,8 +55,14 @@
             <h2 class="h4 mb-0" data-testid="conditions-h2-1">Current Conditions</h2>
             <button type="button" class="btn btn-outline-primary btn-sm" onclick="loadConditions()" data-testid="conditions-refresh-button-1">Refresh</button>
           </div>
-          <div id="conditions" class="row g-3" data-testid="conditions-div-1">Loading current conditions…</div>
+          <div id="conditions" class="row row-cols-2 row-cols-lg-5 g-3" data-testid="conditions-div-1">Loading current conditions…</div>
           <p class="small text-secondary mt-2 mb-0" id="conditions-meta" data-testid="conditions-meta-1"></p>
+        </section>
+
+        <!-- Tomorrow's forecast -->
+        <section class="mb-4" data-testid="forecast-section-1">
+          <h2 class="h4 mb-3" data-testid="forecast-h2-1">Tomorrow's Forecast</h2>
+          <div id="forecast" data-testid="forecast-div-1">Loading forecast…</div>
         </section>
 
         <div class="row g-4">

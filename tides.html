@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Seven Mile Bridge Tides · Marathon, FL</title>
+    <meta name="description" content="High and low tide predictions for the next 3 days at the Seven Mile Bridge (Pigeon Key) in Marathon, Florida, from NOAA." />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style1.css" />
+    <style>
+      .tide-badge-high { background: #0d6efd; color: #fff; }
+      .tide-badge-low  { background: #6c757d; color: #fff; }
+      .tide-today {
+        display: inline-block; font-size: .7rem; font-weight: 600;
+        text-transform: uppercase; letter-spacing: .04em;
+        background: #198754; color: #fff; padding: .15rem .5rem; border-radius: 999px;
+        vertical-align: middle;
+      }
+      .tide-table th { font-size: .8rem; text-transform: uppercase; letter-spacing: .03em; color: #6c757d; }
+      .tide-hero { background: linear-gradient(135deg, #062a4d 0%, #0d6efd 100%); color: #fff; }
+      .tide-hero .lead { color: rgba(255,255,255,.85); }
+    </style>
+  </head>
+  <body>
+    <!-- Header injected dynamically -->
+    <div id="header-include" data-testid="header-include-div-1"></div>
+
+    <header class="py-5 tide-hero border-bottom" data-testid="tides-seven-mile-bridge-header-1">
+      <div class="container" data-testid="tides-seven-mile-bridge-div-1">
+        <div class="row align-items-center" data-testid="tides-seven-mile-bridge-div-2">
+          <div class="col-lg-9" data-testid="tides-seven-mile-bridge-div-3">
+            <h1 class="display-6 fw-bold mb-2" data-testid="tides-h1-1">🌊 Seven Mile Bridge Tides</h1>
+            <p class="lead mb-0" data-testid="tides-subtitle-p-1">High &amp; low tide predictions for the next 3 days — Marathon, Florida.</p>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="py-5" data-testid="tides-main-1">
+      <div class="container" data-testid="tides-main-div-1">
+        <div class="row g-4">
+          <div class="col-lg-8" data-testid="tides-results-col-1">
+            <div class="d-flex align-items-center justify-content-between mb-3">
+              <h2 class="h4 mb-0" data-testid="tides-h2-1">Next 3 Days</h2>
+              <button type="button" class="btn btn-outline-primary btn-sm" onclick="loadTides()" data-testid="tides-refresh-button-1">Refresh</button>
+            </div>
+            <!-- tides.js writes here -->
+            <div id="tides" data-testid="tides-div-1">Loading tide predictions…</div>
+          </div>
+
+          <div class="col-lg-4" data-testid="tides-about-col-1">
+            <div class="card shadow-sm border-0" data-testid="tides-about-card-1">
+              <div class="card-body" data-testid="tides-about-card-body-1">
+                <h2 class="h5 mb-3" data-testid="tides-about-h2-1">About this data</h2>
+                <p class="mb-2" data-testid="tides-about-p-1">
+                  Predictions come from <strong>NOAA Tides &amp; Currents</strong>, station
+                  <strong>8724032 — Pigeon Key (Atlantic Side)</strong>, which sits directly
+                  on the Seven Mile Bridge in Marathon, FL.
+                </p>
+                <ul class="small text-secondary mb-3" data-testid="tides-about-ul-1">
+                  <li>Heights are in feet relative to <strong>MLLW</strong> (Mean Lower Low Water).</li>
+                  <li>Times are local (Eastern) for the station.</li>
+                  <li>▲ High tide &nbsp; ▼ Low tide</li>
+                </ul>
+                <a class="btn btn-sm btn-outline-secondary"
+                   href="https://tidesandcurrents.noaa.gov/noaatidepredictions.html?id=8724032"
+                   target="_blank" rel="noopener" data-testid="tides-noaa-link-1">
+                  View on NOAA ↗
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer injected dynamically -->
+    <div id="footer-include" data-testid="footer-include-div-1"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Shared includes loader (relative path for GitHub Pages) -->
+    <script src="include-loader.js"></script>
+    <script src="tides.js"></script>
+    <script type="module" src="/analytics.js"></script>
+  </body>
+</html>

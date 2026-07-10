@@ -148,7 +148,141 @@
       });
   }
 
+  // ---------------------------------------------------------------------------
+  // Current conditions (weather bar)
+  //   Wind / air temp / water temp: NOAA CO-OPS met sensors at the nearest
+  //     gauge with instruments — station 8723970 "Vaca Key, Florida Bay"
+  //     (~2 mi from the bridge; Pigeon Key has no met/water-temp sensor).
+  //   Precipitation + sky condition: Open-Meteo current (keyless, CORS-enabled).
+  // ---------------------------------------------------------------------------
+
+  var MET_STATION_ID = "8723970";
+  var BRIDGE_LAT = 24.7033;
+  var BRIDGE_LON = -81.155;
+  var COMPASS = ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE",
+                 "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"];
+
+  // Condensed WMO weather-code map (Open-Meteo).
+  var WMO = {
+    0: "☀️ Clear", 1: "🌤️ Mainly clear", 2: "⛅ Partly cloudy", 3: "☁️ Overcast",
+    45: "🌫️ Fog", 48: "🌫️ Rime fog",
+    51: "🌦️ Light drizzle", 53: "🌦️ Drizzle", 55: "🌦️ Heavy drizzle",
+    61: "🌧️ Light rain", 63: "🌧️ Rain", 65: "🌧️ Heavy rain",
+    66: "🌧️ Freezing rain", 67: "🌧️ Freezing rain",
+    71: "🌨️ Light snow", 73: "🌨️ Snow", 75: "🌨️ Heavy snow",
+    80: "🌦️ Light showers", 81: "🌧️ Showers", 82: "⛈️ Violent showers",
+    95: "⛈️ Thunderstorm", 96: "⛈️ Thunderstorm w/ hail", 99: "⛈️ Severe thunderstorm"
+  };
+
+  function knotsToMph(kt) { return kt * 1.15078; }
+
+  function degToCompass(deg) {
+    return COMPASS[Math.round(deg / 22.5) % 16];
+  }
+
+  function fetchNoaaLatest(product) {
+    var url = API + "?" + [
+      "date=latest",
+      "station=" + MET_STATION_ID,
+      "product=" + product,
+      "units=english",
+      "time_zone=lst_ldt",
+      "format=json",
+      "application=daniel_website_tides"
+    ].join("&");
+    return fetch(url, { cache: "no-store" })
+      .then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
+      .then(function (j) {
+        if (j.error || !j.data || !j.data.length) throw new Error(product + " unavailable");
+        return j.data[0];
+      });
+  }
+
+  function fetchOpenMeteo() {
+    var url = "https://api.open-meteo.com/v1/forecast?" + [
+      "latitude=" + BRIDGE_LAT,
+      "longitude=" + BRIDGE_LON,
+      "current=temperature_2m,precipitation,weather_code",
+      "temperature_unit=fahrenheit",
+      "precipitation_unit=inch",
+      "timezone=America%2FNew_York"
+    ].join("&");
+    return fetch(url, { cache: "no-store" })
+      .then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
+      .then(function (j) { if (!j.current) throw new Error("weather unavailable"); return j.current; });
+  }
+
+  function val(settled) { return settled.status === "fulfilled" ? settled.value : null; }
+
+  function tile(icon, label, value, sub, testid) {
+    return "<div class=\"col-6 col-lg-3\" data-testid=\"" + testid + "\">" +
+      "<div class=\"card border-0 shadow-sm h-100 cond-tile\">" +
+      "<div class=\"card-body text-center\">" +
+      "<div class=\"cond-icon\">" + icon + "</div>" +
+      "<div class=\"cond-value\">" + value + "</div>" +
+      "<div class=\"cond-label\">" + label + "</div>" +
+      (sub ? "<div class=\"cond-sub text-secondary\">" + sub + "</div>" : "") +
+      "</div></div></div>";
+  }
+
+  function renderConditions(results) {
+    var wind  = val(results[0]);
+    var air   = val(results[1]);
+    var water = val(results[2]);
+    var wx    = val(results[3]);
+
+    // Wind
+    var windVal = "—", windSub = "";
+    if (wind) {
+      var mph = knotsToMph(parseFloat(wind.s));
+      var dir = wind.dr || (isNaN(parseFloat(wind.d)) ? "" : degToCompass(parseFloat(wind.d)));
+      windVal = mph.toFixed(1) + " mph";
+      windSub = dir + (isNaN(parseFloat(wind.d)) ? "" : " (" + Math.round(wind.d) + "°)");
+      if (!isNaN(parseFloat(wind.g))) windSub += " · gusts " + knotsToMph(parseFloat(wind.g)).toFixed(0) + " mph";
+    }
+
+    // Precip + sky condition (Open-Meteo)
+    var precipVal = "—", precipSub = "";
+    if (wx) {
+      precipVal = parseFloat(wx.precipitation).toFixed(2) + " in";
+      precipSub = WMO[wx.weather_code] || "";
+    }
+
+    var html =
+      tile("🌬️", "Wind", windVal, windSub, "cond-tile-wind") +
+      tile("🌡️", "Air Temp", air ? Math.round(air.v) + "°F" : "—", "", "cond-tile-air") +
+      tile("🌊", "Water Temp", water ? Math.round(water.v) + "°F" : "—", "", "cond-tile-water") +
+      tile("🌧️", "Precipitation", precipVal, precipSub, "cond-tile-precip");
+
+    setHTML("conditions", html);
+
+    // Meta line: observation time + sources
+    var obs = (wind && wind.t) || (air && air.t) || (water && water.t);
+    var when = "";
+    if (obs) {
+      var s = parseStamp(obs);
+      when = "Observed " + fmtTime(s.hh, s.mm) + " · ";
+    }
+    setHTML("conditions-meta",
+      when + "Wind/air/water: NOAA Vaca Key (8723970). Precipitation: Open-Meteo.");
+  }
+
+  function loadConditions() {
+    setHTML("conditions", "<div class=\"col-12\"><p class=\"text-secondary mb-0\" data-testid=\"conditions-loading-1\">Loading current conditions…</p></div>");
+    setHTML("conditions-meta", "");
+    Promise.allSettled([
+      fetchNoaaLatest("wind"),
+      fetchNoaaLatest("air_temperature"),
+      fetchNoaaLatest("water_temperature"),
+      fetchOpenMeteo()
+    ]).then(renderConditions);
+  }
+
   // expose + auto-run
   window.loadTides = loadTides;
-  document.addEventListener("DOMContentLoaded", loadTides);
+  window.loadConditions = loadConditions;
+  document.addEventListener("DOMContentLoaded", function () {
+    loadConditions();
+    loadTides();
+  });
 })();

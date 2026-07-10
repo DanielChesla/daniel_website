@@ -22,6 +22,11 @@
       .tide-table th { font-size: .8rem; text-transform: uppercase; letter-spacing: .03em; color: #6c757d; }
       .tide-hero { background: linear-gradient(135deg, #062a4d 0%, #0d6efd 100%); color: #fff; }
       .tide-hero .lead { color: rgba(255,255,255,.85); }
+      .cond-tile .card-body { padding: 1rem .75rem; }
+      .cond-icon  { font-size: 1.6rem; line-height: 1; }
+      .cond-value { font-size: 1.5rem; font-weight: 700; margin-top: .35rem; }
+      .cond-label { font-size: .8rem; text-transform: uppercase; letter-spacing: .04em; color: #6c757d; }
+      .cond-sub   { font-size: .8rem; margin-top: .15rem; }
     </style>
   </head>
   <body>
@@ -41,6 +46,16 @@
 
     <main class="py-5" data-testid="tides-main-1">
       <div class="container" data-testid="tides-main-div-1">
+        <!-- Current conditions (weather bar) -->
+        <section class="mb-4" data-testid="conditions-section-1">
+          <div class="d-flex align-items-center justify-content-between mb-3">
+            <h2 class="h4 mb-0" data-testid="conditions-h2-1">Current Conditions</h2>
+            <button type="button" class="btn btn-outline-primary btn-sm" onclick="loadConditions()" data-testid="conditions-refresh-button-1">Refresh</button>
+          </div>
+          <div id="conditions" class="row g-3" data-testid="conditions-div-1">Loading current conditions…</div>
+          <p class="small text-secondary mt-2 mb-0" id="conditions-meta" data-testid="conditions-meta-1"></p>
+        </section>
+
         <div class="row g-4">
           <div class="col-lg-8" data-testid="tides-results-col-1">
             <div class="d-flex align-items-center justify-content-between mb-3">

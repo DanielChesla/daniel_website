@@ -9,6 +9,7 @@ test.describe("Mentoring/Training Labs", () => {
       "nav-genai-experiment-link-1", "nav-weather-api-link-1", "nav-loan-calculator-link-1",
       "nav-401k-calculator-link-1", "nav-compound-interest-link-1", "nav-math-project-link-1",
       "nav-tictactoe-link-1", "nav-photos-link-1", "nav-playwright-tests-link-1",
+      "nav-20-questions-link-1",
     ]) {
       await expect(page.getByTestId(id)).toBeVisible();
     }
@@ -97,6 +98,38 @@ test.describe("Mentoring/Training Labs", () => {
     test("loads with the gallery heading", async ({ page }) => {
       await page.goto("/photos.html");
       await expect(page.getByTestId("photos-h1-1")).toBeVisible();
+    });
+  });
+
+  test.describe("20 Questions", () => {
+    test("loads with the heading and Start Game button", async ({ page }) => {
+      await page.goto("/20questions.html");
+      await expect(page.getByTestId("twenty-questions-h1-1")).toBeVisible();
+      await expect(page.getByTestId("start-game-button-1")).toBeVisible();
+    });
+
+    test("starting the game shows the first question, answer buttons, and progress", async ({ page }) => {
+      // Stub the serverless function so this test is deterministic and never
+      // makes a real network call to Pollinations.ai in CI.
+      await page.route("**/api/twenty-questions", async (route) => {
+        await route.fulfill({
+          status: 200,
+          contentType: "application/json",
+          body: JSON.stringify({ type: "question", text: "Is it alive?" }),
+        });
+      });
+
+      await page.goto("/20questions.html");
+      await page.getByTestId("start-game-button-1").click();
+
+      await expect(page.getByTestId("question-text-1")).toHaveText("Is it alive?");
+      for (const id of [
+        "answer-yes-button-1", "answer-no-button-1", "answer-dontknow-button-1",
+        "answer-probably-button-1", "answer-probablynot-button-1",
+      ]) {
+        await expect(page.getByTestId(id)).toBeVisible();
+      }
+      await expect(page.getByTestId("progress-text-1")).toHaveText("Question 1 of 20");
     });
   });
 });

@@ -1,9 +1,16 @@
 // /api/twenty-questions.js
 // Serverless function for the "20 Questions" AI guessing game. Given the
 // client's in-memory question/answer history (and any prior wrong guesses),
-// asks Pollinations.ai's free, keyless text API to decide the next best
-// yes/no question — or to make a guess — and returns strict JSON to the
-// client. Stateless: nothing is persisted server-side (see spec TECH-012).
+// asks Pollinations.ai's free, keyless text API to decide the next *batch*
+// of up to five yes/no questions — or to make a guess — and returns strict
+// JSON to the client. Stateless: nothing is persisted server-side (see spec
+// TECH-012).
+//
+// Batched adaptive questioning (hotfix 2026-07-16): instead of one AI
+// request per question, the client requests a batch of up to five questions
+// at a time (checkpoints at 0/5/10/15 answered questions), presents them one
+// at a time locally, then requests the next batch/guess. See
+// specifications/specifications.md FR-003/FR-006b/TECH-007/TECH-010.
 //
 // Provider: Pollinations.ai's hosted free text model (POST
 // https://text.pollinations.ai/openai, OpenAI-compatible chat-completions
@@ -16,6 +23,11 @@ const POLLINATIONS_URL = "https://text.pollinations.ai/openai";
 const UPSTREAM_TIMEOUT_MS = 28000; // TECH-008: ~28s to accommodate verified anonymous-tier latency.
 const MAX_QUESTIONS = 20; // FR-003
 const MAX_GUESSES = 2; // OUT-004
+const MAX_BATCH_SIZE = 5; // FR-003/FR-006b: up to 5 questions per batch
+
+// TECH-007a: rate-limit retry-after handling.
+const RATE_LIMIT_DEFAULT_MS = 15000; // ~15s default when no Retry-After is present
+const RATE_LIMIT_MAX_MS = 30000; // sane clamp on an unusually large Retry-After
 
 const ALLOWED_ANSWERS = new Set(["yes", "no", "don't know", "probably", "probably not"]);
 const MAX_TEXT_LEN = 300; // defensive cap on any single question/answer/guess string
@@ -23,6 +35,29 @@ const MAX_TEXT_LEN = 300; // defensive cap on any single question/answer/guess s
 function clip(str, max) {
   const s = String(str == null ? "" : str).trim();
   return s.length > max ? s.slice(0, max) : s;
+}
+
+function normalize(str) {
+  return String(str == null ? "" : str).trim().toLowerCase().replace(/\s+/g, " ");
+}
+
+// ---------------------------------------------------------------------------
+// Custom error types so the handler can distinguish failure categories
+// (TECH-007a) without doing any additional upstream requests (TECH-007b).
+// ---------------------------------------------------------------------------
+class UpstreamRateLimitError extends Error {
+  constructor(retryAfterMs) {
+    super("upstream rate-limited (429)");
+    this.name = "UpstreamRateLimitError";
+    this.retryAfterMs = retryAfterMs;
+  }
+}
+
+class InvalidModelResponseError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = "InvalidModelResponseError";
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -78,29 +113,31 @@ function validateGameState(body) {
 // ---------------------------------------------------------------------------
 // Prompt construction
 // ---------------------------------------------------------------------------
-function buildMessages(history, guessesSoFar, questionsAsked, mustGuessNow) {
+function buildMessages(history, guessesSoFar, questionsAsked, mustGuessNow, finalGuessMode, batchTarget) {
   const systemPrompt =
     "You are an expert player of the game \"20 Questions\". A human is thinking of a person " +
     "(real or fictional), a place, an animal, or an object, and you are trying to guess it by " +
-    "asking smart, discriminating yes/no questions. " +
+    "asking smart, discriminating yes/no questions, in batches. " +
     "You must respond with ONLY a single strict JSON object — no markdown, no code fences, no " +
     "commentary before or after — matching exactly one of these two shapes:\n" +
-    '{"type":"question","text":"<a single, specific yes/no question>"}\n' +
+    '{"type":"questions","questions":["<question 1>","<question 2>", "..."]}\n' +
     '{"type":"guess","text":"<your specific guess, e.g. \\"a golden retriever\\">"}\n' +
     "Rules:\n" +
     "- The human answers each question with one of: Yes, No, Don't Know, Probably, Probably Not.\n" +
     "- The whole round is capped at 20 total questions, across both guess attempts.\n" +
+    "- When you choose to ask questions instead of guessing, return EXACTLY the requested number " +
+    "of NEW, unique yes/no questions in the \"questions\" array — never repeat a question already " +
+    "asked, and never include near-duplicate questions in the same array.\n" +
     "- Only respond with a guess when you are reasonably confident, unless you are told you must " +
     "guess now.\n" +
-    "- Never repeat a question you have already asked.\n" +
     "- Never repeat a guess you have already made.\n" +
-    "- Keep your question or guess concise (one short sentence), and make it as specific as " +
-    "possible once you guess (e.g. a specific breed/name/model, not a vague category).";
+    "- Keep each question concise (one short sentence), and make guesses as specific as " +
+    "possible (e.g. a specific breed/name/model, not a vague category).";
 
   const lines = [];
   lines.push("Questions asked so far (" + questionsAsked + " of " + MAX_QUESTIONS + "):");
   if (history.length === 0) {
-    lines.push("(none yet — this is the first question of the round)");
+    lines.push("(none yet — this is the first turn of the round)");
   } else {
     history.forEach((h, i) => {
       lines.push((i + 1) + ". Q: " + h.question + " — A: " + h.answer);
@@ -111,13 +148,23 @@ function buildMessages(history, guessesSoFar, questionsAsked, mustGuessNow) {
     lines.push("Previous wrong guess(es) — do not repeat these: " + guessesSoFar.join("; "));
   }
   lines.push("");
-  if (mustGuessNow) {
+  if (finalGuessMode) {
     lines.push(
-      "IMPORTANT: The question budget is exhausted (or this is your final allowed attempt). " +
-      "You must respond with \"type\":\"guess\" now — do not ask another question."
+      "IMPORTANT: Your previous guess was wrong. This is your final allowed attempt. You must " +
+      "respond with \"type\":\"guess\" now, with a NEW guess different from any previous guess(es) " +
+      "listed above. Do not ask another question."
+    );
+  } else if (mustGuessNow) {
+    lines.push(
+      "IMPORTANT: The 20-question budget has been used up. You must respond with \"type\":\"guess\" " +
+      "now — do not ask another question."
     );
   } else {
-    lines.push("Decide whether to ask another yes/no question or make a guess now, and respond accordingly.");
+    lines.push(
+      "Decide whether to ask another batch of yes/no questions or make a guess now. If you choose " +
+      "to ask questions, return EXACTLY " + batchTarget + " new, unique yes/no question(s) in the " +
+      "\"questions\" array."
+    );
   }
 
   return [
@@ -137,6 +184,24 @@ function extractJsonText(raw) {
   return s;
 }
 
+function parseRetryAfter(headerVal) {
+  if (!headerVal) return RATE_LIMIT_DEFAULT_MS;
+  const asSeconds = Number(headerVal);
+  if (Number.isFinite(asSeconds) && asSeconds >= 0) {
+    return Math.min(asSeconds * 1000, RATE_LIMIT_MAX_MS);
+  }
+  const asDate = Date.parse(headerVal);
+  if (!Number.isNaN(asDate)) {
+    const diff = asDate - Date.now();
+    if (diff > 0) return Math.min(diff, RATE_LIMIT_MAX_MS);
+  }
+  return RATE_LIMIT_DEFAULT_MS;
+}
+
+// TECH-007b: on ANY failure below (network/timeout/non-2xx/unparseable/
+// invalid shape), this function throws and the caller returns an error to
+// the client immediately — no additional internal request to Pollinations is
+// made, to avoid doubling anonymous-tier traffic and risking maxDuration.
 async function callPollinations(messages) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), UPSTREAM_TIMEOUT_MS);
@@ -151,7 +216,10 @@ async function callPollinations(messages) {
       }),
       signal: controller.signal,
     });
-    clearTimeout(timer);
+    if (r.status === 429) {
+      const retryAfterMs = parseRetryAfter(r.headers.get("retry-after"));
+      throw new UpstreamRateLimitError(retryAfterMs);
+    }
     if (!r.ok) throw new Error("upstream HTTP " + r.status);
     const data = await r.json();
     const content = data && data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content;
@@ -162,20 +230,64 @@ async function callPollinations(messages) {
   }
 }
 
+// Parses the model's raw JSON reply into a loosely-typed shape. Does NOT yet
+// enforce batch sizing or dedup — see sanitizeBatch/sanitizeGuess below.
 function parseModelReply(content) {
   const jsonText = extractJsonText(content);
   let parsed;
   try {
     parsed = JSON.parse(jsonText);
   } catch {
-    throw new Error("model output was not parseable JSON");
+    throw new InvalidModelResponseError("model output was not parseable JSON");
   }
-  if (!parsed || typeof parsed !== "object") throw new Error("model output was not a JSON object");
+  if (!parsed || typeof parsed !== "object") {
+    throw new InvalidModelResponseError("model output was not a JSON object");
+  }
   const type = clip(parsed.type, 20).toLowerCase();
-  const text = clip(parsed.text, MAX_TEXT_LEN);
-  if (type !== "question" && type !== "guess") throw new Error("model output had an invalid \"type\"");
-  if (!text) throw new Error("model output had empty \"text\"");
-  return { type, text };
+  if (type === "guess") {
+    const text = clip(parsed.text, MAX_TEXT_LEN);
+    if (!text) throw new InvalidModelResponseError("model guess was empty");
+    return { type: "guess", text };
+  }
+  if (type === "questions") {
+    const items = Array.isArray(parsed.questions) ? parsed.questions : [];
+    return { type: "questions", questionsRaw: items };
+  }
+  throw new InvalidModelResponseError("model output had an invalid \"type\"");
+}
+
+// FR-006b/TECH-010: enforce exact batch size, and dedupe against prior
+// history + within the batch itself (prevents duplicate questions,
+// requirement #9/#3). No internal retry on failure — see TECH-007b.
+function sanitizeBatch(rawItems, history, batchTarget) {
+  const historySet = new Set(history.map((h) => normalize(h.question)));
+  const seen = new Set();
+  const out = [];
+  for (const raw of rawItems) {
+    const text = clip(raw, MAX_TEXT_LEN);
+    if (!text) continue;
+    const norm = normalize(text);
+    if (!norm || historySet.has(norm) || seen.has(norm)) continue;
+    seen.add(norm);
+    out.push(text);
+    if (out.length >= batchTarget) break; // truncate to the exact target
+  }
+  if (out.length < batchTarget) {
+    throw new InvalidModelResponseError(
+      "model returned only " + out.length + " unique new question(s), " + batchTarget + " required"
+    );
+  }
+  return out;
+}
+
+// Prevents repeated rejected guesses (requirement #9).
+function sanitizeGuess(rawText, guessesSoFar) {
+  const text = clip(rawText, MAX_TEXT_LEN);
+  if (!text) throw new InvalidModelResponseError("model guess was empty");
+  const norm = normalize(text);
+  const isDuplicate = guessesSoFar.some((g) => normalize(g) === norm);
+  if (isDuplicate) throw new InvalidModelResponseError("model repeated a previous guess");
+  return text;
 }
 
 // ---------------------------------------------------------------------------
@@ -189,39 +301,76 @@ export default async function handler(req, res) {
   res.setHeader("Cache-Control", "no-store");
 
   if (req.method === "OPTIONS") return res.status(204).end();
-  if (req.method !== "POST") return res.status(405).json({ error: "POST only" });
+  if (req.method !== "POST") return res.status(405).json({ error: "POST only", code: "bad_request" });
 
   let history, guessesSoFar;
   try {
     const body = parseBody(req);
     ({ history, guessesSoFar } = validateGameState(body));
   } catch (e) {
-    return res.status(400).json({ error: "invalid request body", detail: String(e.message || e) });
+    return res.status(400).json({ error: "invalid request body", code: "bad_request", detail: String(e.message || e) });
   }
 
   if (guessesSoFar.length >= MAX_GUESSES) {
     // The client should never legitimately reach this (the round ends after
     // the 2nd guess), but guard against it defensively.
-    return res.status(400).json({ error: "maximum number of guesses already used" });
+    return res.status(400).json({ error: "maximum number of guesses already used", code: "bad_request" });
   }
 
   const questionsAsked = history.length;
   // TECH-010: enforce the 20-question cap and forced-guess rules server-side.
-  //  - FR-009a: cap reached before any guess -> force a guess now.
-  //  - FR-009b: cap reached after a first wrong guess -> force the final guess now.
-  const mustGuessNow = questionsAsked >= MAX_QUESTIONS;
+  //  - finalGuessMode: a first guess was already rejected -> this call must
+  //    return the second/final guess (FR-009), no more questions.
+  //  - capReached: 20 questions answered without any guess yet -> forced
+  //    first guess (FR-009a).
+  const finalGuessMode = guessesSoFar.length >= 1;
+  const capReached = questionsAsked >= MAX_QUESTIONS;
+  const mustGuessNow = finalGuessMode || capReached;
+  const batchTarget = mustGuessNow ? 0 : Math.min(MAX_BATCH_SIZE, MAX_QUESTIONS - questionsAsked);
 
-  const messages = buildMessages(history, guessesSoFar, questionsAsked, mustGuessNow);
+  const messages = buildMessages(history, guessesSoFar, questionsAsked, mustGuessNow, finalGuessMode, batchTarget);
 
   try {
     const content = await callPollinations(messages);
-    let reply = parseModelReply(content);
-    if (mustGuessNow && reply.type !== "guess") {
-      // Server-side override per TECH-010, regardless of what the model chose.
-      reply = { type: "guess", text: reply.text };
+    const reply = parseModelReply(content);
+
+    if (mustGuessNow) {
+      if (reply.type !== "guess") {
+        // TECH-010: the model did not comply with being forced to guess.
+        // No internal retry (TECH-007b) — surface as invalid_response so the
+        // client's own retry flow (FR-016) re-issues this identical request.
+        throw new InvalidModelResponseError("model was required to guess but returned questions");
+      }
+      const text = sanitizeGuess(reply.text, guessesSoFar);
+      return res.status(200).json({ type: "guess", text });
     }
-    return res.status(200).json(reply);
+
+    if (reply.type === "guess") {
+      const text = sanitizeGuess(reply.text, guessesSoFar);
+      return res.status(200).json({ type: "guess", text });
+    }
+
+    const questions = sanitizeBatch(reply.questionsRaw, history, batchTarget);
+    return res.status(200).json({ type: "questions", questions });
   } catch (e) {
-    return res.status(502).json({ error: "failed to get next question/guess", detail: String(e.message || e) });
+    if (e instanceof UpstreamRateLimitError) {
+      return res.status(429).json({
+        error: "The AI service is being rate-limited right now.",
+        code: "rate_limited",
+        retryAfterMs: e.retryAfterMs,
+      });
+    }
+    if (e instanceof InvalidModelResponseError) {
+      return res.status(502).json({
+        error: "The AI's response could not be used.",
+        code: "invalid_response",
+        detail: String(e.message || e),
+      });
+    }
+    return res.status(502).json({
+      error: "failed to get next question/guess",
+      code: "upstream_error",
+      detail: String(e.message || e),
+    });
   }
 }

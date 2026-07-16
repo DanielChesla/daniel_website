@@ -110,12 +110,13 @@ test.describe("Mentoring/Training Labs", () => {
 
     test("starting the game shows the first question, answer buttons, and progress", async ({ page }) => {
       // Stub the serverless function so this test is deterministic and never
-      // makes a real network call to Pollinations.ai in CI.
+      // makes a real network call to Pollinations.ai in CI. The server now
+      // returns a batch of up to five questions per request.
       await page.route("**/api/twenty-questions", async (route) => {
         await route.fulfill({
           status: 200,
           contentType: "application/json",
-          body: JSON.stringify({ type: "question", text: "Is it alive?" }),
+          body: JSON.stringify({ type: "questions", questions: ["Is it alive?"] }),
         });
       });
 
@@ -130,6 +131,147 @@ test.describe("Mentoring/Training Labs", () => {
         await expect(page.getByTestId(id)).toBeVisible();
       }
       await expect(page.getByTestId("progress-text-1")).toHaveText("Question 1 of 20");
+    });
+
+    test("answers a full batch of 5 questions locally with only one API call", async ({ page }) => {
+      var calls = 0;
+      await page.route("**/api/twenty-questions", async (route) => {
+        calls++;
+        if (calls === 1) {
+          await route.fulfill({
+            status: 200,
+            contentType: "application/json",
+            body: JSON.stringify({
+              type: "questions",
+              questions: ["Q1?", "Q2?", "Q3?", "Q4?", "Q5?"],
+            }),
+          });
+          return;
+        }
+        // Second call (after the batch of 5 is exhausted) -> a guess.
+        await route.fulfill({
+          status: 200,
+          contentType: "application/json",
+          body: JSON.stringify({ type: "guess", text: "a mystery object" }),
+        });
+      });
+
+      await page.goto("/20questions.html");
+      await page.getByTestId("start-game-button-1").click();
+
+      for (let i = 1; i <= 4; i++) {
+        await expect(page.getByTestId("question-text-1")).toHaveText("Q" + i + "?");
+        await expect(page.getByTestId("progress-text-1")).toHaveText("Question " + i + " of 20");
+        await page.getByTestId("answer-yes-button-1").click();
+      }
+
+      // Questions 1-4 were all answered locally off the single batch fetch
+      // from Start Game — no additional API call yet.
+      await expect(page.getByTestId("question-text-1")).toHaveText("Q5?");
+      expect(calls).toBe(1);
+
+      // Answering the 5th (final) question in the batch exhausts it and
+      // triggers exactly one more API call, which returns the guess.
+      await page.getByTestId("answer-yes-button-1").click();
+      await expect(page.getByTestId("guess-text-span-1")).toHaveText("a mystery object");
+      expect(calls).toBe(2);
+    });
+
+    test("forces a guess after 20 questions, then makes exactly one final guess if rejected", async ({ page }) => {
+      var calls = 0;
+      await page.route("**/api/twenty-questions", async (route) => {
+        calls++;
+        const body = route.request().postDataJSON();
+        const askedSoFar = (body.history || []).length;
+        const guesses = body.guessesSoFar || [];
+
+        if (guesses.length >= 1) {
+          await route.fulfill({
+            status: 200,
+            contentType: "application/json",
+            body: JSON.stringify({ type: "guess", text: "the final guess" }),
+          });
+          return;
+        }
+        if (askedSoFar >= 20) {
+          await route.fulfill({
+            status: 200,
+            contentType: "application/json",
+            body: JSON.stringify({ type: "guess", text: "the first guess" }),
+          });
+          return;
+        }
+        const remaining = Math.min(5, 20 - askedSoFar);
+        const questions = Array.from({ length: remaining }, (_, i) => "Question #" + (askedSoFar + i + 1) + "?");
+        await route.fulfill({
+          status: 200,
+          contentType: "application/json",
+          body: JSON.stringify({ type: "questions", questions }),
+        });
+      });
+
+      await page.goto("/20questions.html");
+      await page.getByTestId("start-game-button-1").click();
+
+      for (let i = 0; i < 20; i++) {
+        await expect(page.getByTestId("question-text-1")).toBeVisible();
+        await page.getByTestId("answer-yes-button-1").click();
+      }
+
+      await expect(page.getByTestId("guess-text-span-1")).toHaveText("the first guess");
+      // 4 batch-generation calls (checkpoints at 0/5/10/15) + 1 forced first-guess call.
+      expect(calls).toBe(5);
+
+      await page.getByTestId("guess-incorrect-button-1").click();
+      await expect(page.getByTestId("guess-text-span-1")).toHaveText("the final guess");
+      // + exactly 1 final-guess call.
+      expect(calls).toBe(6);
+
+      await page.getByTestId("guess-correct-button-1").click();
+      await expect(page.getByTestId("win-div-1")).toBeVisible();
+    });
+
+    test("shows a friendly rate-limit message and retries using the server's retry-after hint", async ({ page }) => {
+      var calls = 0;
+      await page.route("**/api/twenty-questions", async (route) => {
+        calls++;
+        if (calls === 1) {
+          await route.fulfill({
+            status: 429,
+            contentType: "application/json",
+            body: JSON.stringify({ error: "rate limited", code: "rate_limited", retryAfterMs: 300 }),
+          });
+          return;
+        }
+        await route.fulfill({
+          status: 200,
+          contentType: "application/json",
+          body: JSON.stringify({ type: "questions", questions: ["Is it alive?"] }),
+        });
+      });
+
+      await page.goto("/20questions.html");
+      await page.getByTestId("start-game-button-1").click();
+
+      await expect(page.getByTestId("thinking-text-1")).toContainText("rate-limited");
+      await expect(page.getByTestId("question-text-1")).toHaveText("Is it alive?");
+      expect(calls).toBe(2);
+    });
+
+    test("shows a rate-limit-specific error message after exhausting retries", async ({ page }) => {
+      await page.route("**/api/twenty-questions", async (route) => {
+        await route.fulfill({
+          status: 429,
+          contentType: "application/json",
+          body: JSON.stringify({ error: "rate limited", code: "rate_limited", retryAfterMs: 50 }),
+        });
+      });
+
+      await page.goto("/20questions.html");
+      await page.getByTestId("start-game-button-1").click();
+
+      await expect(page.getByTestId("error-message-1")).toContainText("busy", { timeout: 15000 });
+      await expect(page.getByTestId("retry-button-1")).toBeVisible();
     });
   });
 });

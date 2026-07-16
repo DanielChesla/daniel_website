@@ -3,6 +3,12 @@
 // Holds the full round state in memory (no server-side session, no
 // persistence — see specifications/specifications.md FR-018/FR-019/FR-020)
 // and talks to /api/twenty-questions for each turn.
+//
+// Batched adaptive questioning (hotfix 2026-07-16): the server returns up to
+// five questions per request ("a batch"). The client renders them one at a
+// time locally (no extra network calls) and only calls the API again once
+// the local batch is exhausted, at most every 5 answered questions, up to
+// the 20-question cap. See specifications/specifications.md FR-003/FR-006b.
 
 (function () {
   "use strict";
@@ -10,11 +16,19 @@
   var API_URL = "/api/twenty-questions";
   var MAX_QUESTIONS = 20;
   var MAX_TOTAL_ATTEMPTS = 3; // FR-016: 3 total attempts (1 initial + 2 retries)
-  var RETRY_BACKOFF_MS = [1500, 3000]; // increasing backoff before retry 2 and 3
+  var RETRY_BACKOFF_MS = [1500, 3000]; // increasing backoff for ordinary transient errors
+  var RATE_LIMIT_DEFAULT_MS = 15000; // ~15s when the server gives no retry-after hint
+  var RATE_LIMIT_MAX_WAIT_MS = 30000; // defensive clamp against an unreasonable server value
+
+  var DEFAULT_THINKING_TEXT = "The AI is thinking… this free service can occasionally take up to 30 seconds.";
+  var RATE_LIMIT_WAIT_TEXT = "The AI service is being rate-limited right now — I'll try again in a few seconds.";
+  var RATE_LIMIT_ERROR_TEXT = "The AI service is really busy right now (rate-limited). Please try again in a bit.";
+  var GENERIC_ERROR_TEXT = "Hmm, having trouble thinking of a question. Please try again.";
 
   // ---- Game state (client-side only) ----
   var history = [];          // [{ question, answer }]
   var guessesSoFar = [];      // [ "a golden retriever", ... ]
+  var pendingBatch = [];      // questions from the latest batch not yet shown
   var currentQuestionText = null;
   var currentGuessText = null;
   var lastOutcomeWon = null;  // true = win, false = loss (for Share Result copy)
@@ -46,10 +60,16 @@
     $("game-section").classList.remove("d-none");
   }
 
-  function showThinking() {
+  function showThinking(message) {
     showGameSection();
     hideAllViews();
+    var textEl = $("thinking-text");
+    if (textEl) textEl.textContent = message || DEFAULT_THINKING_TEXT;
     $("thinking-view").classList.remove("d-none");
+  }
+
+  function showRateLimitedWait() {
+    showThinking(RATE_LIMIT_WAIT_TEXT);
   }
 
   function showQuestion() {
@@ -96,7 +116,10 @@
   }
 
   // ---------------------------------------------------------------------
-  // API calls with automatic retry + backoff (FR-016/FR-017)
+  // API calls with error-aware automatic retry (FR-016/FR-017):
+  //  - ordinary transient errors -> short increasing backoff
+  //  - HTTP 429 (rate_limited) -> honor server-provided retryAfterMs, or
+  //    ~15s default, with a distinct friendly waiting message
   // ---------------------------------------------------------------------
   function postToApi() {
     return fetch(API_URL, {
@@ -106,10 +129,14 @@
     }).then(function (res) {
       return res.json().catch(function () { return null; }).then(function (data) {
         if (!res.ok) {
-          var msg = (data && data.error) || ("HTTP " + res.status);
-          throw new Error(msg);
+          var err = new Error((data && data.error) || ("HTTP " + res.status));
+          err.code = data && data.code;
+          err.retryAfterMs = data && data.retryAfterMs;
+          throw err;
         }
-        if (!data || (data.type !== "question" && data.type !== "guess") || !data.text) {
+        var validQuestions = data && data.type === "questions" && Array.isArray(data.questions) && data.questions.length > 0;
+        var validGuess = data && data.type === "guess" && typeof data.text === "string" && data.text.length > 0;
+        if (!validQuestions && !validGuess) {
           throw new Error("malformed response from server");
         }
         return data;
@@ -117,27 +144,38 @@
     });
   }
 
-  function requestNext(attempt) {
+  function normalizeRetryAfter(ms) {
+    var n = Number(ms);
+    if (!isFinite(n) || n <= 0) return RATE_LIMIT_DEFAULT_MS;
+    return Math.min(n, RATE_LIMIT_MAX_WAIT_MS);
+  }
+
+  function requestNextTurn(attempt) {
     attempt = attempt || 0;
     showThinking();
     postToApi()
       .then(handleReply)
-      .catch(function () {
+      .catch(function (err) {
+        var isRateLimited = err && err.code === "rate_limited";
         if (attempt < MAX_TOTAL_ATTEMPTS - 1) {
-          var delay = RETRY_BACKOFF_MS[attempt] || RETRY_BACKOFF_MS[RETRY_BACKOFF_MS.length - 1];
-          setTimeout(function () { requestNext(attempt + 1); }, delay);
+          if (isRateLimited) {
+            var waitMs = normalizeRetryAfter(err.retryAfterMs);
+            showRateLimitedWait();
+            setTimeout(function () { requestNextTurn(attempt + 1); }, waitMs);
+          } else {
+            var delay = RETRY_BACKOFF_MS[attempt] || RETRY_BACKOFF_MS[RETRY_BACKOFF_MS.length - 1];
+            setTimeout(function () { requestNextTurn(attempt + 1); }, delay);
+          }
         } else {
-          showErrorView("Hmm, having trouble thinking of a question. Please try again.");
+          showErrorView(isRateLimited ? RATE_LIMIT_ERROR_TEXT : GENERIC_ERROR_TEXT);
         }
       });
   }
 
   function handleReply(reply) {
-    if (reply.type === "question") {
-      currentQuestionText = reply.text;
-      updateProgress(history.length + 1);
-      $("question-text").textContent = currentQuestionText;
-      showQuestion();
+    if (reply.type === "questions") {
+      pendingBatch = reply.questions.slice();
+      showNextQuestionFromBatch();
     } else {
       currentGuessText = reply.text;
       $("guess-text-span").textContent = currentGuessText;
@@ -148,20 +186,34 @@
   // ---------------------------------------------------------------------
   // Game flow
   // ---------------------------------------------------------------------
+  function showNextQuestionFromBatch() {
+    currentQuestionText = pendingBatch.shift();
+    updateProgress(history.length + 1);
+    $("question-text").textContent = currentQuestionText;
+    showQuestion();
+  }
+
   function startGame() {
     history = [];
     guessesSoFar = [];
+    pendingBatch = [];
     currentQuestionText = null;
     currentGuessText = null;
     lastOutcomeWon = null;
-    requestNext();
+    requestNextTurn();
   }
 
   function answerQuestion(value) {
     if (!currentQuestionText) return;
     history.push({ question: currentQuestionText, answer: value });
     currentQuestionText = null;
-    requestNext();
+    if (pendingBatch.length > 0 && history.length < MAX_QUESTIONS) {
+      // Still questions left in the locally-held batch — no network call.
+      showNextQuestionFromBatch();
+    } else {
+      pendingBatch = [];
+      requestNextTurn();
+    }
   }
 
   function confirmGuess(wasCorrect) {
@@ -176,12 +228,14 @@
     if (guessesSoFar.length >= 2) {
       showLoss();
     } else {
-      requestNext();
+      // One final API request with the complete history + rejected guess —
+      // the server responds directly with the second/final guess.
+      requestNextTurn();
     }
   }
 
   function retryLastRequest() {
-    requestNext();
+    requestNextTurn();
   }
 
   function playAgain() {

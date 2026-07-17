@@ -17,6 +17,13 @@
 // shape). Keyless/anonymous access verified working; anonymous-tier
 // requests can occasionally take 20-30s, so the upstream timeout below is
 // set generously (see specifications/specifications.md TECH-008).
+//
+// Reasoning-model fix (hotfix 2026-07-17): the "openai" model alias is
+// backed by gpt-oss-20b, a reasoning model that can burn its whole
+// completion-token budget on hidden chain-of-thought once the prompt has
+// real history, leaving `message.content` entirely absent. The request
+// includes `reasoning_effort: "low"` to keep this from starving the actual
+// JSON answer (verified fix — see TECH-007c).
 export const config = { runtime: "nodejs", maxDuration: 30 };
 
 const POLLINATIONS_URL = "https://text.pollinations.ai/openai";
@@ -150,14 +157,21 @@ function buildMessages(history, guessesSoFar, questionsAsked, mustGuessNow, fina
   lines.push("");
   if (finalGuessMode) {
     lines.push(
-      "IMPORTANT: Your previous guess was wrong. This is your final allowed attempt. You must " +
-      "respond with \"type\":\"guess\" now, with a NEW guess different from any previous guess(es) " +
-      "listed above. Do not ask another question."
+      "IMPORTANT: Your previous guess was wrong. This is your final allowed attempt — you must " +
+      "make your SECOND AND FINAL GUESS now.\n" +
+      "You MUST return a guess. You MUST NOT return another batch of questions — a \"questions\" " +
+      "response will be rejected and is not a valid answer here.\n" +
+      "Your new guess MUST be different from any previous guess(es) listed above.\n" +
+      "Respond with EXACTLY this JSON shape, and nothing else:\n" +
+      '{"type":"guess","text":"the best specific guess"}'
     );
   } else if (mustGuessNow) {
     lines.push(
-      "IMPORTANT: The 20-question budget has been used up. You must respond with \"type\":\"guess\" " +
-      "now — do not ask another question."
+      "IMPORTANT: The 20-question budget has been used up — you have no questions left.\n" +
+      "You MUST return a guess now. You MUST NOT return a batch of questions — a \"questions\" " +
+      "response will be rejected and is not a valid answer here.\n" +
+      "Respond with EXACTLY this JSON shape, and nothing else:\n" +
+      '{"type":"guess","text":"the best specific guess"}'
     );
   } else {
     lines.push(
@@ -212,6 +226,13 @@ async function callPollinations(messages) {
       body: JSON.stringify({
         model: "openai",
         response_format: { type: "json_object" },
+        // Verified fix (2026-07-17): Pollinations' "openai" alias is backed by
+        // a reasoning model (gpt-oss-20b) that, once the prompt includes real
+        // conversation history, frequently spends its entire completion-token
+        // budget on hidden chain-of-thought and never emits `message.content`
+        // at all. "reasoning_effort: low" reliably keeps enough of the budget
+        // free for the actual JSON answer (see TECH-007c).
+        reasoning_effort: "low",
         messages,
       }),
       signal: controller.signal,

@@ -133,7 +133,7 @@ test.describe("Mentoring/Training Labs", () => {
       await expect(page.getByTestId("progress-text-1")).toHaveText("Question 1 of 20");
     });
 
-    test("answers a full batch of 5 questions locally with only one API call", async ({ page }) => {
+    test("answers a full batch of 4 questions locally with only one API call", async ({ page }) => {
       var calls = 0;
       await page.route("**/api/twenty-questions", async (route) => {
         calls++;
@@ -143,12 +143,12 @@ test.describe("Mentoring/Training Labs", () => {
             contentType: "application/json",
             body: JSON.stringify({
               type: "questions",
-              questions: ["Q1?", "Q2?", "Q3?", "Q4?", "Q5?"],
+              questions: ["Q1?", "Q2?", "Q3?", "Q4?"],
             }),
           });
           return;
         }
-        // Second call (after the batch of 5 is exhausted) -> a guess.
+        // Second call (after the batch of 4 is exhausted) -> a guess.
         await route.fulfill({
           status: 200,
           contentType: "application/json",
@@ -159,25 +159,25 @@ test.describe("Mentoring/Training Labs", () => {
       await page.goto("/20questions.html");
       await page.getByTestId("start-game-button-1").click();
 
-      for (let i = 1; i <= 4; i++) {
+      for (let i = 1; i <= 3; i++) {
         await expect(page.getByTestId("question-text-1")).toHaveText("Q" + i + "?");
         await expect(page.getByTestId("progress-text-1")).toHaveText("Question " + i + " of 20");
         await page.getByTestId("answer-yes-button-1").click();
       }
 
-      // Questions 1-4 were all answered locally off the single batch fetch
+      // Questions 1-3 were all answered locally off the single batch fetch
       // from Start Game — no additional API call yet.
-      await expect(page.getByTestId("question-text-1")).toHaveText("Q5?");
+      await expect(page.getByTestId("question-text-1")).toHaveText("Q4?");
       expect(calls).toBe(1);
 
-      // Answering the 5th (final) question in the batch exhausts it and
+      // Answering the 4th (final) question in the batch exhausts it and
       // triggers exactly one more API call, which returns the guess.
       await page.getByTestId("answer-yes-button-1").click();
       await expect(page.getByTestId("guess-text-span-1")).toHaveText("a mystery object");
       expect(calls).toBe(2);
     });
 
-    test("forces a guess after 20 questions, then makes exactly one final guess if rejected", async ({ page }) => {
+    test("forces a guess after 20 questions (5 batches of 4), then makes exactly one final guess if rejected", async ({ page }) => {
       var calls = 0;
       await page.route("**/api/twenty-questions", async (route) => {
         calls++;
@@ -201,7 +201,10 @@ test.describe("Mentoring/Training Labs", () => {
           });
           return;
         }
-        const remaining = Math.min(5, 20 - askedSoFar);
+        // Never confident enough to guess early (even from question 8
+        // onward) — always returns another batch, so this test deliberately
+        // exercises the full worst-case 5-batch + forced-guess call count.
+        const remaining = Math.min(4, 20 - askedSoFar);
         const questions = Array.from({ length: remaining }, (_, i) => "Question #" + (askedSoFar + i + 1) + "?");
         await route.fulfill({
           status: 200,
@@ -219,13 +222,13 @@ test.describe("Mentoring/Training Labs", () => {
       }
 
       await expect(page.getByTestId("guess-text-span-1")).toHaveText("the first guess");
-      // 4 batch-generation calls (checkpoints at 0/5/10/15) + 1 forced first-guess call.
-      expect(calls).toBe(5);
+      // 5 batch-generation calls (checkpoints at 0/4/8/12/16) + 1 forced first-guess call.
+      expect(calls).toBe(6);
 
       await page.getByTestId("guess-incorrect-button-1").click();
       await expect(page.getByTestId("guess-text-span-1")).toHaveText("the final guess");
-      // + exactly 1 final-guess call.
-      expect(calls).toBe(6);
+      // + exactly 1 final-guess call = 7 total (the documented maximum, excluding retries).
+      expect(calls).toBe(7);
 
       await page.getByTestId("guess-correct-button-1").click();
       await expect(page.getByTestId("win-div-1")).toBeVisible();
@@ -272,6 +275,36 @@ test.describe("Mentoring/Training Labs", () => {
 
       await expect(page.getByTestId("error-message-1")).toContainText("busy", { timeout: 15000 });
       await expect(page.getByTestId("retry-button-1")).toBeVisible();
+    });
+
+    test("persistent early-guess non-compliance (invalid_response) exhausts retries and shows the manual Retry UI, without looping forever", async ({ page }) => {
+      // Simulates the server persistently rejecting a non-compliant early
+      // guess (e.g. medium/low/missing confidence) as invalid_response on
+      // every attempt. The client's bounded retry flow (FR-016, 3 total
+      // attempts) must terminate normally at the generic error/Retry view —
+      // never hang or retry indefinitely.
+      var calls = 0;
+      await page.route("**/api/twenty-questions", async (route) => {
+        calls++;
+        await route.fulfill({
+          status: 502,
+          contentType: "application/json",
+          body: JSON.stringify({
+            error: "The AI's response could not be used.",
+            code: "invalid_response",
+            detail: "model attempted an early guess without declaring high confidence (confidence=medium)",
+          }),
+        });
+      });
+
+      await page.goto("/20questions.html");
+      await page.getByTestId("start-game-button-1").click();
+
+      await expect(page.getByTestId("error-message-1")).toContainText("having trouble", { timeout: 15000 });
+      await expect(page.getByTestId("retry-button-1")).toBeVisible();
+      // Exactly 3 total attempts (1 initial + 2 retries) — proves the loop
+      // terminates rather than retrying forever.
+      expect(calls).toBe(3);
     });
   });
 });

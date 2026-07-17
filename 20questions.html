@@ -166,9 +166,11 @@
                 <p class="mb-2" data-testid="twenty-questions-about-p-2">
                   Each request calls a <strong>Vercel serverless function</strong> that sends the game's
                   full question/answer history to the AI and asks it to decide the next batch of up
-                  to five yes/no questions — or make a guess — a simple demonstration of
+                  to four yes/no questions — or make a guess — a simple demonstration of
                   <strong>prompt engineering</strong>. Batching questions (instead of one AI call per
-                  question) keeps the round fast and cheap on the free, keyless API tier.
+                  question) keeps the round fast and cheap on the free, keyless API tier, and each
+                  batch of four has its own narrowing purpose (broad category, then major traits, a
+                  shortlist, distinguishing candidates, and finally targeted confirmation).
                 </p>
                 <p class="mb-2" data-testid="twenty-questions-about-p-3">
                   The AI uses <strong>confidence-based reasoning</strong> to decide when it has enough

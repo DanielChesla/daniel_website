@@ -4,11 +4,15 @@
 // persistence — see specifications/specifications.md FR-018/FR-019/FR-020)
 // and talks to /api/twenty-questions for each turn.
 //
-// Batched adaptive questioning (hotfix 2026-07-16): the server returns up to
-// five questions per request ("a batch"). The client renders them one at a
-// time locally (no extra network calls) and only calls the API again once
-// the local batch is exhausted, at most every 5 answered questions, up to
-// the 20-question cap. See specifications/specifications.md FR-003/FR-006b.
+// Batched adaptive questioning (hotfix 2026-07-16, revised 2026-07-17 —
+// 5 batches of 4): the server returns up to four questions per request ("a
+// batch"). The client renders them one at a time locally (no extra network
+// calls) and only calls the API again once the local batch is exhausted, at
+// most every 4 answered questions (checkpoints 0/4/8/12/16), up to the
+// 20-question cap. The client itself is batch-size-agnostic — it simply
+// renders whatever-length array the server returns — so this file needed no
+// logic changes for the 5x4 batching revision, only this comment update.
+// See specifications/specifications.md FR-003/FR-006b/FR-006d/FR-006e.
 
 (function () {
   "use strict";
